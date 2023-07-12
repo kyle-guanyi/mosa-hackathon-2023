@@ -1,12 +1,11 @@
 "use client";
 
-import Image from "next/image";
+import Image from 'next/image';
 
-import { useState, useEffect } from "react";
-import { signIn, signOut, useSession, getProviders } from "next-auth/react";
+import { useState, useEffect } from 'react';
+import { signIn, useSession, getProviders } from 'next-auth/react';
 
 const Home = () => {
-  const isUserLoggedIn = false;
   const { data: session } = useSession();
 
   const [providers, setProviders] = useState(null);
@@ -22,19 +21,18 @@ const Home = () => {
   }, []);
 
   return (
-    <div>
+    <div className="flex-center flex-col">
       {session?.user ? (
-        <div>test</div>
+        <div>Event Feed to be Implemented</div>
       ) : (
         <div>
-          <section className="w-full flex-center flex-col">
+          <section className="w-full flex-center">
             <Image
               className="image-contain"
               src="/assets/images/logo.png"
-              alt="Next.js Logo"
+              alt="Founding Friends Logo"
               width={720}
               height={37}
-              priority
             />
           </section>
           <div className="flex justify-center space-x-4 mt-4">
@@ -44,7 +42,7 @@ const Home = () => {
                   type="button"
                   key={provider.name}
                   onClick={() => signIn(provider.id)}
-                  className="blue_btn"
+                  className="blue_btn pointer-events-auto"
                 >
                   Log In
                 </button>
@@ -55,7 +53,7 @@ const Home = () => {
                   type="button"
                   key={provider.name}
                   onClick={() => signIn(provider.id)}
-                  className="red_btn"
+                  className="red_btn pointer-events-auto"
                 >
                   Sign Up
                 </button>

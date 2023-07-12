@@ -17,6 +17,7 @@
   align-items: center;
   pointer-events: none;
 }
+
 .image-cropper {
   width: 100px;
   height: 100px;
@@ -24,12 +25,13 @@
   overflow: hidden;
   border-radius: 50%;
 }
+
 .profile-pic {
-display: inline;
-margin: 0 auto;
-margin-left: -25%; 
-height: 100%;
-width: auto;
+  display: inline;
+  margin: 0 auto;
+  margin-left: -25%;
+  height: 100%;
+  width: auto;
 }
 
 /* Tailwind Styles */

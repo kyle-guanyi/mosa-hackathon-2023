@@ -26,7 +26,7 @@ const about = () => {
         <div className="text-2xl font-bold">
           <h1>FOUNDING FATHERS:</h1>
         </div>
-        <div className=" flex gap-4 text-xl font-normal flex-col">
+        <div className="flex gap-4 text-xl font-normal flex-col">
           <div>
           <div className="image-cropper">
               <Image
@@ -38,7 +38,7 @@ const about = () => {
             </div>
             Bonnie Tse
             <div className="flex gap-4 text-upenn-red">
-              <span className="bannerIcon">
+              <span className="bannerIcon pointer-events-auto" >
                 <a
                   href="https://www.linkedin.com/in/bonnietse/"
                   target="_blank"
@@ -47,7 +47,7 @@ const about = () => {
                   <FaLinkedin />
                 </a>
               </span>
-              <span className="bannerIcon">
+              <span className="bannerIcon pointer-events-auto">
                 <a
                   href="https://github.com/bonniewt"
                   target="_blank"
@@ -69,7 +69,7 @@ const about = () => {
             </div>
             Kyle Li
             <div className="flex gap-4 text-upenn-red">
-              <span className="bannerIcon">
+              <span className="bannerIcon pointer-events-auto">
                 <a
                   href="https://www.linkedin.com/in/kyleguanyili/"
                   target="_blank"
@@ -78,7 +78,7 @@ const about = () => {
                   <FaLinkedin />
                 </a>
               </span>
-              <span className="bannerIcon">
+              <span className="bannerIcon pointer-events-auto">
                 <a
                   href="https://github.com/kyle-guanyi"
                   target="_blank"
@@ -101,7 +101,7 @@ const about = () => {
             <div></div>
             Kevin Nguyen
             <div className="flex gap-4 text-upenn-red">
-              <span className="bannerIcon">
+              <span className="bannerIcon pointer-events-auto">
                 <a
                   href="https://www.linkedin.com/in/kevin-ucsb/"
                   target="_blank"
@@ -110,7 +110,7 @@ const about = () => {
                   <FaLinkedin />
                 </a>
               </span>
-              <span className="bannerIcon">
+              <span className="bannerIcon pointer-events-auto">
                 <a
                   href="https://github.com/kebinjpeg"
                   target="_blank"
