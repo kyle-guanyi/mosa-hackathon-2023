@@ -22,23 +22,23 @@ const about = () => {
         </div>
       </div>
 
-      <div>
-        <div className="text-2xl font-bold">
+      <div className="gap-4">
+        <div className="text-2xl font-bold gap-4">
           <h1>FOUNDING FATHERS:</h1>
         </div>
-        <div className="flex gap-4 text-xl font-normal flex-col">
-          <div>
+        <div className="flex gap-4 text-xl font-normal">
           <div className="image-cropper">
-              <Image
-                src="/assets/images/bonnie.jpg"
-                alt="Bonnie Tse"
-                width={400}
-                height={400}
-              />
-            </div>
+            <Image
+              src="/assets/images/bonnie.jpg"
+              alt="Bonnie Tse"
+              width={400}
+              height={400}
+            />
+          </div>
+          <div className="font-bold">
             Bonnie Tse
             <div className="flex gap-4 text-upenn-red">
-              <span className="bannerIcon pointer-events-auto" >
+              <span className="bannerIcon pointer-events-auto">
                 <a
                   href="https://www.linkedin.com/in/bonnietse/"
                   target="_blank"
@@ -59,14 +59,20 @@ const about = () => {
             </div>
           </div>
           <div>
-            <div className="image-cropper">
-              <Image
-                src="/assets/images/kyle.jpg"
-                alt="Kyle Li"
-                width={400}
-                height={400}
-              />
-            </div>
+            <p>This is the body of text for Bonnie.</p>
+          </div>
+        </div>
+
+        <div className="flex gap-4 text-xl font-normal">
+          <div className="image-cropper">
+            <Image
+              src="/assets/images/kyle.jpg"
+              alt="Kyle Li"
+              width={400}
+              height={400}
+            />
+          </div>
+          <div className="font-bold">
             Kyle Li
             <div className="flex gap-4 text-upenn-red">
               <span className="bannerIcon pointer-events-auto">
@@ -90,15 +96,19 @@ const about = () => {
             </div>
           </div>
           <div>
+            <p>This is the body of text for Kyle.</p>
+          </div>
+        </div>
+        <div className="flex gap-4 text-xl font-normal">
           <div className="image-cropper">
-              <Image
-                src="/assets/images/kevin.jpg"
-                alt="Kevin Nguyen"
-                width={400}
-                height={400}
-              />
-            </div>
-            <div></div>
+            <Image
+              src="/assets/images/kevin.jpg"
+              alt="Kevin Nguyen"
+              width={400}
+              height={400}
+            />
+          </div>
+          <div className="font-bold">
             Kevin Nguyen
             <div className="flex gap-4 text-upenn-red">
               <span className="bannerIcon pointer-events-auto">
@@ -120,6 +130,9 @@ const about = () => {
                 </a>
               </span>
             </div>
+          </div>
+          <div>
+            <p>This is the body of text for Kevin.</p>
           </div>
         </div>
       </div>
