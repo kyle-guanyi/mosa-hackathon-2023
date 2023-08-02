@@ -1,6 +1,6 @@
 import React from "react";
 
-const Card = ({ item: { eventName, location, des, time } }) => {
+const Card = ({ item: { eventName, location, des, time, src } }) => {
   return (
     <div className="w-full p-4 xl:px-12 xl:py-10 h-auto rounded-lg flex flex-col hover:bg-gradient-to-b hover:from-gray-700 hover:gray-700 transition-colors duration-1000 cursor-pointer">
       <div className="w-full h-[80%] overflow-hidden rounded-lg">
