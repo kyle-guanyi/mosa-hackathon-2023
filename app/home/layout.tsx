@@ -10,7 +10,6 @@ export const metadata = {
 
 const RootLayout = ({ children }) => {
   return (
-    <html lang="en">
       <body>
         <Provider>
         <Nav/>
@@ -19,7 +18,6 @@ const RootLayout = ({ children }) => {
         </main>
         </Provider>
       </body>
-    </html>
   );
 };
 

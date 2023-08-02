@@ -8,7 +8,7 @@ export const metadata = {
   description: "Meetup web application for MCIT Online students",
 };
 
-const RootLayout = ({ children }) => {
+const homeLayout = ({ children }) => {
   return (
     <html lang="en">
       <body>
@@ -23,4 +23,4 @@ const RootLayout = ({ children }) => {
   );
 };
 
-export default RootLayout;
+export default homeLayout;
