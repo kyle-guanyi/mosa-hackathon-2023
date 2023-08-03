@@ -12,6 +12,7 @@ interface IEvent extends Document {
     startDate: Date;
     startTime: string;
     eventDescription: string;
+    isCompleted: boolean;
   }
 
 const eventSchema = new Schema({
@@ -35,7 +36,6 @@ const eventSchema = new Schema({
   eventName: {
     type: String,
     required: true,
-    minlength: 5,
   },
   isVirtual: {
     type: Boolean,
@@ -68,7 +68,6 @@ const eventSchema = new Schema({
   eventDescription: {
     type: String,
     required: true,
-    minlength: 11,
   },
 });
 
