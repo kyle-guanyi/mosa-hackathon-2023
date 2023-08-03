@@ -8,7 +8,7 @@ interface IEvent extends Document {
     eventName: string;
     isVirtual: boolean;
     location?: string;
-    zoomLink?: string | null;
+    zoomLink?: string;
     startDate: Date;
     startTime: string;
     eventDescription: string;
