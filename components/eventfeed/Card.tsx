@@ -2,7 +2,7 @@ import React from "react";
 
 const Card = ({eventName, location, des, time, src, date} ) => {
   return (
-    <div className="w-full p-4 xl:px-12 xl:py-10 h-auto rounded-lg flex flex-col hover:bg-gradient-to-b hover:from-gray-700 hover:gray-700 transition-colors duration-1000 cursor-pointer">
+    <div className="w-full p-2 xl:px-10 xl:py-8 h-auto rounded-lg flex flex-col hover:bg-gradient-to-b hover:from-gray-700 hover:gray-700 transition-colors duration-1000 cursor-pointer">
       <div className="w-full h-[80%] overflow-hidden rounded-lg">
         <img
           className="w-full h-60 object-cover group-hover:scale-110 duration-300"
@@ -16,12 +16,12 @@ const Card = ({eventName, location, des, time, src, date} ) => {
             <h3 className="text-base uppercase text-designColor font-normal">
               {eventName}
             </h3>
-            <div className="flex flex-col gap-2 font-thin">
-              <h5>
-                {location}
-              </h5>
+            <div className="flex flex-col gap-1 font-thin text-xs text-right">
               <h6>
-                {date}{time}
+                {location}
+              </h6>
+              <h6>
+                {date} - {time}
               </h6>
             </div>
           </div>

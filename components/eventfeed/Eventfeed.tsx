@@ -10,7 +10,7 @@ const Eventfeed = () => {
             <h1 className="head_text justify-between">
                 Upcoming Events:
             </h1>
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2 xl:gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-1 xl:gap-3">
                 <Card
                     eventName="Park Hangout"
                     location="Los Angeles, CA"
