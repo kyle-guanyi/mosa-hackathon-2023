@@ -47,7 +47,6 @@ const Form = ({ type, event, setEvent, submitting, handleSubmit }) => {
               onChange={(e) =>
                 setEvent({ ...event, isVirtual: e.target.checked })
               }
-              className="form_checkbox"
             />
             <span className="font-satoshi text-gray-700 ml-2">
               Virtual Event
@@ -61,7 +60,6 @@ const Form = ({ type, event, setEvent, submitting, handleSubmit }) => {
               onChange={(e) =>
                 setEvent({ ...event, isPublic: e.target.checked })
               }
-              className="form_checkbox"
             />
             <span className="font-satoshi text-gray-700 ml-2">
               Public Event

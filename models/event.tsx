@@ -19,15 +19,12 @@ const eventSchema = new Schema({
   creator: {
     type: Schema.Types.ObjectId,
     ref: 'User',
-    required: true,
   },
   attending: {
     type: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-    default: [],
   },
   interested: {
     type: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-    default: [],
   },
   isPublic: {
     type: Boolean,
@@ -63,7 +60,6 @@ const eventSchema = new Schema({
   },
   isCompleted: {
     type: Boolean,
-    default: false,
   },
   eventDescription: {
     type: String,

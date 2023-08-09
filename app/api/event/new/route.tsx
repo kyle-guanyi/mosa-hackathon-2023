@@ -1,7 +1,7 @@
 import { connectToDB } from 'utils/database';
 import Event from 'models/event';
 
-export const POST = async (req) => {
+export const POST = async (request) => {
     const { eventName,
         eventDescription,
         userId,
@@ -13,7 +13,7 @@ export const POST = async (req) => {
         zoomLink,
         startDate,
         startTime,
-        isCompleted } = await req.json();
+        isCompleted } = await request.json();
 
     try {
         await connectToDB();
@@ -36,6 +36,7 @@ export const POST = async (req) => {
 
         return new Response(JSON.stringify(newEvent), { status: 201 })
     } catch (error) {
+        console.log(error);
         return new Response("Failed to create a new prompt", { status: 500 });
     }
 }

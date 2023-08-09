@@ -1,24 +1,23 @@
 "use client";
-import React from 'react';
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 import Form from "components/Form";
 
-const createEvent = () => {
+const CreateEvent = () => {
   const router = useRouter();
   const { data: session } = useSession();
 
   const [submitting, setSubmitting] = useState(false);
-  const [event, setEvent] = useState({eventName: "", eventDescription: "", location: "", zoomLink:"", isPublic: false, isVirtual: false, isCompleted: false, attending:[], interested:[]});
+  const [event, setEvent] = useState({eventName: "", eventDescription: "", location: "", zoomLink:"", isPublic: false, isVirtual: false, isCompleted: false, attending:[], interested:[], startDate: new Date(), startTime: "12:00 PM"});
 
-  const createPrompt = async (e) => {
+  const createEvent = async (e) => {
     e.preventDefault();
     setSubmitting(true);
 
     try {
-      const response = await fetch("/api/event/new", {
+      const response = await fetch('/api/event/new', {
         method: "POST",
         body: JSON.stringify({
           creator: session?.user.id,
@@ -28,8 +27,8 @@ const createEvent = () => {
           interested: event.interested,
           isPublic: event.isPublic,
           isVirtual: event.isVirtual,
-          startDate: new Date(), // Example value, you may adjust this as needed
-          startTime: "12:00 PM", // Example value, you may adjust this as needed
+          startDate: event.startDate,
+          startTime: event.startTime,
           location: event.location,
           zoomLink: event.zoomLink,
           isCompleted: event.isCompleted,
@@ -57,4 +56,4 @@ const createEvent = () => {
   );
 };
 
-export default createEvent;
+export default CreateEvent;

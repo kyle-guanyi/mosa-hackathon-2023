@@ -34,7 +34,17 @@
   width: auto;
 }
 
+@media screen and (max-width: 640px) {
+  .main {
+    padding: 0;
+  }
+}
+
 /* Tailwind Styles */
+
+.app {
+  @apply relative z-10 flex justify-center items-center flex-col max-w-7xl mx-auto sm:px-16 px-6;
+}
 
 .blue_btn {
   @apply rounded-full border-2 border-upenn-blue bg-upenn-blue py-1.5 px-5 text-white transition-all hover:bg-white hover:text-upenn-blue text-center text-sm font-inter flex items-center justify-center;
