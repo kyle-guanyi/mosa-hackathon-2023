@@ -67,14 +67,6 @@ const eventSchema = new Schema({
   },
 });
 
-// Middleware to set the creator as the default attending user
-eventSchema.pre('save', async function (next) {
-      if (!this.attending.includes(this.creator)) {
-        this.attending.push(this.creator);
-      }
-      next();
-});
-
 const Event = models.Event || model('Event', eventSchema);
 
 export default Event;

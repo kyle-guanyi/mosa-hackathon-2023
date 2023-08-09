@@ -10,7 +10,7 @@ const CreateEvent = () => {
   const { data: session } = useSession();
 
   const [submitting, setSubmitting] = useState(false);
-  const [event, setEvent] = useState({eventName: "", eventDescription: "", location: "", zoomLink:"", isPublic: false, isVirtual: false, isCompleted: false, attending:[], interested:[], startDate: new Date(), startTime: "12:00 PM"});
+  const [event, setEvent] = useState({eventName: "", eventDescription: "", location: "", zoomLink:"", isPublic: false, isVirtual: false, isCompleted: false, interested:[], startDate: new Date(), startTime: "12:00 PM"});
 
   const createEvent = async (e) => {
     e.preventDefault();
@@ -20,10 +20,10 @@ const CreateEvent = () => {
       const response = await fetch('/api/event/new', {
         method: "POST",
         body: JSON.stringify({
-          creator: session?.user.id,
+          userId: session?.user.id,
           eventName: event.eventName,
           eventDescription: event.eventDescription,
-          attending: event.attending,
+          attending: [session?.user.id],
           interested: event.interested,
           isPublic: event.isPublic,
           isVirtual: event.isVirtual,
