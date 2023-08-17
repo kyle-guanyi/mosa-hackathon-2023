@@ -28,6 +28,9 @@ const handler = NextAuth({
         return session;
       },
       async signIn({ profile }) {
+        if (!profile?.email?.endsWith("@seas.upenn.edu")) {
+          return false;
+        }
         try {
           await connectToDB();
           //check if user already exists
