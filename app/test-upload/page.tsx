@@ -1,35 +1,36 @@
 "use client";
 import axios from "axios";
-import React, {useMemo} from 'react';
+import React, { useMemo } from "react";
 import { useEffect, useState, FormEvent } from "react";
 import { useDropzone } from "react-dropzone";
+import { BsUpload } from "react-icons/bs";
 
 const baseStyle = {
   flex: 1,
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  padding: '20px',
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  padding: "20px",
   borderWidth: 2,
   borderRadius: 2,
-  borderColor: '#eeeeee',
-  borderStyle: 'dashed',
-  backgroundColor: '#fafafa',
-  color: '#bdbdbd',
-  outline: 'none',
-  transition: 'border .24s ease-in-out'
+  borderColor: "#eeeeee",
+  borderStyle: "dashed",
+  backgroundColor: "#fafafa",
+  color: "#a3a2a2",
+  outline: "none",
+  transition: "border .24s ease-in-out",
 };
 
 const focusedStyle = {
-  borderColor: '#2196f3'
+  borderColor: "#2196f3",
 };
 
 const acceptStyle = {
-  borderColor: '#00e676'
+  borderColor: "#00e676",
 };
 
 const rejectStyle = {
-  borderColor: '#ff1744'
+  borderColor: "#ff1744",
 };
 
 export default function FileUpload() {
@@ -77,28 +78,28 @@ export default function FileUpload() {
     getInputProps,
     isFocused,
     isDragAccept,
-    isDragReject
+    isDragReject,
+    isDragActive,
   } = useDropzone({
     accept: {
-      'image/jpeg': [],
-      'image/png': [],
-      'image/jpg': [],
+      "image/jpeg": [],
+      "image/png": [],
+      "image/jpg": [],
     },
     onDrop,
   });
 
-  const style = useMemo(() => ({
-    ...baseStyle,
-    ...(isFocused ? focusedStyle : {}),
-    ...(isDragAccept ? acceptStyle : {}),
-    ...(isDragReject ? rejectStyle : {})
-  }), [
-    isFocused,
-    isDragAccept,
-    isDragReject
-  ]);
+  const style = useMemo(
+    () => ({
+      ...baseStyle,
+      ...(isFocused ? focusedStyle : {}),
+      ...(isDragAccept ? acceptStyle : {}),
+      ...(isDragReject ? rejectStyle : {}),
+    }),
+    [isFocused, isDragAccept, isDragReject]
+  );
 
-  const acceptedFileItems = acceptedFiles.map(file => (
+  const acceptedFileItems = acceptedFiles.map((file) => (
     <li key={file.path}>
       {file.path} - {file.size} bytes
     </li>
@@ -108,7 +109,7 @@ export default function FileUpload() {
     <li key={file.path}>
       {file.path} - {file.size} bytes
       <ul>
-        {errors.map(e => (
+        {errors.map((e) => (
           <li key={e.code}>{e.message}</li>
         ))}
       </ul>
@@ -119,8 +120,14 @@ export default function FileUpload() {
     <section className="container">
       <div {...getRootProps({ style })}>
         <input {...getInputProps()} />
-        <p>Drag 'n' drop some files here, or click to select files</p>
-        <em>(Only *.jpeg and *.png images will be accepted)</em>
+        <BsUpload className="w-5 h-5 fill-current" />
+        {isDragActive ? (
+          <p className="select-none">Drop files here</p>
+        ) : (
+          <p className="select-none">Drag & drop files here, or click to select files</p>
+        )}
+
+        <em className="select-none">(Only *.jpeg, *jpg, and *.png images will be accepted)</em>
       </div>
       <aside>
         <h4>Accepted files</h4>
