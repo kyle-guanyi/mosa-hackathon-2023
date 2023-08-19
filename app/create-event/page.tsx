@@ -10,7 +10,7 @@ const CreateEvent = () => {
   const { data: session } = useSession();
 
   const [submitting, setSubmitting] = useState(false);
-  const [event, setEvent] = useState({eventName: "", eventDescription: "", location: "", zoomLink:"", isPublic: false, isVirtual: false, isCompleted: false, interested:[], startDate: new Date(), startTime: "12:00 PM"});
+  const [event, setEvent] = useState({eventName: "", eventDescription: "", location: "", zoomLink:"", isPublic: false, isVirtual: false, isCompleted: false, interested:[], startDate: new Date(), startTime: "12:00 PM", timeZone: "EST", closestCity: ""});
 
   const createEvent = async (e) => {
     e.preventDefault();
@@ -29,7 +29,9 @@ const CreateEvent = () => {
           isVirtual: event.isVirtual,
           startDate: event.startDate,
           startTime: event.startTime,
+          timeZone: event.timeZone,
           location: event.location,
+          closestCity: event.closestCity,
           zoomLink: event.zoomLink,
           isCompleted: event.isCompleted,
         }),

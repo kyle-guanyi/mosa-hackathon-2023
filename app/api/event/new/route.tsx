@@ -10,9 +10,11 @@ export const POST = async (request) => {
         isPublic,
         isVirtual,
         location,
+        closestCity,
         zoomLink,
         startDate,
         startTime,
+        timeZone,
         isCompleted } = await request.json();
 
     try {
@@ -26,9 +28,11 @@ export const POST = async (request) => {
             isPublic,
             isVirtual,
             location,
+            closestCity,
             zoomLink,
             startDate,
             startTime,
+            timeZone,
             isCompleted,
         })
 

@@ -11,6 +11,7 @@ interface IEvent extends Document {
     zoomLink?: string;
     startDate: Date;
     startTime: string;
+    timeZone: string;
     eventDescription: string;
     isCompleted: boolean;
   }
@@ -44,6 +45,12 @@ const eventSchema = new Schema({
       return !this.isVirtual; // Location is required if virtual is false
     },
   },
+  closestCity: {
+    type: String,
+    required: function (this: IEvent) {
+      return !this.isVirtual; // closest city is required if virtual is false
+    },
+  },
   zoomLink: {
     type: String,
     required: function (this: IEvent) {
@@ -55,6 +62,10 @@ const eventSchema = new Schema({
     required: true,
   },
   startTime: {
+    type: String,
+    required: true,
+  },
+  timeZone: {
     type: String,
     required: true,
   },
