@@ -12,7 +12,7 @@ const RootLayout = ({ children }) => (
   <html lang='en'>
     <body>
       <Provider>
-        <main className='app'>
+        <main className='main flex-col'>
           <Nav />
           {children}
         </main>
