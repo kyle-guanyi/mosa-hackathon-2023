@@ -5,6 +5,7 @@ export const GET = async (request) => {
     try {
         await connectToDB();
 
+        // populate used for filtering events => use for location?
         const events = await Event.find({}).populate
         ('creator');
 

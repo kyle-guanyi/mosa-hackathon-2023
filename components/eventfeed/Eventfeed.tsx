@@ -39,8 +39,8 @@ const Eventfeed = () => {
     }, []);
     
     // redirect to specialized URL of each event
-    const handleEdit = (event) => {
-        router.push(`/eventpage?id=${event._id}`)
+    const handleLocationClick = (event) => {
+        console.log("Location");
     }
     return (
         <section
@@ -48,7 +48,7 @@ const Eventfeed = () => {
         className="w-full border-l-1 border-r-1 border-t-1 border-gray-600">
             <PromptCardList
                 data={events}
-                handleTagClick={handleEdit}
+                handleLocationClick={handleLocationClick}
             />
         </section>
     )

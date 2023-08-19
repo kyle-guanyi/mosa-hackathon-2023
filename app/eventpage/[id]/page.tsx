@@ -7,20 +7,20 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 
-const EventPage = () => {
+const EventPage = ({ params }) => {
     const router = useRouter();
     const { data: session } = useSession();
     const searchParams = useSearchParams();
-    const[event, setEvent] = useState(null); // start with null because fetching single event
+    const[eventDetails, setEventDetails] = useState(null); // start with null because fetching single event
     const eventId = searchParams.get('id');
 
 
     useEffect(() => {
         const getEventDetails = async () => {
             try {
-                const response = await fetch (`/api/event/${eventId}`)
+                const response = await fetch (`/api/event/${params?.id}`)
                 const data = await response.json();
-                setEvent(data)
+                setEventDetails(data)
 
             } catch (error) {
                 console.error("Error fetching event details:", error);
@@ -35,9 +35,9 @@ const EventPage = () => {
 
     return (
         <section id="eventpage" className="w-full border-l-1 border-r-1 border-t-1 border-gray-600">
-            {event && (
+            {eventDetails && (
                 <EventPageFormat
-                    event={event}
+                    event={eventDetails}
             // Pass any additional props or handlers here
                 />
         )}

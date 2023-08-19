@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 
-const Card = ({event, handleTagClick, handleEdit, handleDelete} ) => {
+const Card = ({event, handleLocationClick, handleEdit, handleDelete} ) => {
 
   const startDate = new Date(event.startDate).toLocaleDateString('en-US', {
     year: 'numeric',
@@ -13,12 +13,14 @@ const Card = ({event, handleTagClick, handleEdit, handleDelete} ) => {
     day: 'numeric',
   });
 
-  const redirectToEventPage = () => {
-    handleTagClick(event);
+  const router = useRouter();
+
+  const handleEventClick = () => {
+    router.push(`/eventpage?id=${event._id}`)
   };
 
   return (
-    <div className="prompt_card" onClick={redirectToEventPage}>
+    <div className="prompt_card" onClick={handleEventClick}>
       <div className = "flex justify-between items-start gap-5">
         <div className = "flex flex-col">
           <h3 className = "font-satoshi font-semibold">
