@@ -1,4 +1,5 @@
 import Eventfeed from "../../components/eventfeed/Eventfeed";
+import Feed from '../../components/search/Feed';
 
 const about = () => {
   return (
@@ -8,7 +9,7 @@ const about = () => {
         <div className=" w-full h-1/2 bg-orange-500">Your Events</div>
       </div>
       <div className="w-3/5 bg-green-700 flex-grow">
-        <div className="w-full h-1/10 bg-green-500">Search Function</div>
+        <div className="w-full h-1/10 bg-green-500"></div>
         <div className=" w-full h-5/6 bg-blue-500"><Eventfeed /></div>
       </div>
       <div className="w-1/5 bg-purple-700 hidden md:block ">Past Event Timeline</div>

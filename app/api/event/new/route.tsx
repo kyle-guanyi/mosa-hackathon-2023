@@ -44,3 +44,4 @@ export const POST = async (request) => {
         return new Response("Failed to create a new prompt", { status: 500 });
     }
 }
+

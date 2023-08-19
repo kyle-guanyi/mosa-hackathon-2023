@@ -8,6 +8,12 @@ const handler = NextAuth({
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      authorization: {
+        params: {
+          prompt: "consent",
+          hd: "seas.upenn.edu"
+        }
+      },
     }),
   ],
   callbacks: {
@@ -22,6 +28,9 @@ const handler = NextAuth({
         return session;
       },
       async signIn({ profile }) {
+        if (!profile?.email?.endsWith("@seas.upenn.edu")) {
+          return false;
+        }
         try {
           await connectToDB();
           //check if user already exists
@@ -34,6 +43,7 @@ const handler = NextAuth({
               email: profile.email,
               username: profile.name.replace(" ", "").toLowerCase(),
               image: profile.picture,
+              attending: [],
             });
           }
           return true;
