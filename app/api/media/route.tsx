@@ -16,22 +16,17 @@ async function uploadImageToS3(
   fileName: string,
   type: string
 ): Promise<string> {
-//   const resizedImageBuffer = await sharp(file)
-//     .resize(400, 500) // Specify your desired width or height for resizing
-//     .toBuffer();
-
   const params = {
     Bucket: process.env.AWS_BUCKET_NAME as string,
     Key: `${Date.now()}-${fileName}`,
     Body: file,
-    ContentType: type, // Change the content type accordingly
+    ContentType: type,
   };
 
   const command = new PutObjectCommand(params);
-  const res = await s3Client.send(command);
+  await s3Client.send(command);
 
-  const getCommand = new GetObjectCommand(params);
-  const url = await getSignedUrl(s3Client, getCommand, { expiresIn: 3600 });
+  const url = getSignedUrl(s3Client, command, { expiresIn: 3600 });
 
   return url;
 }
@@ -39,28 +34,25 @@ async function uploadImageToS3(
 export async function POST(request: NextRequest, response: NextResponse) {
   try {
     const formData = await request.formData();
-    console.log(formData, "Form data")
-    const file = formData.get("file") as Blob | null;
-    if (!file) {
-      return NextResponse.json(
-        { error: "File blob is required." },
-        { status: 400 }
+    const files = formData.getAll("file"); // Get all files
+
+    const uploadedUrls = await Promise.all(files.map(async (file) => {
+      const mimeType = file.type;
+      const fileExtension = mimeType.split("/")[1];
+      const buffer = Buffer.from(await file.arrayBuffer());
+      
+      const url = await uploadImageToS3(
+        buffer,
+        uuid() + "." + fileExtension,
+        mimeType
       );
-    }
 
-    const mimeType = file.type;
-    const fileExtension = mimeType.split("/")[1];
+      return url;
+    }));
 
-    const buffer = Buffer.from(await file.arrayBuffer());
-    const url = await uploadImageToS3(
-      buffer,
-      uuid() + "." + fileExtension,
-      mimeType
-    );
-
-    return NextResponse.json({ success: true, url });
+    return NextResponse.json({ success: true, urls: uploadedUrls });
   } catch (error) {
-    console.error("Error uploading image:", error);
-    NextResponse.json({ message: "Error uploading image" });
+    console.error("Error uploading images:", error);
+    return NextResponse.json({ message: "Error uploading images" });
   }
 }
