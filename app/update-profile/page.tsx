@@ -9,8 +9,6 @@ const UpdateProfile = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const userId = searchParams.get("id");
-  console.log("This is the USER ID")
-  console.log(userId)
 
   const [user, setUser] = useState({ firstName: "", lastName: "", closestMainCity: "", timeZone: "", gender: "", bio: "", classesTaken:[], fieldOfInterest: [], userUpdatedProfileImage: "" });
   const [submitting, setIsSubmitting] = useState(false);
@@ -44,7 +42,7 @@ const UpdateProfile = () => {
     if (!userId) return alert("Missing User Id!");
 
     try {
-      const response = await fetch(`/api/prompt/${userId}`, {
+      const response = await fetch(`/api/user/${userId}`, {
         method: "PATCH",
         body: JSON.stringify({
           firstName: user.firstName,
@@ -60,7 +58,7 @@ const UpdateProfile = () => {
       });
 
       if (response.ok) {
-        router.push("/");
+        router.push("/profile");
       }
     } catch (error) {
       console.log(error);

@@ -75,7 +75,7 @@ const ProfileForm = ({ type, user, setUser, submitting, handleSubmit }) => {
         {/*User update bio (optional)*/}
         <label>
           <span className="font-satoshi font-semibold text-base text-gray-700">
-            Tell us about yourself! (Not Required)
+            Tell us about yourself!
           </span>
           <textarea
             value={user.bio}
@@ -121,6 +121,7 @@ const ProfileForm = ({ type, user, setUser, submitting, handleSubmit }) => {
               />
           </label>
 
+          {/*Multi-select for field(s) of interest*/}
           <label>
           <span className="font-satoshi font-semibold text-base text-gray-700">
             Field(s) of Interest
@@ -159,9 +160,10 @@ const ProfileForm = ({ type, user, setUser, submitting, handleSubmit }) => {
               />
           </label>
 
+        {/*Dropdown menu select Time Zone*/}
         <label>
           <span className="font-satoshi font-semibold text-base text-gray-700">
-            Time Zone
+            Time Zone (Required)
           </span>
           <Dropdown
               options={[
@@ -210,12 +212,13 @@ const ProfileForm = ({ type, user, setUser, submitting, handleSubmit }) => {
           />
           </label>
 
-
+        {/*Cancel button*/}
         <div className="flex-end mx-3 mb-5 gap-4">
-          <Link href="/" className="text-gray-500 text-sm">
+          <Link href="/profile" className="text-gray-500 text-sm">
             Cancel
           </Link>
 
+          {/*Submit button*/}
           <button
             type="submit"
             disabled={submitting}

@@ -2,7 +2,7 @@ import React from "react";
 import Image from 'next/image';
 
 const ProfilePage = ({
-    profileDetails
+    profileDetails, handleEdit
 }) => {
     console.log("This is the event info");
     console.log(profileDetails);
@@ -19,10 +19,17 @@ const ProfilePage = ({
                     />
                 </div>
                 
-            <h1 className="head_text text-left"> {profileDetails.firstName} {profileDetails.lastName}</h1>
+            <h1 className="head_text text-left"> {profileDetails?.firstName} {profileDetails?.lastName}</h1>
             <div className="pt-4">
-                <h3>{profileDetails.email}</h3>
+                <h3>{profileDetails?.email}</h3>
             </div>
+            <button
+                type="button"
+                onClick={handleEdit}
+                className="blue_btn"
+            >
+                Edit Profile
+            </button>
         </section>
     )
 }

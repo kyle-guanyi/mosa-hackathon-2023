@@ -3,17 +3,28 @@ import React from "react";
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 const UserCard = ( {user} ) => { 
     console.log("This is the user for event")
     console.log(user)
+    const { data: session } = useSession();
+
+    console.log("This is my session ID")
+    console.log(session?.user.id)
+
     const router = useRouter();
-    const handleUserClick = () => {
-        router.push(`/user/${user._id}`)
+
+    const handleProfileClick = () => {
+
+
+        if (user?._id === session?.user.id) return router.push("/profile");
+
+        router.push(`/profile/${user._id}`)
     };
 
     return (
-        <div className = "user_card cursor-pointer" onClick={handleUserClick} >
+        <div className = "user_card cursor-pointer" onClick={handleProfileClick} >
             <div className="flex justify-between items-start gap-5">
                 <div className="flex-1 flex justify-start items-center gap-3">
                     <Image 
