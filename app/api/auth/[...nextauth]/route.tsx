@@ -16,6 +16,9 @@ const handler = NextAuth({
       },
     }),
   ],
+  pages: {
+    signIn: "/",
+  },
   callbacks: {
     async session({ session }) {
         const sessionUser = await User.findOne({
