@@ -1,3 +1,5 @@
+"use client"
+
 import "/styles/globals.css";
 
 import Nav from "components/Nav";
@@ -8,18 +10,20 @@ export const metadata = {
   description: "Meetup web application for MCIT Online students",
 };
 
-const RootLayout = ({ children }) => (
-  <html lang='en'>
-    <body>
-      <Provider>
-        <main className='main flex-col'>
-          <Nav />
-          {children}
-        </main>
-      </Provider>
-    </body>
-  </html>
-);
+const RootLayout = ({ children }) => {
+  return (
+    <html lang='en'>
+      <body>
+        <Provider>
+          <main className='main flex-col'>
+            <Nav />
+            {children}
+          </main>
+        </Provider>
+      </body>
+    </html>
+  );
+};
 
 
 export default RootLayout;

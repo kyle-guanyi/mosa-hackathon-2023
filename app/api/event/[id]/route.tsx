@@ -7,13 +7,13 @@ export const GET = async (request, { params }) => {
   try {
     await connectToDB;
 
-    const event = await Event.findByID(params.id).
-    populate('creator');
-    if(!event) return new Response("Prompt not found", {status: 404});
+    const event = await Event.findById(params?.id);
+
+    if(!event) return new Response("Event not found", {status: 404});
 
     return new Response(JSON.stringify(event), {status: 200})
   } catch (error) {
-    return new Response("Failed to fetch prompt", { status: 500 })
+    return new Response("Failed to fetch event", { status: 500 })
   }
 }
 

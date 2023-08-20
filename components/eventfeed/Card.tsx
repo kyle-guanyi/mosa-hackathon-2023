@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 
-const Card = ({event, handleLocationClick, handleEdit, handleDelete} ) => {
+const Card = ({event} ) => {
 
   const startDate = new Date(event.startDate).toLocaleDateString('en-US', {
     year: 'numeric',
@@ -16,7 +16,7 @@ const Card = ({event, handleLocationClick, handleEdit, handleDelete} ) => {
   const router = useRouter();
 
   const handleEventClick = () => {
-    router.push(`/eventpage?id=${event._id}`)
+    router.push(`/event/${event._id}`)
   };
 
   return (
@@ -37,8 +37,6 @@ const Card = ({event, handleLocationClick, handleEdit, handleDelete} ) => {
             {event.startTime}
           </p>
           </div>
-          
-
         </div>
       </div>
     </div>

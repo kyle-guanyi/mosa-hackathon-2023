@@ -4,10 +4,11 @@ import Image from 'next/image';
 
 import { useState, useEffect } from 'react';
 import { signIn, useSession, getProviders } from 'next-auth/react';
+import { useRouter } from "next/navigation";
 
 const Home = () => {
   const { data: session } = useSession();
-
+  const router = useRouter();
   const [providers, setProviders] = useState(null);
 
   useEffect(() => {
@@ -20,11 +21,18 @@ const Home = () => {
     setUpProviders();
   }, []);
 
+  const handleLoggedIn = () => {
+    router.push(`/home`)
+  };
+
+  useEffect(() => {
+    if (session?.user) {
+      handleLoggedIn();
+    }
+  }, [session]);
+
   return (
     <div className="flex-center flex-col">
-      {session?.user ? (
-        <div>Event Feed to be Implemented</div>
-      ) : (
         <div>
           <section className="w-full flex-center">
             <Image
@@ -60,7 +68,6 @@ const Home = () => {
               ))}
           </div>
         </div>
-      )}
     </div>
   );
 };
