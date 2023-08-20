@@ -20,7 +20,7 @@ const UserCard = ( {user} ) => {
 
         if (user?._id === session?.user.id) return router.push("/profile");
 
-        router.push(`/profile/${user._id}`)
+        router.push(`/profile/${user?._id}`)
     };
 
     return (

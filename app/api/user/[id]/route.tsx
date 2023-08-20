@@ -41,7 +41,7 @@ export const PATCH = async (request, { params }) => {
     existingUser.gender = gender;
     existingUser.bio = bio;
     existingUser.classesTaken = classesTaken;
-    existingUser.fieldofInterest = fieldOfInterest;
+    existingUser.fieldOfInterest = fieldOfInterest;
 
     await existingUser.save();
 
