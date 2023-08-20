@@ -44,9 +44,16 @@ const handler = NextAuth({
           if (!userExists) {
             await User.create({
               email: profile.email,
-              username: profile.name.replace(" ", "").toLowerCase(),
-              image: profile.picture,
-              attending: [],
+              firstName: profile.name.split(" ")[0], // Extract first name
+              lastName: profile.name.split(" ")[1], // Extract last name
+              googleProfileImage: profile.picture,
+              userUpdatedProfileImage: null,
+              closestMainCity: "",
+              gender: "",
+              bio: "",
+              classesTaken: [],
+              fieldOfInterest: [],
+              attendingEvents: [],
             });
           }
           return true;
