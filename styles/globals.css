@@ -123,11 +123,11 @@
 
 /* PromptCard Component */
 .prompt_card {
-  @apply flex-1 break-inside-avoid rounded-lg border border-gray-300 bg-white/20 bg-clip-padding p-6 pb-6 backdrop-blur-lg backdrop-filter md:w-[360px] w-full h-fit;
+  @apply flex-1 break-inside-avoid rounded-lg border border-gray-300 bg-white/20 bg-clip-padding p-6 pb-6 backdrop-blur-lg backdrop-filter md:w-[360px] w-full h-fit hover:bg-opacity-40 hover:-translate-y-1 transition-all;
 }
 
 .user_card {
-  @apply flex-1 break-inside-avoid rounded-lg border border-gray-300 bg-white/20 bg-clip-padding p-6 pb-6 backdrop-blur-lg backdrop-filter md:w-[360px] w-full h-fit;
+  @apply flex-1 break-inside-avoid rounded-lg border border-gray-300 bg-white/20 bg-clip-padding p-6 pb-6 backdrop-blur-lg backdrop-filter md:w-[360px] w-full h-fit hover:bg-opacity-40 hover:-translate-y-1 transition-all;
 }
 
 .flex-center {
@@ -144,4 +144,8 @@
 
 .flex-between {
   @apply flex justify-between items-center;
+}
+
+.bannerIcon{
+  @apply w-16 h-16 bg-black bg-opacity-25 text-gray-200 text-xl inline-flex items-center justify-center rounded-md hover:bg-opacity-40 hover:-translate-y-1 transition-all cursor-pointer;
 }

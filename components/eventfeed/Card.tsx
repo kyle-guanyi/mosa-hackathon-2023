@@ -34,7 +34,7 @@ const Card = ({event} ) => {
             {startDate} 
           </p>
           <p>
-            {event.startTime}
+            {event.startTime} {event.timeZone}
           </p>
           </div>
         </div>
