@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
-import Form from "components/Form";
+import EventForm from "components/EventForm";
 
 const CreateEvent = () => {
   const router = useRouter();
@@ -48,7 +48,7 @@ const CreateEvent = () => {
   };
 
   return (
-    <Form
+    <EventForm
       type="Create"
       event={event}
       setEvent={setEvent}

@@ -17,3 +17,36 @@ export const GET = async (request, { params }) => {
     return new Response("Failed to fetch user", { status: 500 })
   }
 }
+
+//PATCH (update)
+
+export const PATCH = async (request, { params }) => {
+  const { firstName, lastName, closestMainCity, timeZone, gender, bio, classesTaken, fieldOfInterest } = await request.json();
+
+  try {
+    await connectToDB();
+
+    // Find the existing prompt by ID
+    const existingUser = await User.findById(params.id);
+
+    if (!existingUser) {
+      return new Response("User not found", { status: 404 });
+    }
+
+    // Update the prompt with new data
+    existingUser.firstName = firstName;
+    existingUser.lastName = lastName;
+    existingUser.closestMainCity = closestMainCity;
+    existingUser.timeZone = timeZone;
+    existingUser.gender = gender;
+    existingUser.bio = bio;
+    existingUser.classesTaken = classesTaken;
+    existingUser.fieldofInterest = fieldOfInterest;
+
+    await existingUser.save();
+
+    return new Response("Successfully updated the User", { status: 200 });
+  } catch (error) {
+    return new Response("Error Updating User", { status: 500 });
+  }
+};

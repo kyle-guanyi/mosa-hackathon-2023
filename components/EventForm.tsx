@@ -3,13 +3,13 @@ import Dropdown from "./Dropdown";
 
 
 // @ts-ignore
-const Form = ({ type, event, setEvent, submitting, handleSubmit }) => {
+const EventForm = ({ type, event, setEvent, submitting, handleSubmit }) => {
   return (
     <section className="w-full max-w-full flex-start flex-col">
       <h1 className="head_text text-left">
         <span className="blue_gradient">{type} Post </span>
       </h1>
-      <p className="desc text-left max-w-md">{type} your event Here.</p>
+      <p className="desc text-left max-w-md">{type} your event here.</p>
       <form
         onSubmit={handleSubmit}
         className="mt-10 w-full max-w-2xl flex flex-col gap-7 glassmorphism"
@@ -211,4 +211,4 @@ const Form = ({ type, event, setEvent, submitting, handleSubmit }) => {
   );
 };
 
-export default Form;
+export default EventForm;

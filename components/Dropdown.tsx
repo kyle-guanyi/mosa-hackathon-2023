@@ -15,7 +15,7 @@ const Dropdown: React.FC<DropdownProps> = ({ options, selected, onSelectedChange
                 {selected || "Select an option"}
             </button>
             {isOpen && (
-                <ul className="absolute left-0 mt-2 w-48 bg-white rounded shadow-md overflow-y-auto max-h-48">
+                <ul className="absolute left-0 mt-2 w-48 bg-white rounded shadow-md overflow-y-auto max-h-48 z-50">
                     {options.map((option, idx) => (
                         <li key={idx}>
                             <a

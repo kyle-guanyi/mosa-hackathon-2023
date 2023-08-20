@@ -17,7 +17,7 @@ const UserCard = ( {user} ) => {
             <div className="flex justify-between items-start gap-5">
                 <div className="flex-1 flex justify-start items-center gap-3">
                     <Image 
-                        src= {user?.image}
+                        src= {user?.googleProfileImage}
                         alt="user_image"
                         width={40}
                         height={40}
@@ -25,7 +25,7 @@ const UserCard = ( {user} ) => {
                     />
 
                     <div className="flex flex-col">
-                        <h3>{user?.username}</h3>
+                        <h3>{user?.firstName} {user?.lastName}</h3>
                     </div>
                 </div>
 

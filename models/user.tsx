@@ -39,6 +39,10 @@ const UserSchema = new Schema({
     type: String,
   },
 
+  timeZone: {
+    type: String,
+  },
+
   gender: {
     type: String,
   },

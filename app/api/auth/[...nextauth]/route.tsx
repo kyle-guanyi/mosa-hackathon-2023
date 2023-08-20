@@ -49,6 +49,7 @@ const handler = NextAuth({
               googleProfileImage: profile.picture,
               userUpdatedProfileImage: null,
               closestMainCity: "",
+              timeZone: "",
               gender: "",
               bio: "",
               classesTaken: [],

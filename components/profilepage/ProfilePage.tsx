@@ -11,7 +11,7 @@ const ProfilePage = ({
         <section className="w-full h-full flex-col flex-1 items-center justify-center bg-slate-500">
                 <div className="pt-4">
                 <Image 
-                        src= {profileDetails?.image}
+                        src= {profileDetails?.googleProfileImage}
                         alt="user_image"
                         width={120}
                         height={120}
@@ -19,7 +19,7 @@ const ProfilePage = ({
                     />
                 </div>
                 
-            <h1 className="head_text text-left"> {profileDetails.username}</h1>
+            <h1 className="head_text text-left"> {profileDetails.firstName} {profileDetails.lastName}</h1>
             <div className="pt-4">
                 <h3>{profileDetails.email}</h3>
             </div>
