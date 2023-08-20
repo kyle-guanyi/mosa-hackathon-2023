@@ -23,7 +23,7 @@ const CreateEvent = () => {
           userId: session?.user.id,
           eventName: event.eventName,
           eventDescription: event.eventDescription,
-          attending: [session?.user.id],
+          attendees: [session?.user.id],
           interested: event.interested,
           isPublic: event.isPublic,
           isVirtual: event.isVirtual,

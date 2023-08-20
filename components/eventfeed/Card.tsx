@@ -20,7 +20,7 @@ const Card = ({event} ) => {
   };
 
   return (
-    <div className="prompt_card" onClick={handleEventClick}>
+    <div className="prompt_card cursor-pointer" onClick={handleEventClick}>
       <div className = "flex justify-between items-start gap-5">
         <div className = "flex flex-col">
           <h3 className = "font-satoshi font-semibold">

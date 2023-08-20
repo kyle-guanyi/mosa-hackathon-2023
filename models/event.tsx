@@ -2,7 +2,7 @@ import { Schema, model, models, Document, Types } from 'mongoose';
 
 interface IEvent extends Document {
     creator: Types.ObjectId;
-    attending: Types.ObjectId[];
+    attendees: Types.ObjectId[];
     interested: Types.ObjectId[];
     isPublic: boolean;
     eventName: string;
@@ -21,7 +21,7 @@ const eventSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User',
   },
-  attending: {
+  attendees: {
     type: [{ type: Schema.Types.ObjectId, ref: 'User' }],
   },
   interested: {
