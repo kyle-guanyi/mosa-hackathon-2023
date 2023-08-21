@@ -4,7 +4,7 @@ import Card from "./Card";
 
 const EventCardList = ({data}) => {
     return (
-        <div className="mt-16 prompt_layout">
+        <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
             {data.map((event) => (
                 <Card
                     key={event._id}
@@ -21,6 +21,7 @@ const Eventfeed = () => {
     const [filterCity, setFilterCity] = useState('');
     const [filterDate, setFilterDate] = useState('');
     const [filterVirtual, setFilterVirtual] = useState('');
+    const [sortOption, setSortOption] = useState(true);
 
     const fetchEvents = async () => {
         const response = await fetch('/api/event');
@@ -33,24 +34,31 @@ const Eventfeed = () => {
     }, []);
 
     useEffect(() => {
-        Object.values(events).forEach(event => {
-            console.log("this is the event start date")
-            console.log(event.startDate.substring(0,10));
-            console.log("this is the filtered date")
-            console.log(filterDate);
-        
-            // You can perform further actions here using event.startDate and filterDate
-            // For example, compare the dates and decide what to do with the event
-          });
-
         const results = Object.values(events).filter(event =>
             event.closestCity.includes(filterCity) &&
             (!filterDate || event.startDate.substring(0,10) === filterDate) &&
             (filterVirtual === '' || event.isVirtual.toString() === filterVirtual)
         );
-        setFilteredEvents(results);
-    }, [events, filterCity, filterDate, filterVirtual]);
+        console.log(results)
 
+        if (sortOption) {
+            const sortedEvents = [...results].sort((a, b) => {
+                const dateA = new Date(a.startDate);
+                const dateB = new Date(b.startDate);
+                return dateA - dateB;
+            });
+            setFilteredEvents(sortedEvents);
+        } else {
+            const sortedEvents = [...results].reverse();
+            console.log("Reversed List");
+            console.log(sortedEvents);
+            setFilteredEvents(sortedEvents);
+        }
+
+        
+    }, [events, filterCity, filterDate, filterVirtual, sortOption]);
+
+        
         return (
             <section id="eventfeed" className="w-full border-l-1 border-r-1 border-t-1 border-gray-600">
                 <div className="p-4 flex space-x-4">
@@ -115,6 +123,14 @@ const Eventfeed = () => {
                         onChange={(e) => setFilterDate(e.target.value)}
                         className="appearance-none block w-1/4 bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
                     />
+                    <select
+                        value={sortOption.toString()}
+                        onChange={(e) => setSortOption(e.target.value === "true")}
+                        className="block appearance-none w-1/4 bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+                    >
+                        <option value="true">Upcoming Events</option>
+                        <option value="false">Recently Added Events</option>
+                    </select>
                 </div>
                 <EventCardList data={filteredEvents} />
             </section>

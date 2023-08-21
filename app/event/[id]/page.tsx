@@ -14,15 +14,16 @@ const Event = ({ params }) => {
         const response = await fetch(`/api/event/${params?.id}`);
         const eventData = await response.json();
 
-        // Now fetch creator and attendees information
-        const creatorResponse = await fetch(`/api/user/${eventData.creator}`);
+        const [creatorResponse, ...attendeesResponses] = await Promise.all([
+          fetch(`/api/user/${eventData.creator}`),
+          ...eventData.attendees.map(attendeeId =>
+            fetch(`/api/user/${attendeeId}`)
+          ),
+        ]);
+  
         const creatorData = await creatorResponse.json();
-
         const attendeesData = await Promise.all(
-          eventData.attendees.map(async (attendeeId) => {
-            const attendeeResponse = await fetch(`/api/user/${attendeeId}`);
-            return await attendeeResponse.json();
-          })
+          attendeesResponses.map(response => response.json())
         );
 
         setEventDetails(eventData);

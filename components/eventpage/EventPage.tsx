@@ -2,6 +2,7 @@ import React from "react";
 import UserCard from "./UserCard";
 import { FiClock } from "react-icons/Fi";
 import { CiLocationOn } from "react-icons/Ci";
+import { useState , useEffect } from "react";
 
 const EventPage = ({
   eventDetails,
@@ -25,13 +26,22 @@ const EventPage = ({
     }
   );
 
+  const [isLoading, setIsLoading] = useState(true);
+
+  // UseEffect to set isLoading to false once data is fetched
+  useEffect(() => {
+    if (eventDetails && creatorInfo && attendeesInfo) {
+      setIsLoading(false);
+    }
+  }, [eventDetails, creatorInfo, attendeesInfo]);
+
   return (
     <div className="h-screen w-full bg-red-500 flex">
       <div className="w-1/5 bg-blue-500">
         <div className="w-full h-full bg-yellow-500">
           Attendees:
           <div className="flex-col">
-            {attendeesInfo.map((user) => (
+            {!isLoading && attendeesInfo.map((user) => (
               <UserCard key={user._id} user={user} />
             ))}
           </div>
@@ -44,7 +54,7 @@ const EventPage = ({
         <div className=" w-full h-5/6 bg-blue-500 flex-col">
           <div>Hosted By:</div>
           <div>
-            <UserCard user={creatorInfo} />
+            {!isLoading && <UserCard user={creatorInfo} />}
           </div>
           <div className="flex-row flex justify-between">
             <div className="flex-col justify-start">
