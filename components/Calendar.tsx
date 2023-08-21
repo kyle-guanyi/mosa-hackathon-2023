@@ -16,11 +16,7 @@ type EventDocument = {
 const Calendar: React.FC = () => {
     // constant containing JSONs of events
     const [events, setEvents] = useState([]);
-    // constant containing currentUserInfo
-    const [userInfo, setUserInfo] = useState();
-
-    // 
-    const [userAttendingEvents, setUserAttendingEvents] = useState([]);
+  
     // to obtain session ID
     const { data:session } = useSession();
 
@@ -38,24 +34,43 @@ const Calendar: React.FC = () => {
         fetchEvents();
     }, []);
 
-
-    useEffect(() => {
-        const fetchUserInfo = async () => {
-            try {
-                const response = await fetch (`/api/user/${session?.user.id}`);
-                const userData = await response.json();
-                setUserInfo(userData);
-
-            } catch (error) {
-                console.error("Error fetching user details:", error);
-            }
-
-            
+    
+    const [userAttendingEvents, setUserAttendingEvents] = useState({
+        attendingEvents: [],
+      });
+    
+      useEffect(() => {
+        const getUserAttendingEvents = async () => {
+          const response = await fetch(`/api/user/${session?.user.id}`);
+          const data = await response.json();
+    
+          setUserAttendingEvents({
+            attendingEvents: data.attendingEvents,
+          });
+    
         };
-        if (session?.user.id) {
-            fetchUserInfo();
-        }
-    }, [session?.user.id]);
+    
+        if (session?.user.id) getUserAttendingEvents();
+      }, [session?.user.id]);
+    
+      useEffect(() => {
+        // Function to filter events based on user's attending events
+        const filterEvents = () => {
+          if (userAttendingEvents.attendingEvents.length > 0) {
+            const filtered = events.filter(event =>
+              userAttendingEvents.attendingEvents.includes(event._id)
+            );
+            setFilteredEvents(filtered);
+            console.log("These are the filtered events if I had events");
+            console.log(filtered);
+          } else {
+            // If user is not attending any events, set filteredEvents to the same as events
+            console.log("No attending events")
+          }
+        };
+    
+        filterEvents(); // Call the filter function initially
+      }, [userAttendingEvents, events]);
 
     return (
         <div className="p-4">
