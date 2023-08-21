@@ -15,7 +15,7 @@ const EventCardList = ({data}) => {
     );
 }
 
-const Eventfeed = () => {
+const EventFeed = () => {
     const [events, setEvents] = useState([]);
     const [filteredEvents, setFilteredEvents] = useState([]);
     const [filterCity, setFilterCity] = useState('');
@@ -137,5 +137,5 @@ const Eventfeed = () => {
         );
     }
 
-    export default Eventfeed;
+    export default EventFeed;
 

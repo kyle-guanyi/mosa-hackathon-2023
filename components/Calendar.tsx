@@ -19,6 +19,8 @@ const Calendar: React.FC = () => {
     // constant containing currentUserInfo
     const [userInfo, setUserInfo] = useState();
 
+    // 
+    const [userAttendingEvents, setUserAttendingEvents] = useState([]);
     // to obtain session ID
     const { data:session } = useSession();
 
@@ -32,17 +34,28 @@ const Calendar: React.FC = () => {
         const data = await response.json();
         setEvents(data);
     }
-
     useEffect(() => {
         fetchEvents();
     }, []);
 
 
     useEffect(() => {
-        try {
-            const response = await fetch()
+        const fetchUserInfo = async () => {
+            try {
+                const response = await fetch (`/api/user/${session?.user.id}`);
+                const userData = await response.json();
+                setUserInfo(userData);
+
+            } catch (error) {
+                console.error("Error fetching user details:", error);
+            }
+
+            
+        };
+        if (session?.user.id) {
+            fetchUserInfo();
         }
-    })
+    }, [session?.user.id]);
 
     return (
         <div className="p-4">
