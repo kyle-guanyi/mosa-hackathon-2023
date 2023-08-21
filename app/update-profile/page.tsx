@@ -1,14 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+
 
 import ProfileForm from "components/ProfileForm";
 
 const UpdateProfile = () => {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const userId = searchParams.get("id");
+  const { data: session } = useSession();
 
   const [user, setUser] = useState({
     firstName: "",
@@ -26,7 +27,7 @@ const UpdateProfile = () => {
 
   useEffect(() => {
     const getUserDetails = async () => {
-      const response = await fetch(`/api/user/${userId}`);
+      const response = await fetch(`/api/user/${session?.user.id}`);
       const data = await response.json();
       console.log(data);
 
@@ -43,17 +44,17 @@ const UpdateProfile = () => {
       });
     };
 
-    if (userId) getUserDetails();
-  }, [userId]);
+    if (session?.user.id) getUserDetails();
+  }, [session?.user.id]);
 
   const updateUser = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    if (!userId) return alert("Missing User Id!");
+    if (!session?.user.id) return alert("Missing User Id!");
 
     try {
-      const response = await fetch(`/api/user/${userId}`, {
+      const response = await fetch(`/api/user/${session?.user.id}`, {
         method: "PATCH",
         body: JSON.stringify({
           firstName: user.firstName,

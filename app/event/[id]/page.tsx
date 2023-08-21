@@ -3,6 +3,7 @@
 import EventPage from "components/eventpage/EventPage";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const Event = ({ params }) => {
   const [eventDetails, setEventDetails] = useState([]);
@@ -40,6 +41,7 @@ const Event = ({ params }) => {
   }, [params.id]);
 
   const { data: session } = useSession();
+  const router = useRouter();
 
   const [user, setUser] = useState({
     attendingEvents: [],
@@ -129,15 +131,19 @@ const Event = ({ params }) => {
     }
   };
 
+  const handleEdit = (eventId) => {
+    router.push(`/update-event/${eventId}`);
+  };
+
   return (
     <EventPage
       eventDetails={eventDetails}
       creatorInfo={creatorInfo}
       attendeesInfo={attendeesInfo}
       user={user}
-      setUser={setUser}
       handleAdd={handleAdd}
       handleRemove={handleRemove}
+      handleEdit={handleEdit}
     />
   );
 };

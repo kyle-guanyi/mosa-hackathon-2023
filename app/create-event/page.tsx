@@ -10,14 +10,27 @@ const CreateEvent = () => {
   const { data: session } = useSession();
 
   const [submitting, setSubmitting] = useState(false);
-  const [event, setEvent] = useState({eventName: "", eventDescription: "", location: "", zoomLink:"", isPublic: false, isVirtual: false, isCompleted: false, interested:[], startDate: new Date(), startTime: "12:00 PM", timeZone: "EST", closestCity: ""});
+  const [event, setEvent] = useState({
+    eventName: "",
+    eventDescription: "",
+    location: "",
+    zoomLink: "",
+    isPublic: false,
+    isVirtual: false,
+    isCompleted: false,
+    interested: [],
+    startDate: new Date(),
+    startTime: "12:00 PM",
+    timeZone: "EST",
+    closestCity: "",
+  });
 
   const createEvent = async (e) => {
     e.preventDefault();
     setSubmitting(true);
 
     try {
-      const response = await fetch('/api/event/new', {
+      const response = await fetch("/api/event/new", {
         method: "POST",
         body: JSON.stringify({
           userId: session?.user.id,

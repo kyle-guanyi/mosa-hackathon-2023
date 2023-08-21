@@ -22,7 +22,7 @@ const MyProfile = () => {
     }, [session?.user.id]);
 
     const handleEdit = (myUserProfile) => {
-        router.push(`/update-profile?id=${session?.user.id}`);
+        router.push(`/update-profile`);
     };
 
     return (

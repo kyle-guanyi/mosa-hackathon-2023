@@ -3,13 +3,13 @@ import UserCard from "./UserCard";
 import { FiClock } from "react-icons/Fi";
 import { CiLocationOn } from "react-icons/Ci";
 import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
 
 const EventPage = ({
   eventDetails,
   creatorInfo,
   attendeesInfo,
   user,
-  setUser,
   handleAdd,
   handleRemove,
   handleEdit,
@@ -25,6 +25,7 @@ const EventPage = ({
   );
 
   const [isLoading, setIsLoading] = useState(true);
+  const { data: session } = useSession();
 
   // UseEffect to set isLoading to false once data is fetched
   useEffect(() => {
@@ -58,18 +59,36 @@ const EventPage = ({
             </div>
 
             <div>
-              <div className="justify-end">
+              <div className="pb-3">
+                {session?.user.id === eventDetails.creator && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleEdit(eventDetails._id);
+                    }}
+                    className="blue_btn"
+                  >
+                    Update Event
+                  </button>
+                )}
+              </div>
+              <div>
                 <button
                   type="button"
                   onClick={(e) =>
                     !user.attendingEvents.includes(eventDetails._id)
                       ? handleAdd(eventDetails._id)
                       : handleRemove(eventDetails._id)
-
                   }
-                  className={`mx-auto ${!user.attendingEvents.includes(eventDetails._id) ? "blue_btn" : "red_btn"}`}
+                  className={`mx-auto ${
+                    !user.attendingEvents.includes(eventDetails._id)
+                      ? "blue_btn"
+                      : "red_btn"
+                  }`}
                 >
-                  {!user.attendingEvents.includes(eventDetails._id) ? "Add Event" : "Remove Event"}
+                  {!user.attendingEvents.includes(eventDetails._id)
+                    ? "Add Event"
+                    : "Remove Event"}
                 </button>
               </div>
             </div>
