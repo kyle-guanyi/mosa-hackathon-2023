@@ -20,6 +20,7 @@ const Eventfeed = () => {
     const [filteredEvents, setFilteredEvents] = useState([]);
     const [filterCity, setFilterCity] = useState('');
     const [filterDate, setFilterDate] = useState('');
+    const [filterVirtual, setFilterVirtual] = useState('');
 
     const fetchEvents = async () => {
         const response = await fetch('/api/event');
@@ -34,21 +35,30 @@ const Eventfeed = () => {
     useEffect(() => {
         const results = events.filter(event =>
             event.closestCity.includes(filterCity) &&
-            (!filterDate || new Date(event.startDate).toDateString() === new Date(filterDate).toDateString())
+            (!filterDate || new Date(event.startDate).toDateString() === new Date(filterDate).toDateString()) &&
+            (filterVirtual === '' || event.isVirtual.toString() === filterVirtual)
         );
         setFilteredEvents(results);
-    }, [events, filterCity, filterDate]);
+    }, [events, filterCity, filterDate, filterVirtual]);
 
         return (
             <section id="eventfeed" className="w-full border-l-1 border-r-1 border-t-1 border-gray-600">
                 <div className="p-4 flex space-x-4">
+                    <select
+                        value={filterVirtual}
+                        onChange={(e) => setFilterVirtual(e.target.value)}
+                        className="block appearance-none w-1/4 bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+                    >
+                        <option value="">Event Type</option>
+                        <option value="true">Virtual Event</option>
+                        <option value="false">In-Person Event</option>
+                    </select>
                     <select
                         value={filterCity}
                         onChange={(e) => setFilterCity(e.target.value)}
                         className="block appearance-none w-1/4 bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
                     >
                         <option value="">Select City</option>
-                        <option value="Virtual Event">Virtual Event</option>
                         <option value="Africa">Africa</option>
                         <option value="Atlanta">Atlanta</option>
                         <option value="Austin">Austin</option>
@@ -103,25 +113,3 @@ const Eventfeed = () => {
 
     export default Eventfeed;
 
-
-//     return (
-//         <section id="eventfeed" className="w-full border-l-1 border-r-1 border-t-1 border-gray-600">
-//             <div className="p-4">
-//                 <input
-//                     type="text"
-//                     placeholder="Filter by city"
-//                     value={filterCity}
-//                     onChange={(e) => setFilterCity(e.target.value)}
-//                 />
-//                 <input
-//                     type="date"
-//                     value={filterDate}
-//                     onChange={(e) => setFilterDate(e.target.value)}
-//                 />
-//             </div>
-//             <EventCardList data={filteredEvents} />
-//         </section>
-//     );
-// }
-
-// export default Eventfeed;
