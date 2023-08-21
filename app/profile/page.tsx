@@ -11,17 +11,10 @@ const MyProfile = () => {
     const { data: session } = useSession();
     const [myUserProfile, setMyUserProfile] = useState();
 
-
-    console.log("SUCCESS ENTERED PROFILE")
-    console.log(session?.user.id)
-
-
     useEffect(() => {
         const fetchMyDetails = async () => {
             const response = await fetch(`/api/user/${session?.user.id}`);
             const data = await response.json();
-            console.log("this is my data")
-            console.log(data)
             setMyUserProfile(data);
         };
 

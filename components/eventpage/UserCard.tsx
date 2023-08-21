@@ -6,18 +6,12 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 
 const UserCard = ( {user} ) => { 
-    console.log("This is the user for event")
-    console.log(user)
-    const { data: session } = useSession();
 
-    console.log("This is my session ID")
-    console.log(session?.user.id)
+    const { data: session } = useSession();
 
     const router = useRouter();
 
     const handleProfileClick = () => {
-
-
         if (user?._id === session?.user.id) return router.push("/profile");
 
         router.push(`/profile/${user?._id}`)

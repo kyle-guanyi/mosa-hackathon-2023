@@ -21,19 +21,24 @@ export const GET = async (request, { params }) => {
 //PATCH (update)
 
 export const PATCH = async (request, { params }) => {
+
+  if (request.nextUrl.searchParams.get("type") === "attending") {
+    return PATCH_ATTENDING(request, {params});
+  }
+
   const { firstName, lastName, closestMainCity, timeZone, gender, bio, classesTaken, fieldOfInterest } = await request.json();
 
   try {
     await connectToDB();
 
-    // Find the existing prompt by ID
+    // Find the existing user by ID
     const existingUser = await User.findById(params.id);
 
     if (!existingUser) {
       return new Response("User not found", { status: 404 });
     }
 
-    // Update the prompt with new data
+    // Update the user with new data
     existingUser.firstName = firstName;
     existingUser.lastName = lastName;
     existingUser.closestMainCity = closestMainCity;
@@ -48,5 +53,32 @@ export const PATCH = async (request, { params }) => {
     return new Response("Successfully updated the User", { status: 200 });
   } catch (error) {
     return new Response("Error Updating User", { status: 500 });
+  }
+};
+
+export const PATCH_ATTENDING = async (request, { params }) => {
+  const { attendingEvents } = await request.json();
+
+  console.log(attendingEvents)
+
+  try {
+    await connectToDB();
+
+    // Find the existing user by ID
+    const existingUser = await User.findById(params.id);
+
+    if (!existingUser) {
+      return new Response("User not found", { status: 404 });
+    }
+
+    // Add new values to the attending array
+    existingUser.attendingEvents = attendingEvents;
+
+    await existingUser.save();
+
+    return new Response("Successfully updated user's attending events", { status: 200 });
+  } catch (error) {
+    console.error("Error updating user's attending events:", error); // Log the error for debugging
+    return new Response("Error updating user's attending events", { status: 500 });
   }
 };

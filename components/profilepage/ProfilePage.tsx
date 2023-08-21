@@ -3,29 +3,36 @@ import Image from "next/image";
 
 const ProfilePage = ({ profileDetails, handleEdit }) => {
   return (
-    <section className="w-full h-full flex-col flex-1 items-center justify-center bg-slate-500">
+    <section className="w-full flex-col flex-1 text-center bg-slate-500">
       <div className="pt-4">
-        <Image
-          src={profileDetails?.googleProfileImage}
-          alt="user_image"
-          width={120}
-          height={120}
-          className="rounded-full object-contain"
-        />
+        {profileDetails?.googleProfileImage && (
+          <Image
+            src={profileDetails.googleProfileImage}
+            alt="user_image"
+            width={120}
+            height={120}
+            className="mx-auto rounded-full object-contain"
+          />
+        )}
       </div>
 
-      <h1 className="head_text text-left">
-        {" "}
+      <h1 className="head_text">
         {profileDetails?.firstName} {profileDetails?.lastName}
       </h1>
       <div className="pt-4">
         <h3>{profileDetails?.email}</h3>
       </div>
-      {handleEdit && (
-        <button type="button" onClick={handleEdit} className="blue_btn">
-          Edit Profile
-        </button>
-      )}
+      <div className="pt-4">
+        {handleEdit && (
+          <button
+            type="button"
+            onClick={handleEdit}
+            className="mx-auto blue_btn"
+          >
+            Edit Profile
+          </button>
+        )}
+      </div>
     </section>
   );
 };

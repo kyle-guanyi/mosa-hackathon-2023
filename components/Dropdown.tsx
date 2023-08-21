@@ -19,9 +19,10 @@ const Dropdown: React.FC<DropdownProps> = ({ options, selected, onSelectedChange
                     {options.map((option, idx) => (
                         <li key={idx}>
                             <a
-                                href="#"
                                 onClick={(e) => {
+                                    console.log("DropDown")
                                     e.preventDefault();
+                                    e.stopPropagation();
                                     onSelectedChange(option);
                                     setIsOpen(false);
                                 }}

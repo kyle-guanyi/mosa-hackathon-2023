@@ -2,6 +2,8 @@
 
 import EventPage from "components/eventpage/EventPage";
 import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const Event = ({ params }) => {
   const [eventDetails, setEventDetails] = useState([]);
@@ -38,11 +40,71 @@ const Event = ({ params }) => {
     }
   }, [params.id]);
 
+
+  const { data: session } = useSession();
+  const [eventAdded, setEventAdded] = useState(false);
+
+  const router = useRouter();
+
+  const [user, setUser] = useState({
+    attendingEvents: [],
+  })
+
+  useEffect(() => {
+    const getUserAttendingEvents = async () => {
+      const response = await fetch(`/api/user/${session?.user.id}`);
+      const data = await response.json();
+      console.log("This is the current user bout to attend")
+      console.log(data);
+
+      setUser({
+        attendingEvents: data.attendingEvents,
+      });
+
+      console.log(user)
+    };
+
+    if (session?.user.id) getUserAttendingEvents();
+  }, [session?.user.id]);
+
+  const handleAdd = async (eventId) => {
+    
+    if (!session?.user.id) return alert("User is not logged in and does not have a current session");
+
+    if (user.attendingEvents.includes(eventId)) {
+      console.log("Event is already added to attending events.");
+      return;
+    }
+
+    try {
+
+      const updatedAttendingEvents = [...user.attendingEvents, eventId];
+
+      console.log("this is the updated attending events")
+      console.log(updatedAttendingEvents)
+
+      const response = await fetch(`/api/user/${session?.user.id}?type=attending`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          attendingEvents: updatedAttendingEvents,
+        }),
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setEventAdded(true);
+    }
+  };
+
   return (
     <EventPage
       eventDetails={eventDetails}
       creatorInfo={creatorInfo}
       attendeesInfo={attendeesInfo}
+      user={user}
+      setUser={setUser}
+      handleAdd={handleAdd}
+      eventAdded={eventAdded}
     />
   );
 };

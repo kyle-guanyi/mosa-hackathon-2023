@@ -14,8 +14,7 @@
   overflow: auto;
   display: flex;
   justify-content: center;
-  /*padding: 120px 24px 160px 24px;
-  */
+  align-items: center;
 }
 
 .image-cropper {

@@ -21,6 +21,7 @@ const UpdateProfile = () => {
     fieldOfInterest: [],
     userUpdatedProfileImage: "",
   });
+  
   const [submitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -68,7 +69,7 @@ const UpdateProfile = () => {
       });
 
       if (response.ok) {
-        router.push("/");
+        router.push("/profile");
       }
     } catch (error) {
       console.log(error);
