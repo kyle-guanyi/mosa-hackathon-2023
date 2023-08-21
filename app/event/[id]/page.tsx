@@ -3,7 +3,6 @@
 import EventPage from "components/eventpage/EventPage";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 
 const Event = ({ params }) => {
   const [eventDetails, setEventDetails] = useState([]);
@@ -42,8 +41,6 @@ const Event = ({ params }) => {
 
   const { data: session } = useSession();
 
-  const router = useRouter();
-
   const [user, setUser] = useState({
     attendingEvents: [],
   });
@@ -52,14 +49,11 @@ const Event = ({ params }) => {
     const getUserAttendingEvents = async () => {
       const response = await fetch(`/api/user/${session?.user.id}`);
       const data = await response.json();
-      console.log("This is the current user bout to attend");
-      console.log(data);
 
       setUser({
         attendingEvents: data.attendingEvents,
       });
 
-      console.log(user);
     };
 
     if (session?.user.id) getUserAttendingEvents();
@@ -77,7 +71,7 @@ const Event = ({ params }) => {
     try {
       const updatedAttendingEvents = [...user.attendingEvents, eventId];
 
-      console.log("this is the updated (added) attending events");
+      console.log("This is the updated (added) attending events");
       console.log(updatedAttendingEvents);
 
       const response = await fetch(
@@ -113,7 +107,7 @@ const Event = ({ params }) => {
         (id) => id !== eventId
       );
 
-      console.log("this is the updated (removed) attending events");
+      console.log("This is the updated (removed) attending events");
       console.log(updatedAttendingEvents);
 
       const response = await fetch(
