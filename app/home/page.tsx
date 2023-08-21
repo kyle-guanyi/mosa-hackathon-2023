@@ -1,11 +1,12 @@
 import Eventfeed from "../../components/eventfeed/Eventfeed";
+import Calendar from "../../components/Calendar";
 import Feed from '../../components/search/Feed';
 
 const about = () => {
   return (
     <div className="h-screen w-full bg-red-500 flex">
       <div className="w-1/5 bg-blue-500">
-        <div className="w-full h-1/2 bg-yellow-500">Calendar</div>
+        <div className="w-full h-1/2 bg-yellow-500"><Calendar /></div>
         <div className=" w-full h-1/2 bg-orange-500">Your Events</div>
       </div>
       <div className="w-3/5 bg-green-700 flex-grow">
