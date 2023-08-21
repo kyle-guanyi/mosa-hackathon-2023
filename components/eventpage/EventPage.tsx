@@ -11,7 +11,7 @@ const EventPage = ({
   user,
   setUser,
   handleAdd,
-  eventAdded,
+  handleRemove,
   handleEdit,
   handleDelete,
 }) => {
@@ -51,7 +51,6 @@ const EventPage = ({
           <h1 className="text-3xl">{eventDetails.eventName}</h1>
         </div>
         <div className=" w-full h-5/6 bg-blue-500 flex-col">
-
           <div className="flex flex-row justify-between">
             <div>
               <div>Hosted By:</div>
@@ -60,15 +59,18 @@ const EventPage = ({
 
             <div>
               <div className="justify-end">
-                {handleAdd && (
-                  <button
-                    type="button"
-                    onClick={(e) => handleAdd(eventDetails._id)}
-                    className="mx-auto blue_btn"
-                  >
-                    Add Event
-                  </button>
-                )}
+                <button
+                  type="button"
+                  onClick={(e) =>
+                    !user.attendingEvents.includes(eventDetails._id)
+                      ? handleAdd(eventDetails._id)
+                      : handleRemove(eventDetails._id)
+
+                  }
+                  className={`mx-auto ${!user.attendingEvents.includes(eventDetails._id) ? "blue_btn" : "red_btn"}`}
+                >
+                  {!user.attendingEvents.includes(eventDetails._id) ? "Add Event" : "Remove Event"}
+                </button>
               </div>
             </div>
           </div>

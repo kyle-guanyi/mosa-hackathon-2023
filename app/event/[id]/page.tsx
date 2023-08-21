@@ -18,14 +18,14 @@ const Event = ({ params }) => {
 
         const [creatorResponse, ...attendeesResponses] = await Promise.all([
           fetch(`/api/user/${eventData.creator}`),
-          ...eventData.attendees.map(attendeeId =>
+          ...eventData.attendees.map((attendeeId) =>
             fetch(`/api/user/${attendeeId}`)
           ),
         ]);
-  
+
         const creatorData = await creatorResponse.json();
         const attendeesData = await Promise.all(
-          attendeesResponses.map(response => response.json())
+          attendeesResponses.map((response) => response.json())
         );
 
         setEventDetails(eventData);
@@ -40,59 +40,98 @@ const Event = ({ params }) => {
     }
   }, [params.id]);
 
-
   const { data: session } = useSession();
-  const [eventAdded, setEventAdded] = useState(false);
 
   const router = useRouter();
 
   const [user, setUser] = useState({
     attendingEvents: [],
-  })
+  });
 
   useEffect(() => {
     const getUserAttendingEvents = async () => {
       const response = await fetch(`/api/user/${session?.user.id}`);
       const data = await response.json();
-      console.log("This is the current user bout to attend")
+      console.log("This is the current user bout to attend");
       console.log(data);
 
       setUser({
         attendingEvents: data.attendingEvents,
       });
 
-      console.log(user)
+      console.log(user);
     };
 
     if (session?.user.id) getUserAttendingEvents();
   }, [session?.user.id]);
 
   const handleAdd = async (eventId) => {
-    
-    if (!session?.user.id) return alert("User is not logged in and does not have a current session");
+    if (!session?.user.id)
+      return alert("User is not logged in and does not have a current session");
 
     if (user.attendingEvents.includes(eventId)) {
-      console.log("Event is already added to attending events.");
+      console.log("Event is already added to user's attending events");
       return;
     }
 
     try {
-
       const updatedAttendingEvents = [...user.attendingEvents, eventId];
 
-      console.log("this is the updated attending events")
-      console.log(updatedAttendingEvents)
+      console.log("this is the updated (added) attending events");
+      console.log(updatedAttendingEvents);
 
-      const response = await fetch(`/api/user/${session?.user.id}?type=attending`, {
-        method: "PATCH",
-        body: JSON.stringify({
-          attendingEvents: updatedAttendingEvents,
-        }),
+      const response = await fetch(
+        `/api/user/${session?.user.id}?type=attending`,
+        {
+          method: "PATCH",
+          body: JSON.stringify({
+            attendingEvents: updatedAttendingEvents,
+          }),
+        }
+      );
+
+      setUser({
+        attendingEvents: updatedAttendingEvents,
       });
     } catch (error) {
       console.log(error);
     } finally {
-      setEventAdded(true);
+    }
+  };
+
+  const handleRemove = async (eventId) => {
+    if (!session?.user.id)
+      return alert("User is not logged in and does not have a current session");
+
+    if (!user.attendingEvents.includes(eventId)) {
+      console.log("Event is already not in user's attending events");
+      return;
+    }
+
+    try {
+      const updatedAttendingEvents = user.attendingEvents.filter(
+        (id) => id !== eventId
+      );
+
+      console.log("this is the updated (removed) attending events");
+      console.log(updatedAttendingEvents);
+
+      const response = await fetch(
+        `/api/user/${session?.user.id}?type=attending`,
+        {
+          method: "PATCH",
+          body: JSON.stringify({
+            attendingEvents: updatedAttendingEvents,
+          }),
+        }
+      );
+
+      setUser({
+        attendingEvents: updatedAttendingEvents,
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
     }
   };
 
@@ -104,7 +143,7 @@ const Event = ({ params }) => {
       user={user}
       setUser={setUser}
       handleAdd={handleAdd}
-      eventAdded={eventAdded}
+      handleRemove={handleRemove}
     />
   );
 };

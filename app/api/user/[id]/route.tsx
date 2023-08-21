@@ -71,7 +71,7 @@ export const PATCH_ATTENDING = async (request, { params }) => {
       return new Response("User not found", { status: 404 });
     }
 
-    // Add new values to the attending array
+    // update user's attending events array
     existingUser.attendingEvents = attendingEvents;
 
     await existingUser.save();
