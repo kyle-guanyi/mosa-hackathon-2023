@@ -33,9 +33,19 @@ const Eventfeed = () => {
     }, []);
 
     useEffect(() => {
-        const results = events.filter(event =>
+        Object.values(events).forEach(event => {
+            console.log("this is the event start date")
+            console.log(event.startDate.substring(0,10));
+            console.log("this is the filtered date")
+            console.log(filterDate);
+        
+            // You can perform further actions here using event.startDate and filterDate
+            // For example, compare the dates and decide what to do with the event
+          });
+
+        const results = Object.values(events).filter(event =>
             event.closestCity.includes(filterCity) &&
-            (!filterDate || new Date(event.startDate).toDateString() === new Date(filterDate).toDateString()) &&
+            (!filterDate || event.startDate.substring(0,10) === filterDate) &&
             (filterVirtual === '' || event.isVirtual.toString() === filterVirtual)
         );
         setFilteredEvents(results);

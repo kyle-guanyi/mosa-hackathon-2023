@@ -7,11 +7,11 @@ import React from "react";
 
 const Card = ({event} ) => {
 
-  const startDate = new Date(event.startDate).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
+  // const startDate = new Date(event.startDate).toLocaleDateString('en-US', {
+  //   year: 'numeric',
+  //   month: 'long',
+  //   day: 'numeric',
+  // });
 
   const router = useRouter();
 
@@ -31,7 +31,7 @@ const Card = ({event} ) => {
           </p>
           <div className = "text-xs justify-between flex">
           <p>
-            {startDate} 
+            {event.startDate.substring(0,10)} 
           </p>
           <p>
             {event.startTime} {event.timeZone}

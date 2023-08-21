@@ -10,7 +10,17 @@ const UpdateProfile = () => {
   const searchParams = useSearchParams();
   const userId = searchParams.get("id");
 
-  const [user, setUser] = useState({ firstName: "", lastName: "", closestMainCity: "", timeZone: "", gender: "", bio: "", classesTaken:[], fieldOfInterest: [], userUpdatedProfileImage: "" });
+  const [user, setUser] = useState({
+    firstName: "",
+    lastName: "",
+    closestMainCity: "",
+    timeZone: "",
+    gender: "",
+    bio: "",
+    classesTaken: [],
+    fieldOfInterest: [],
+    userUpdatedProfileImage: "",
+  });
   const [submitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -57,9 +67,9 @@ const UpdateProfile = () => {
         }),
       });
 
-      // if (response.ok) {
-      //   router.push("/");
-      // }
+      if (response.ok) {
+        router.push("/");
+      }
     } catch (error) {
       console.log(error);
     } finally {
@@ -68,13 +78,13 @@ const UpdateProfile = () => {
   };
 
   return (
-      <ProfileForm
-          type='Edit'
-          user={user}
-          setUser={setUser}
-          submitting={submitting}
-          handleSubmit={updateUser}
-      />
+    <ProfileForm
+      type="Edit"
+      user={user}
+      setUser={setUser}
+      submitting={submitting}
+      handleSubmit={updateUser}
+    />
   );
 };
 
