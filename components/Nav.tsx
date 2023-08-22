@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import Image from "next/image";
-
 import { useSession, signOut } from "next-auth/react";
 
 const Nav = () => {
@@ -20,6 +19,28 @@ const Nav = () => {
         />
         <p className="logo_text">Founding Friends</p>
       </Link>
+
+
+      <div>
+        {session?.user && (
+          <a href="/create-event" className="flex flex-center">
+          <button type ="button" className="blue_btn">Create Event</button>
+          </a>
+          
+        )}
+          
+          
+      </div>
+      <div>
+        {session?.user && (
+          <a href="/profile" className="flex flex-center">
+          <button type ="button" className="blue_btn">My Profile</button>
+          </a>
+          
+        )}
+          
+          
+      </div>
 
       <div>
         {session?.user ? (
