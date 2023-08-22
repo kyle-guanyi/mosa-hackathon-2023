@@ -343,6 +343,12 @@ const Timezones = [
 
 // @ts-ignore
 const ProfileForm = ({ type, user, setUser, submitting, handleSubmit }) => {
+  // const [selectedOptions, setSelectedOptions] = useState([]);
+
+  // const handleMultiSelectChange = (selectedOptions) => {
+  //   setSelectedOptions(selectedOptions);
+  // };
+  
   return (
     <section className="w-full max-w-full flex-start flex-col">
       <h1 className="head_text text-left">
@@ -389,7 +395,7 @@ const ProfileForm = ({ type, user, setUser, submitting, handleSubmit }) => {
           <Select
             options={ClosestCity}
             onChange={(selectedOption) =>
-              setUser({ ...user, closestCity: selectedOption.value })
+              setUser({ ...user, closestMainCity: selectedOption.value })
             }
           />
         </label>
@@ -429,9 +435,10 @@ const ProfileForm = ({ type, user, setUser, submitting, handleSubmit }) => {
           <Select
             options={classesTaken}
             closeMenuOnSelect={false}
-            onChange={(selectedOption) =>
-              setUser({ ...user, classesTaken: selectedOption.value })
-            }
+            onChange={(selectedOptions) => {
+              const selectedValues = selectedOptions.map(option => option.value);
+              setUser({ ...user, classesTaken: selectedValues });
+            }}
             isMulti
           />
         </label>
@@ -444,10 +451,11 @@ const ProfileForm = ({ type, user, setUser, submitting, handleSubmit }) => {
           <Select
             options={InterestFields}
             closeMenuOnSelect={false}
-            onChange={(selectedOption) =>
-              setUser({ ...user, fieldOfInterest: selectedOption.value })
-            }
-            isMulti
+            onChange={(selectedOptions) => {
+              const selectedValues = selectedOptions.map(option => option.value);
+              setUser({ ...user, fieldOfInterest: selectedValues });
+            }}
+            isMulti 
           />
         </label>
 
