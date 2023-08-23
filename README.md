@@ -82,6 +82,7 @@ Which frameworks, libraries, or other tools did you use to create your project?
 * [Tailwind CSS](https://tailwindcss.com/) - CSS Framework
 * [NextAuth.js](https://next-auth.js.org/) - Authentication for Next.js
 * [bcrypt.js](https://www.npmjs.com/package/bcrypt) - Hash Passwords library for cybersecurity
+* [react-dropzone](https://react-dropzone.js.org/) - React hook to create a HTML5-compliant drag and drop zone for files
 * [Mongoose](https://www.npmjs.com/package/mongoose) - Database MongoDB Object Modeling Tool
 * [Axios](https://axios-http.com/) - HTTP Request Utility
 * [Amazon Web Services Software Development Kit](https://aws.amazon.com/developer/tools/) - S3 buckets for storing images
