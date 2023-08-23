@@ -15,14 +15,31 @@ type EventDocument = {
   description?: string;
 };
 
-//Wed Aug 09 2023 00:00:00 GMT-0700 (Pacific Daylight Time)
-//2024-10-16T00:00:00.000+00:00
-
 const Calendar = ( { handleDate }) => {
   // constant containing JSONs of events
   const [events, setEvents] = useState([]);
 
   const [value, setValue] = useState(null);
+
+  // eventDot
+  const renderEventDot = (date) => {
+    const dateString = date.toISOString().split("T")[0];
+
+    console.log("This is the dateString")
+    console.log(dateString); // Add this line
+    
+    console.log("This is the filteredEvents map")
+    console.log(filteredEvents.map(event => new Date(event.startDate).toISOString().split("T")[0])); // Add this line
+
+    if (filteredEvents.some((event) => new Date(event.startDate).toISOString().split("T")[0] === dateString)) {
+      return <div className="relative justify-center items-center ">
+          <div className="event-dot"> </div>
+        </div>
+       // CSS class for blue dot
+    }
+    
+    return null;
+  };
 
   function onChange(nextValue) {
     setValue(nextValue);
@@ -92,7 +109,8 @@ const Calendar = ( { handleDate }) => {
         onChange(nextValue);
         handleDate(nextValue);
       }}
-        value={value} />
+        value={value} 
+        tileContent={({ date }) => renderEventDot(date)}/>
       <button onClick={resetCalendar} className="blue_btn">
         Reset Calendar
       </button>
