@@ -2,6 +2,7 @@ import EventFeed from "../../components/eventfeed/EventFeed";
 import Calendar from "../../components/Calendar";
 import AttendingFeed from "../../components/attendingfeed/AttendingFeed";
 import Feed from '../../components/search/Feed';
+import PastEventsFeed from "@/components/pasteventsfeed/PastEventsFeed";
 
 const about = () => {
   return (
@@ -14,7 +15,7 @@ const about = () => {
         <div className="w-full h-1/10 bg-green-500"></div>
         <div className=" w-full h-5/6 bg-blue-500"><EventFeed /></div>
       </div>
-      <div className="w-1/5 bg-purple-700 hidden md:block ">Past Event Timeline</div>
+      <div className="w-1/5 bg-purple-700 hidden md:block "><PastEventsFeed /></div>
     </div>
   );
 };
