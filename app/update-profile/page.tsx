@@ -52,7 +52,8 @@ const UpdateProfile = () => {
     setIsSubmitting(true);
 
     if (!session?.user.id) return alert("Missing User Id!");
-
+    console.log("This should be teh updated user")
+    console.log(user)
     try {
       const response = await fetch(`/api/user/${session?.user.id}`, {
         method: "PATCH",

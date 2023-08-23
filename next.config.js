@@ -14,6 +14,9 @@ const nextConfig = {
     };
     return config;
   },
+  images: {
+    domains: ['founding-friends-pre-signed-url-images.s3.us-west-1.amazonaws.com'],
+  },
 };
 
 module.exports = nextConfig;

@@ -357,9 +357,7 @@ const ProfileForm = ({ type, user, setUser, submitting, handleSubmit }) => {
   const [uploadedKeys, setUploadedKeys] = useState([]);
 
   const handleKeysArray = async (keysArray) => {
-    console.log("This is the array of keys")
     console.log(keysArray)
-    console.log("this is the key")
     console.log(keysArray[0])
     setUser({ ...user, userUpdatedProfileImage: keysArray[0] });
   }

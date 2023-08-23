@@ -10,17 +10,34 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
   const [profilePicture, setProfilePicture] = useState("");
 
   const fetchProfilePicture = async () => {
+    try {
+      const keysArray = [profileDetails.userUpdatedProfileImage]; // Convert to an array
+      const response = await fetch(`/api/media?keys=${encodeURIComponent(JSON.stringify(keysArray))}`);
+      const data = await response.json();
+      console.log(data)
 
-    const response = await fetch(`/api/comment/${message._id}`);
-    
+      if (response.ok) {
+        setProfilePicture(data.urls[0]); // Assuming the data structure is { success: true, urls: [profilePictureUrl] }
+      } else {
+        console.error("Error fetching profile picture");
+      }
+    } catch (error) {
+      console.error("Error fetching profile picture:", error);
+    }
   };
+
+  useEffect(() => {
+    if (profileDetails?.userUpdatedProfileImage) {
+      fetchProfilePicture();
+    }
+  }, [profileDetails?.userUpdatedProfileImage]);
 
   return (
     <section className="w-full flex-col flex-1 text-center bg-slate-500">
       <div className="pt-4">
       {profileDetails?.userUpdatedProfileImage ? (
       <Image
-        src={profileDetails.userUpdatedProfileImage}
+        src={profilePicture}
         alt="user_image"
         width={120}
         height={120}

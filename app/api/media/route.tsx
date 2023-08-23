@@ -60,11 +60,14 @@ export async function POST(request: NextRequest, response: NextResponse) {
   }
 }
 
-export default async function GET(request: NextRequest, response: NextResponse) {
+export async function GET(request: NextRequest, response: NextResponse) {
   try {
-    const keys  = await request.json();
+    const url = new URL(request.url);
+    const keys = url.searchParams.get('keys');
 
-    const presignedUrls = await Promise.all(keys.map(async (key) => {
+    const keysArray = JSON.parse(keys);
+
+    const presignedUrls = await Promise.all(keysArray.map(async (key) => {
       const command = new GetObjectCommand({
         Bucket: process.env.AWS_BUCKET_NAME as string,
         Key: key,

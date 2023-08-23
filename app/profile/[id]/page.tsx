@@ -16,8 +16,6 @@ const Profile = ({ params }) => {
             } catch (error) {
                 console.error("Error fetching user details:", error);
             }
-
-            
         };
         if (params?.id) {
             fetchUserDetails();
