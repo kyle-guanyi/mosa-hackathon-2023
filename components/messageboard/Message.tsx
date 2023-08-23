@@ -86,7 +86,7 @@ const Message = ({ message }) => {
         handleCommentSubmit={createComment} 
       />
       {messageComments.slice().reverse().map(messageComment => (
-        <Comment key={messageComment._id} comment={messageComment} userName={userName} />
+        <Comment key={messageComment._id} comment={messageComment} />
       ))}
     </div>
   );

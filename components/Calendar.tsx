@@ -15,7 +15,10 @@ type EventDocument = {
   description?: string;
 };
 
-const Calendar: React.FC = () => {
+//Wed Aug 09 2023 00:00:00 GMT-0700 (Pacific Daylight Time)
+//2024-10-16T00:00:00.000+00:00
+
+const Calendar = ( { handleDate }) => {
   // constant containing JSONs of events
   const [events, setEvents] = useState([]);
 
@@ -27,6 +30,7 @@ const Calendar: React.FC = () => {
 
   function resetCalendar() {
     setValue(null);
+    handleDate(null);
   }
 
   // to obtain session ID
@@ -84,27 +88,15 @@ const Calendar: React.FC = () => {
 
   return (
     <div>
-      <ReactCalendar onChange={onChange} value={value} />
+      <ReactCalendar onChange={(nextValue) => {
+        onChange(nextValue);
+        handleDate(nextValue);
+      }}
+        value={value} />
       <button onClick={resetCalendar} className="blue_btn">
         Reset Calendar
       </button>
     </div>
-    // <div className="p-4">
-    //   <h1 className="text-xl font-bold mb-4">Events Calendar</h1>
-    //   <div className="grid grid-cols-7 gap-4">
-    //     {/* For simplicity, assuming fixed days. You can expand to render a full grid */}
-    //     {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-    //       <div key={day} className="text-center font-medium">
-    //         {day}
-    //       </div>
-    //     ))}
-    //     {events.map((event) => (
-    //       <div key={event._id} className="bg-blue-200 p-2 rounded">
-    //         {event.name}
-    //       </div>
-    //     ))}
-    //   </div>
-    // </div>
   );
 };
 

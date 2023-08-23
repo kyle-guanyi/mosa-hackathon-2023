@@ -21,7 +21,7 @@ const AttendingFeed = () => {
   // to obtain session ID
   const { data: session } = useSession();
 
-  console.log(session?.user.id);
+  // console.log(session?.user.id);
 
   const [filteredEvents, setFilteredEvents] = useState([]);
 
@@ -32,7 +32,7 @@ const AttendingFeed = () => {
     const currentDate = new Date();
     const currentEvents = data.filter((event) => {
       const eventDate = new Date(event.startDate);
-       console.log('attending event DATE', eventDate);
+       // console.log('attending event DATE', eventDate);
       return eventDate >= currentDate;
     })
     setEvents(currentEvents);
@@ -66,11 +66,11 @@ const AttendingFeed = () => {
           userAttendingEventIDs.attendingEvents.includes(event._id)
         );
         setFilteredEvents(filtered);
-        console.log("These are the filtered events if I had events");
-        console.log(filtered);
+        // console.log("These are the filtered events if I had events");
+        // console.log(filtered);
       } else {
         // If user is not attending any events, set filteredEvents to the same as events
-        console.log("No attending events");
+        // console.log("No attending events");
       }
     };
 

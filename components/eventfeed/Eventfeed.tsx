@@ -15,11 +15,10 @@ const EventCardList = ({data}) => {
     );
 }
 
-const EventFeed = () => {
+const EventFeed = ({selectedDate}) => {
     const [events, setEvents] = useState([]);
     const [filteredEvents, setFilteredEvents] = useState([]);
     const [filterCity, setFilterCity] = useState('');
-    const [filterDate, setFilterDate] = useState('');
     const [filterVirtual, setFilterVirtual] = useState('');
     const [sortOption, setSortOption] = useState(true);
 
@@ -39,12 +38,20 @@ const EventFeed = () => {
     }, []);
 
     useEffect(() => {
-        const results = Object.values(events).filter(event =>
-            event.closestCity.includes(filterCity) &&
-            (!filterDate || event.startDate.substring(0,10) === filterDate) &&
-            (filterVirtual === '' || event.isVirtual.toString() === filterVirtual)
-        );
-        console.log(results)
+        const results = Object.values(events).filter(event => {
+            const isDateMatching = (!selectedDate || event.startDate.substring(0, 10) === selectedDate);
+            console.log("This is the event date:", event.startDate.substring(0, 10));
+            console.log("This is my selected date:", selectedDate);
+
+            if (
+                event.closestCity.includes(filterCity) &&
+                isDateMatching &&
+                (filterVirtual === '' || event.isVirtual.toString() === filterVirtual)
+            ) {
+                return true;
+            }
+        });
+        // console.log(results)
 
         if (sortOption) {
             const sortedEvents = [...results].sort((a, b) => {
@@ -55,13 +62,13 @@ const EventFeed = () => {
             setFilteredEvents(sortedEvents);
         } else {
             const sortedEvents = [...results].reverse();
-            console.log("Reversed List");
-            console.log(sortedEvents);
+            //console.log("Reversed List");
+            //console.log(sortedEvents);
             setFilteredEvents(sortedEvents);
         }
 
         
-    }, [events, filterCity, filterDate, filterVirtual, sortOption]);
+    }, [events, filterCity, selectedDate, filterVirtual, sortOption]);
 
         
         return (
@@ -122,12 +129,6 @@ const EventFeed = () => {
                         <option value="Vancouver">Vancouver</option>
                         <option value="Vietnam">Vietnam</option>
                     </select>
-                    <input
-                        type="date"
-                        value={filterDate}
-                        onChange={(e) => setFilterDate(e.target.value)}
-                        className="appearance-none block w-1/4 bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-                    />
                     <select
                         value={sortOption.toString()}
                         onChange={(e) => setSortOption(e.target.value === "true")}

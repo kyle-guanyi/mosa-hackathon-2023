@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import { signIn, useSession, getProviders } from 'next-auth/react';
 import { useRouter } from "next/navigation";
 
-const Home = () => {
+const LogIn = () => {
   const { data: session } = useSession();
   const router = useRouter();
   const [providers, setProviders] = useState(null);
@@ -72,4 +72,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default LogIn;
