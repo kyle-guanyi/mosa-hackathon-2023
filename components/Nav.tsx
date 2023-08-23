@@ -19,7 +19,7 @@ const Nav = () => {
         />
         <p className="logo_text">Founding Friends</p>
       </Link>
-
+      
 
       <div>
         {session?.user && (
