@@ -17,6 +17,7 @@ const EventCardList = ({ data }) => {
 const PastEventsFeed = () => {
     // constant containing JSONs of events
     const [events, setEvents] = useState([]);
+    const [pastEventType, setPastEventType] = useState("All Past Events");
 
     // to obtain session ID
     const { data: session } = useSession();
@@ -39,108 +40,63 @@ const PastEventsFeed = () => {
         attendingEvents: [],
     });
 
-    // useEffect(() => {
-    //     const getUserAttendingEvents = async () => {
-    //         const response = await fetch(`/api/user/${session?.user.id}`);
-    //         const data = await response.json();
-    //
-    //         setUserAttendingEvents({
-    //             attendingEvents: data.attendingEvents,
-    //         });
-    //     };
-    //
-    //     if (session?.user.id) getUserAttendingEvents();
-    // }, [session?.user.id]);
+    useEffect(() => {
+        const getUserAttendingEvents = async () => {
+            const response = await fetch(`/api/user/${session?.user.id}`);
+            const data = await response.json();
 
-    // useEffect(() => {
-    //     // Function to filter events based on user's attending events
-    //     const filterEvents = () => {
-    //         if (userAttendingEventIDs.attendingEvents.length > 0) {
-    //             const filtered = events.filter((event) =>
-    //                 userAttendingEventIDs.attendingEvents.includes(event._id)
-    //             );
-    //             setFilteredEvents(filtered);
-    //             console.log("These are the filtered events if I had events");
-    //             console.log(filtered);
-    //         } else {
-    //             // If user is not attending any events, set filteredEvents to the same as events
-    //             console.log("No attending events");
-    //         }
-    //     };
-    //
-    //     filterEvents(); // Call the filter function initially
-    // }, [userAttendingEventIDs, events]);
+            setUserAttendingEvents({
+                attendingEvents: data.attendingEvents,
+            });
+        };
+
+        if (session?.user.id) getUserAttendingEvents();
+    }, [session?.user.id]);
 
     useEffect(() => {
         // Function to filter events based on user's attending events and date
         const filterEvents = async () => {
             const currentDate = new Date();
             currentDate.setHours(0, 0, 0, 0);  // Sets the time to midnight to ensure we're comparing just the date
-            console.log("Current date:", currentDate)
-            const pastEvents = events.filter((event) => {
-                const eventDate = new Date(event.startDate);
-                console.log("Event date:", eventDate)
-                return eventDate < currentDate;
-            })
-            setFilteredEvents(pastEvents);
-                // const eventDate = new Date(eventDateStr);
-                //
-                // console.log("Event date what is eventDATE:", eventDateStr)
-                // // convert 2023-08-09T00:00:00.000+00:00 to date object
-                // const timestampString = '2023-08-09T00:00:00.000+00:00';
-                // const convertedDate = new Date(timestampString); // The converted date
-                // console.log("Converted Date", convertedDate);
-                // console.log("EVENT DATE", eventDate);
-                // if (eventDate < currentDate) {
-                //     console.log("Event is in the past", eventDate);
-                // }
-                // return eventDate < currentDate;
+            if (pastEventType === "Your Past Events") {
+                const pastEvents = events.filter((event) => {
+                    const eventDate = new Date(event.startDate);
 
-            };
+                    if (userAttendingEventIDs.attendingEvents.includes(event._id)) {
+                        return eventDate < currentDate;
+                    }
 
-        //     if (userAttendingEventIDs.attendingEvents.length > 0) {
-        //         const filtered = events.filter((event) =>
-        //             userAttendingEventIDs.attendingEvents.includes(event._id)
-        //         );
-        //
-        //         // Find events that need to be updated in the DB
-        //         const eventsToUpdate = filtered.filter(event => isEventInPast(event.date) && !event.isComplete);
-        //         await Promise.all(eventsToUpdate.map(updateEventInDB));
-        //
-        //         setFilteredEvents(filtered.filter(event => isEventInPast(event.date)));
-        //         // console.log("These are the filtered events if I had events");
-        //         // console.log(filtered);
-        //     } else {
-        //         // If user is not attending any events, set filteredEvents to the same as events
-        //         // console.log("No attending events");
-        //     }
-        // };
+                })
+                setFilteredEvents(pastEvents);
+            }
+            else if (pastEventType === "All Past Events"){
+                const pastEvents = events.filter((event) => {
+                    const eventDate = new Date(event.startDate);
 
-        // Function to update an event in the database
-        // const updateEventInDB = async (event) => {
-        //     try {
-        //         await fetch(`/api/event/${event._id}`, {
-        //             method: 'PUT',
-        //             headers: {
-        //                 'Content-Type': 'application/json'
-        //             },
-        //             body: JSON.stringify({
-        //                 isComplete: true
-        //             })
-        //         });
-        //     } catch (error) {
-        //         console.error("Error updating event:", error);
-        //     }
-        // };
-
+                    return eventDate < currentDate;
+                })
+                setFilteredEvents(pastEvents);
+            }
+        };
         filterEvents(); // Call the filter function initially
-    }, [userAttendingEventIDs, events]);
 
+    }, [userAttendingEventIDs, events, pastEventType]);
 
-
-    return <EventCardList data={filteredEvents} />;
-};
-
-
+    return (
+        <section id="eventfeed" className="w-full border-l-1 border-r-1 border-t-1 border-gray-600">
+            <div className="p-4 flex space-x-4">
+                <select
+                    value={pastEventType}
+                    onChange={(e) => setPastEventType(e.target.value)}
+                    className="block appearance-none w-1/4 bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+                >
+                    <option value="Your Past Events">Your Past Events</option>
+                    <option value="All Past Events">All Past Events</option>
+                </select>
+            </div>
+        <EventCardList data={filteredEvents} />
+            </section>
+        )
+}
 
 export default PastEventsFeed;
