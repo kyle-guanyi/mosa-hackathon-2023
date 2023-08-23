@@ -4,6 +4,8 @@
 import React, { useEffect, useState } from "react";
 // (session?.user.id)
 import { useSession } from "next-auth/react";
+import ReactCalendar from "react-calendar";
+import 'react-calendar/dist/Calendar.css';
 
 import Event from "../models/Event";
 
@@ -16,6 +18,12 @@ type EventDocument = {
 const Calendar: React.FC = () => {
   // constant containing JSONs of events
   const [events, setEvents] = useState([]);
+
+  const [value, setValue] = useState(null);
+
+  function onChange(nextValue) {
+    setValue(nextValue);
+  }
 
   // to obtain session ID
   const { data: session } = useSession();
@@ -71,22 +79,23 @@ const Calendar: React.FC = () => {
   }, [userAttendingEvents, events]);
 
   return (
-    <div className="p-4">
-      <h1 className="text-xl font-bold mb-4">Events Calendar</h1>
-      <div className="grid grid-cols-7 gap-4">
-        {/* For simplicity, assuming fixed days. You can expand to render a full grid */}
-        {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-          <div key={day} className="text-center font-medium">
-            {day}
-          </div>
-        ))}
-        {events.map((event) => (
-          <div key={event._id} className="bg-blue-200 p-2 rounded">
-            {event.name}
-          </div>
-        ))}
-      </div>
-    </div>
+    <ReactCalendar onChange={onChange} value={value} />
+    // <div className="p-4">
+    //   <h1 className="text-xl font-bold mb-4">Events Calendar</h1>
+    //   <div className="grid grid-cols-7 gap-4">
+    //     {/* For simplicity, assuming fixed days. You can expand to render a full grid */}
+    //     {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+    //       <div key={day} className="text-center font-medium">
+    //         {day}
+    //       </div>
+    //     ))}
+    //     {events.map((event) => (
+    //       <div key={event._id} className="bg-blue-200 p-2 rounded">
+    //         {event.name}
+    //       </div>
+    //     ))}
+    //   </div>
+    // </div>
   );
 };
 
