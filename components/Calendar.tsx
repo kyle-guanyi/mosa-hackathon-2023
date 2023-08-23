@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 // (session?.user.id)
 import { useSession } from "next-auth/react";
 import ReactCalendar from "react-calendar";
-import 'react-calendar/dist/Calendar.css';
+import "react-calendar/dist/Calendar.css";
 
 import Event from "../models/Event";
 
@@ -23,6 +23,10 @@ const Calendar: React.FC = () => {
 
   function onChange(nextValue) {
     setValue(nextValue);
+  }
+
+  function resetCalendar() {
+    setValue(null);
   }
 
   // to obtain session ID
@@ -79,7 +83,12 @@ const Calendar: React.FC = () => {
   }, [userAttendingEvents, events]);
 
   return (
-    <ReactCalendar onChange={onChange} value={value} />
+    <div>
+      <ReactCalendar onChange={onChange} value={value} />
+      <button onClick={resetCalendar} className="blue_btn">
+        Reset Calendar
+      </button>
+    </div>
     // <div className="p-4">
     //   <h1 className="text-xl font-bold mb-4">Events Calendar</h1>
     //   <div className="grid grid-cols-7 gap-4">
