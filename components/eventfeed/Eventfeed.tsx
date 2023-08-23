@@ -26,7 +26,15 @@ const EventFeed = () => {
     const fetchEvents = async () => {
         const response = await fetch('/api/event');
         const data = await response.json();
-        setEvents(data);
+        const currentDate = new Date();
+        // console.log('current DATE', currentDate)
+        const currentEvents = data.filter((event) => {
+            const eventDate = new Date(event.startDate);
+            // console.log('event DATE', eventDate);
+            return eventDate >= currentDate;
+        })
+        // console.log('current events', currentEvents);
+        setEvents(currentEvents);
     }
 
     useEffect(() => {
