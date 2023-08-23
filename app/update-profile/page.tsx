@@ -52,8 +52,7 @@ const UpdateProfile = () => {
     setIsSubmitting(true);
 
     if (!session?.user.id) return alert("Missing User Id!");
-    console.log("This should be teh updated user")
-    console.log(user)
+
     try {
       const response = await fetch(`/api/user/${session?.user.id}`, {
         method: "PATCH",
@@ -80,6 +79,30 @@ const UpdateProfile = () => {
     }
   };
 
+  const updateUserProfilePic = async (newProfileImage) => {
+    setIsSubmitting(true);
+
+    if (!session?.user.id) return alert("Missing User Id!");
+    console.log(newProfileImage)
+    try {
+      const response = await fetch(`/api/user/${session?.user.id}?type=pic`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          userUpdatedProfileImage: newProfileImage,
+        }),
+      });
+
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleKeysArray = async (keysArray) => {
+    updateUserProfilePic(keysArray[0]);
+  }
+
   return (
     <ProfileForm
       type="Edit"
@@ -87,6 +110,7 @@ const UpdateProfile = () => {
       setUser={setUser}
       submitting={submitting}
       handleSubmit={updateUser}
+      handleKeysArray={handleKeysArray}
     />
   );
 };

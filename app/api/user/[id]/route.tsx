@@ -24,6 +24,8 @@ export const PATCH = async (request, { params }) => {
 
   if (request.nextUrl.searchParams.get("type") === "attending") {
     return PATCH_ATTENDING(request, {params});
+  } else if (request.nextUrl.searchParams.get("type") === "pic") {
+    return PATCH_PROFILE_PIC(request, {params});
   }
 
   const { firstName, lastName, closestMainCity, timeZone, gender, bio, classesTaken, fieldOfInterest, userUpdatedProfileImage } = await request.json();
@@ -60,9 +62,6 @@ export const PATCH = async (request, { params }) => {
 export const PATCH_ATTENDING = async (request, { params }) => {
   const { attendingEvents } = await request.json();
 
-  console.log("USER PATCH ATTENDING?")
-  console.log(attendingEvents)
-
   try {
     await connectToDB();
 
@@ -82,5 +81,30 @@ export const PATCH_ATTENDING = async (request, { params }) => {
   } catch (error) {
     console.error("Error updating user's attending events:", error); // Log the error for debugging
     return new Response("Error updating user's attending events", { status: 500 });
+  }
+};
+
+export const PATCH_PROFILE_PIC = async (request, { params }) => {
+  const { userUpdatedProfileImage } = await request.json();
+
+  try {
+    await connectToDB();
+
+    // Find the existing user by ID
+    const existingUser = await User.findById(params.id);
+
+    if (!existingUser) {
+      return new Response("User not found", { status: 404 });
+    }
+
+    // update user's attending events array
+    existingUser.userUpdatedProfileImage = userUpdatedProfileImage;
+
+    await existingUser.save();
+
+    return new Response("Successfully updated user's profile pic", { status: 200 });
+  } catch (error) {
+    console.error("Error updating user's profile pic:", error); // Log the error for debugging
+    return new Response("Error updating user's profile pic", { status: 500 });
   }
 };

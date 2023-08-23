@@ -5,7 +5,7 @@ const nextConfig = {
     serverComponentsExternalPackages: ["mongoose"],
   },
   images: {
-    domains: ["lh3.googleusercontent.com"],
+    domains: ["lh3.googleusercontent.com", "founding-friends-pre-signed-url-images.s3.us-west-1.amazonaws.com"],
   },
   webpack(config) {
     config.experiments = {
@@ -13,9 +13,6 @@ const nextConfig = {
       topLevelAwait: true,
     };
     return config;
-  },
-  images: {
-    domains: ['founding-friends-pre-signed-url-images.s3.us-west-1.amazonaws.com'],
   },
 };
 

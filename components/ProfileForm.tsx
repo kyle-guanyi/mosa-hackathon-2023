@@ -1,12 +1,6 @@
-"use client"
-
 import Link from "next/link";
-import Dropdown from "./Dropdown";
-import MultiSelectDropdown from "@/components/MultiSelectDropdown";
 import Select from "react-select";
 import Dropzone from "components/Dropzone";
-
-import { useEffect, useState } from "react";
 
 const ClosestCity = [
   { value: "Africa", label: "Africa" },
@@ -347,20 +341,7 @@ const Timezones = [
 ];
 
 // @ts-ignore
-const ProfileForm = ({ type, user, setUser, submitting, handleSubmit }) => {
-  // const [selectedOptions, setSelectedOptions] = useState([]);
-
-  // const handleMultiSelectChange = (selectedOptions) => {
-  //   setSelectedOptions(selectedOptions);
-  // };
-
-  const [uploadedKeys, setUploadedKeys] = useState([]);
-
-  const handleKeysArray = async (keysArray) => {
-    console.log(keysArray)
-    console.log(keysArray[0])
-    setUser({ ...user, userUpdatedProfileImage: keysArray[0] });
-  }
+const ProfileForm = ({ type, user, setUser, submitting, handleSubmit, handleKeysArray }) => {
   
   return (
     <section className="w-full max-w-full flex-start flex-col">
@@ -407,6 +388,7 @@ const ProfileForm = ({ type, user, setUser, submitting, handleSubmit }) => {
           </span>
           <Select
             options={ClosestCity}
+            value={ClosestCity.find(city => city.value === user.closestMainCity)}
             onChange={(selectedOption) =>
               setUser({ ...user, closestMainCity: selectedOption.value })
             }
@@ -420,6 +402,7 @@ const ProfileForm = ({ type, user, setUser, submitting, handleSubmit }) => {
           </span>
           <Select
             options={Gender}
+            value={Gender.find(gender => gender.value === user.gender)}
             onChange={(selectedOption) =>
               setUser({ ...user, gender: selectedOption.value })
             }
@@ -448,6 +431,7 @@ const ProfileForm = ({ type, user, setUser, submitting, handleSubmit }) => {
           <Select
             options={classesTaken}
             closeMenuOnSelect={false}
+            value={classesTaken.filter(classTaken => user.classesTaken.includes(classTaken.value))}
             onChange={(selectedOptions) => {
               const selectedValues = selectedOptions.map(option => option.value);
               setUser({ ...user, classesTaken: selectedValues });
@@ -463,6 +447,7 @@ const ProfileForm = ({ type, user, setUser, submitting, handleSubmit }) => {
           </span>
           <Select
             options={InterestFields}
+            value={InterestFields.filter(field => user.fieldOfInterest.includes(field.value))}
             closeMenuOnSelect={false}
             onChange={(selectedOptions) => {
               const selectedValues = selectedOptions.map(option => option.value);
@@ -479,6 +464,7 @@ const ProfileForm = ({ type, user, setUser, submitting, handleSubmit }) => {
           </span>
           <Select
             options={Timezones}
+            value={Timezones.find(timezone => timezone.value === user.timeZone)}
             onChange={(selectedOption) =>
               setUser({ ...user, timeZone: selectedOption.value })
             }
