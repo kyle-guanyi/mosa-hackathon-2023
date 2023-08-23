@@ -62,6 +62,7 @@ const EventPage = ({
             <div>
               <div className="pb-3">
                 {session?.user.id === eventDetails.creator && (
+                  <div>
                   <button
                     type="button"
                     onClick={() => {
@@ -71,6 +72,16 @@ const EventPage = ({
                   >
                     Update Event
                   </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleDelete(eventDetails._id);
+                    }}
+                    className="blue_btn"
+                  >
+                    Delete Event
+                  </button>
+                  </div>
                 )}
               </div>
               <div>

@@ -6,7 +6,7 @@ import Comment from './Comment';
 import CommentForm from './CommentForm';
 import { useSession } from "next-auth/react";
 
-const Message = ({ message }) => {
+const Message = ({ message, onDeleteItem }) => {
   const [userName, setUserName] = useState("");
 
   const fetchUserName = async () => {
@@ -43,10 +43,10 @@ const Message = ({ message }) => {
   };
 
   useEffect(() => {
-    if (message.id) {
+    if (message._id) {
       fetchMessageComments();
     }
-  }, [message.id]);
+  }, [message._id]);
 
   const createComment = async (e) => {
     e.preventDefault();
@@ -74,19 +74,38 @@ const Message = ({ message }) => {
       setSubmitting(false);
     }
   };
+  const handleDeleteComment = async (commentId) => {
+    try {
+      const response = await fetch(`/api/comment/${commentId}`, {
+        method: 'DELETE',
+      });
 
+      if (response.ok) {
+        // Refresh comments after deletion
+        fetchMessageComments();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div>
       <p>{message.content}</p>
       <p>Author: {userName}</p>
+      {session?.user.id === message.author && (
+        <button onClick={onDeleteItem} className="blue_btn">Delete Message</button>
+      )}
       <CommentForm 
         comment={comment}
         setComment={setComment}
         handleCommentSubmit={createComment} 
       />
       {messageComments.slice().reverse().map(messageComment => (
-        <Comment key={messageComment._id} comment={messageComment} />
+        <Comment key={messageComment._id} comment={messageComment} 
+        
+        onDeleteComment={() => handleDeleteComment(messageComment._id)}
+        />
       ))}
     </div>
   );

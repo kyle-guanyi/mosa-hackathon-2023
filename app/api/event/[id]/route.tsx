@@ -1,6 +1,7 @@
 import { connectToDB } from "utils/database";
 import Event from "models/event";
-
+import Message from "models/message";
+import Comment from "models/comment";
 
 //GET (read)
 export const GET = async (request, { params }) => {
@@ -21,10 +22,10 @@ export const GET = async (request, { params }) => {
 
 export const PATCH = async (request, { params }) => {
 
-  if (request.nextUrl.searchParams.get("type") === "attendees") {
+  if (request.nextUrl.searchParams.get("type") === "attending") {
     return PATCH_ATTENDEES(request, {params});
   } else if (request.nextUrl.searchParams.get("type") === "interested") {
-    return PATCH_ATTENDEES(request, {params});
+    return PATCH_INTERESTED(request, {params});
   }
 
   const { isPublic, eventName, isVirtual, location, zoomLink, startDate, startTime, timeZone, eventDescription } = await request.json();
@@ -61,6 +62,7 @@ export const PATCH = async (request, { params }) => {
 export const PATCH_ATTENDEES = async (request, { params }) => {
   const { attendees } = await request.json();
 
+  console.log("EVENT PATCH ATTENDEES?")
   console.log(attendees)
 
   try {
@@ -111,6 +113,33 @@ export const PATCH_INTERESTED = async (request, { params }) => {
     return new Response("Error updating event's interested users", { status: 500 });
   }
 };
-//DELETE (delete)
 
+//DELETE (delete)
+export const DELETE = async (request, { params }) => {
+  try {
+    await connectToDB();
+
+    // Find the existing event by ID
+    const existingEvent = await Event.findById(params?.id);
+
+    if (!existingEvent) {
+      return new Response("Event not found", { status: 404 });
+    }
+
+    const messages = await Message.find({ event: existingEvent._id });
+
+    for (const message of messages) {
+      await Comment.deleteMany({ message: message._id });
+      await message.deleteOne();
+    }
+
+    // Delete the event
+    await existingEvent.deleteOne();
+
+    return new Response("Successfully deleted the event", { status: 200 });
+  } catch (error) {
+    console.error("Error deleting event", error); // Log the error for debugging
+    return new Response("Error deleting event", { status: 500 });
+  }
+};
 

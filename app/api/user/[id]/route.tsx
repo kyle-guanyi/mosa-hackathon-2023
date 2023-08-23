@@ -59,6 +59,7 @@ export const PATCH = async (request, { params }) => {
 export const PATCH_ATTENDING = async (request, { params }) => {
   const { attendingEvents } = await request.json();
 
+  console.log("USER PATCH ATTENDING?")
   console.log(attendingEvents)
 
   try {

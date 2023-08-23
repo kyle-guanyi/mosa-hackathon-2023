@@ -60,6 +60,21 @@ const MessageBoard = ({ eventDetails }) => {
     }
   };
 
+  const handleDeleteMessage = async (messageId) => {
+    try {
+      const response = await fetch(`/api/message/${messageId}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        // Refresh comments after deletion
+        fetchEventMessages();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div>
       <div> MessageBoard </div>
@@ -70,7 +85,11 @@ const MessageBoard = ({ eventDetails }) => {
       />
       {eventMessages.slice().reverse().map((eventMessage) => {
       return (
-        <Message key={eventMessage._id} message={eventMessage} />
+        <Message key={eventMessage._id} 
+        message={eventMessage} 
+        onDeleteItem={() => handleDeleteMessage(eventMessage._id)}
+        
+        />
       );
     })}
     </div>

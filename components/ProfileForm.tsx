@@ -1,7 +1,12 @@
+"use client"
+
 import Link from "next/link";
 import Dropdown from "./Dropdown";
 import MultiSelectDropdown from "@/components/MultiSelectDropdown";
 import Select from "react-select";
+import Dropzone from "components/Dropzone";
+
+import { useEffect, useState } from "react";
 
 const ClosestCity = [
   { value: "Africa", label: "Africa" },
@@ -348,6 +353,16 @@ const ProfileForm = ({ type, user, setUser, submitting, handleSubmit }) => {
   // const handleMultiSelectChange = (selectedOptions) => {
   //   setSelectedOptions(selectedOptions);
   // };
+
+  const [uploadedKeys, setUploadedKeys] = useState([]);
+
+  const handleKeysArray = async (keysArray) => {
+    console.log("This is the array of keys")
+    console.log(keysArray)
+    console.log("this is the key")
+    console.log(keysArray[0])
+    setUser({ ...user, userUpdatedProfileImage: keysArray[0] });
+  }
   
   return (
     <section className="w-full max-w-full flex-start flex-col">
@@ -380,7 +395,7 @@ const ProfileForm = ({ type, user, setUser, submitting, handleSubmit }) => {
           </span>
           <input
             value={user.lastName}
-            onChange={(e) => setUser({ ...event, eventName: e.target.value })}
+            onChange={(e) => setUser({ ...user, lastName: e.target.value })}
             placeholder="Update your last name here..." // TODO prefill with last name from upenn email
             required
             className="form_input"
@@ -488,6 +503,8 @@ const ProfileForm = ({ type, user, setUser, submitting, handleSubmit }) => {
           </button>
         </div>
       </form>
+      <Dropzone handleKeysArray={handleKeysArray}
+            maxUploads={1}/>
     </section>
   );
 };

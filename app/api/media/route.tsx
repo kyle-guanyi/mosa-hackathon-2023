@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { v4 as uuid } from "uuid";
 import { S3Client, PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { String } from "aws-sdk/clients/cloudhsm";
 
 const s3Client = new S3Client({
   region: process.env.AWS_REGION as string,
@@ -15,7 +16,7 @@ async function uploadImageToS3(
   file: Buffer,
   fileName: string,
   type: string
-): Promise<string> {
+): Promise<{url: Promise<string>, key: string }> {
   const params = {
     Bucket: process.env.AWS_BUCKET_NAME as string,
     Key: `${Date.now()}-${fileName}`,
@@ -28,7 +29,7 @@ async function uploadImageToS3(
 
   const url = getSignedUrl(s3Client, command, { expiresIn: 3600 });
 
-  return url;
+  return { url, key: params.Key };
 }
 
 export async function POST(request: NextRequest, response: NextResponse) {
@@ -36,23 +37,46 @@ export async function POST(request: NextRequest, response: NextResponse) {
     const formData = await request.formData();
     const files = formData.getAll("file"); // Get all files
 
-    const uploadedUrls = await Promise.all(files.map(async (file) => {
+    const uploadedData = await Promise.all(files.map(async (file) => {
       const mimeType = file.type;
       const fileExtension = mimeType.split("/")[1];
       const buffer = Buffer.from(await file.arrayBuffer());
       
-      const url = await uploadImageToS3(
+      const { url, key } = await uploadImageToS3(
         buffer,
         uuid() + "." + fileExtension,
         mimeType
       );
 
-      return url;
+      return { url: await url, key };
     }));
 
-    return NextResponse.json({ success: true, urls: uploadedUrls });
+    const keysArray = uploadedData.map(data => data.key);
+
+    return NextResponse.json({ success: true, uploadedData, keysArray });
   } catch (error) {
     console.error("Error uploading images:", error);
     return NextResponse.json({ message: "Error uploading images" });
+  }
+}
+
+export default async function GET(request: NextRequest, response: NextResponse) {
+  try {
+    const keys  = await request.json();
+
+    const presignedUrls = await Promise.all(keys.map(async (key) => {
+      const command = new GetObjectCommand({
+        Bucket: process.env.AWS_BUCKET_NAME as string,
+        Key: key,
+      });
+
+      const url = await getSignedUrl(s3Client, command, { expiresIn: 3600 });
+      return url;
+    }));
+
+    return NextResponse.json({ success: true, urls: presignedUrls });
+  } catch (error) {
+    console.error("Error fetching S3 images:", error);
+    return NextResponse.json({ message: "Error fetching images" });
   }
 }

@@ -35,37 +35,41 @@ const rejectStyle = {
   borderColor: "#ff1744",
 };
 
-export default function FileUpload() {
+export default function FileUpload({ handleKeysArray, maxUploads }) {
   const [files, setFiles] = useState<any>([]);
   const [rejected, setRejected] = useState<any>([]);
 
-  const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
-    if (acceptedFiles?.length) {
-      setFiles((previousFiles) => [
-        ...previousFiles,
-        ...acceptedFiles.map((file) => {
-          let count = 1;
-          let originalName = file.name;
-          let baseName = originalName.replace(/\.[^/.]+$/, ""); // Remove file extension
-          let extension = originalName.split(".").pop(); // Get file extension
-          while (
-            [...previousFiles].some(
-              (existingFile) => existingFile.name === file.name
-            )
-          ) {
-            const newName = `${baseName} (${count}).${extension}`;
-            count++;
-            file = new File([file], newName, { type: file.type });
-          }
-          return Object.assign(file, { preview: URL.createObjectURL(file) });
-        }),
-      ]);
-    }
+  const onDrop = useCallback(
+    (acceptedFiles, rejectedFiles) => {
+      if (acceptedFiles?.length) {
+        const filesToAdd = acceptedFiles.slice(0, maxUploads - files.length); // Limit based on remaining slots
+        setFiles((previousFiles) => [
+          ...previousFiles,
+          ...filesToAdd.map((file) => {
+            let count = 1;
+            let originalName = file.name;
+            let baseName = originalName.replace(/\.[^/.]+$/, ""); // Remove file extension
+            let extension = originalName.split(".").pop(); // Get file extension
+            while (
+              [...previousFiles].some(
+                (existingFile) => existingFile.name === file.name
+              )
+            ) {
+              const newName = `${baseName} (${count}).${extension}`;
+              count++;
+              file = new File([file], newName, { type: file.type });
+            }
+            return Object.assign(file, { preview: URL.createObjectURL(file) });
+          }),
+        ]);
+      }
 
-    if (rejectedFiles?.length) {
-      setRejected((previousFiles) => [...previousFiles, ...rejectedFiles]);
-    }
-  }, []);
+      if (rejectedFiles?.length) {
+        setRejected((previousFiles) => [...previousFiles, ...rejectedFiles]);
+      }
+    },
+    [maxUploads, files]
+  );
 
   const {
     acceptedFiles,
@@ -124,7 +128,8 @@ export default function FileUpload() {
         },
       });
 
-      console.log(data);
+      console.log(data.keysArray);
+      handleKeysArray(data.keysArray);
 
       setFiles([]);
     } catch (err) {
@@ -178,6 +183,9 @@ export default function FileUpload() {
         <h3 className="title text-lg font-semibold text-neutral-600 mt-10 border-b pb-3">
           Accepted Files
         </h3>
+        {files.length >= maxUploads && (
+          <p className="text-red-500">Maximum number of uploads reached</p>
+        )}
         <ul className="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-10">
           {files.map((file) => (
             <li key={file.name} className="relative h-32 rounded-md shadow-lg">

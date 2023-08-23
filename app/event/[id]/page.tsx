@@ -10,31 +10,32 @@ const Event = ({ params }) => {
   const [creatorInfo, setCreatorInfo] = useState();
   const [attendeesInfo, setAttendeesInfo] = useState<any[]>([]);
 
+  const fetchEventDetails = async () => {
+    try {
+      const response = await fetch(`/api/event/${params?.id}`);
+      const eventData = await response.json();
+
+      const [creatorResponse, ...attendeesResponses] = await Promise.all([
+        fetch(`/api/user/${eventData.creator}`),
+        ...eventData.attendees.map((attendeeId) =>
+          fetch(`/api/user/${attendeeId}`)
+        ),
+      ]);
+
+      const creatorData = await creatorResponse.json();
+      const attendeesData = await Promise.all(
+        attendeesResponses.map((response) => response.json())
+      );
+
+      setEventDetails(eventData);
+      setCreatorInfo(creatorData);
+      setAttendeesInfo(attendeesData);
+    } catch (error) {
+      console.error("Error fetching event details:", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchEventDetails = async () => {
-      try {
-        const response = await fetch(`/api/event/${params?.id}`);
-        const eventData = await response.json();
-
-        const [creatorResponse, ...attendeesResponses] = await Promise.all([
-          fetch(`/api/user/${eventData.creator}`),
-          ...eventData.attendees.map((attendeeId) =>
-            fetch(`/api/user/${attendeeId}`)
-          ),
-        ]);
-
-        const creatorData = await creatorResponse.json();
-        const attendeesData = await Promise.all(
-          attendeesResponses.map((response) => response.json())
-        );
-
-        setEventDetails(eventData);
-        setCreatorInfo(creatorData);
-        setAttendeesInfo(attendeesData);
-      } catch (error) {
-        console.error("Error fetching event details:", error);
-      }
-    };
     if (params?.id) {
       fetchEventDetails();
     }
@@ -72,11 +73,12 @@ const Event = ({ params }) => {
 
     try {
       const updatedAttendingEvents = [...user.attendingEvents, eventId];
+      const updatedAttendees = [...eventDetails.attendees, session?.user.id];
 
       console.log("This is the updated (added) attending events");
       console.log(updatedAttendingEvents);
 
-      const response = await fetch(
+      const userResponse = await fetch(
         `/api/user/${session?.user.id}?type=attending`,
         {
           method: "PATCH",
@@ -86,12 +88,31 @@ const Event = ({ params }) => {
         }
       );
 
+      console.log(eventDetails)
+
+      const eventResponse = await fetch(
+        `/api/event/${eventDetails._id}?type=attending`,
+        {
+          method: "PATCH",
+          body: JSON.stringify({
+            attendees: updatedAttendees,
+          }),
+        }
+      );
+
       setUser({
         attendingEvents: updatedAttendingEvents,
       });
+
+      setEventDetails(prevEventDetails => ({
+        ...prevEventDetails,
+        attendees: updatedAttendees,
+      }));
+
     } catch (error) {
       console.log(error);
     } finally {
+      fetchEventDetails();
     }
   };
 
@@ -109,10 +130,14 @@ const Event = ({ params }) => {
         (id) => id !== eventId
       );
 
+      const updatedAttendees = eventDetails.attendees.filter(
+        (id) => id !== session?.user.id
+      );
+
       console.log("This is the updated (removed) attending events");
       console.log(updatedAttendingEvents);
 
-      const response = await fetch(
+      const userResponse = await fetch(
         `/api/user/${session?.user.id}?type=attending`,
         {
           method: "PATCH",
@@ -122,18 +147,49 @@ const Event = ({ params }) => {
         }
       );
 
+      const eventResponse = await fetch(
+        `/api/event/${eventDetails._id}?type=attending`,
+        {
+          method: "PATCH",
+          body: JSON.stringify({
+            attendees: updatedAttendees,
+          }),
+        }
+      );
+
       setUser({
         attendingEvents: updatedAttendingEvents,
       });
+
+      setEventDetails(prevEventDetails => ({
+        ...prevEventDetails,
+        attendees: updatedAttendees,
+      }));
     } catch (error) {
       console.log(error);
     } finally {
+      fetchEventDetails();
     }
   };
 
   const handleEdit = (eventId) => {
     router.push(`/update-event/${eventId}`);
   };
+
+  const handleDelete = async (eventId) => {
+    try {
+      const response = await fetch(`/api/event/${eventId}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        // Refresh comments after deletion
+        router.push("/home")
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <EventPage
@@ -144,6 +200,7 @@ const Event = ({ params }) => {
       handleAdd={handleAdd}
       handleRemove={handleRemove}
       handleEdit={handleEdit}
+      handleDelete={handleDelete}
     />
   );
 };
