@@ -1,20 +1,21 @@
 import { Schema, model, models, Document, Types } from 'mongoose';
 
-interface IEvent extends Document {
-    creator: Types.ObjectId;
-    attendees: Types.ObjectId[];
-    interested: Types.ObjectId[];
-    isPublic: boolean;
-    eventName: string;
-    isVirtual: boolean;
-    location?: string;
-    zoomLink?: string;
-    startDate: Date;
-    startTime: string;
-    timeZone: string;
-    eventDescription: string;
-    isCompleted: boolean;
-  }
+type IEvent = Document & {
+  creator: Types.ObjectId;
+  attendees: Types.ObjectId[];
+  interested: Types.ObjectId[];
+  isPublic: boolean;
+  eventName: string;
+  isVirtual: boolean;
+  location?: string;
+  closestCity?: string;
+  zoomLink?: string;
+  startDate: Date;
+  startTime: string;
+  timeZone: string;
+  eventDescription: string;
+  isCompleted?: boolean;
+};
 
 const eventSchema = new Schema({
   creator: {

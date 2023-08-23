@@ -5,7 +5,7 @@ import Event from "models/event";
 //GET (read)
 export const GET = async (request, { params }) => {
   try {
-    await connectToDB;
+    await connectToDB();
 
     const event = await Event.findById(params?.id);
 
@@ -17,7 +17,6 @@ export const GET = async (request, { params }) => {
   }
 }
 
-//PATCH (update)
 //PATCH (update)
 
 export const PATCH = async (request, { params }) => {

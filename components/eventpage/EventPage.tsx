@@ -1,5 +1,6 @@
 import React from "react";
 import UserCard from "./UserCard";
+import MessageBoard from "/components/messageboard/MessageBoard"
 import { FiClock } from "react-icons/Fi";
 import { CiLocationOn } from "react-icons/Ci";
 import { useState, useEffect } from "react";
@@ -101,6 +102,7 @@ const EventPage = ({
               <div className="pt-5 text-blue-900">
                 <a href="{eventDetails.zoomLink}">Zoom Link</a>
               </div>
+              <MessageBoard eventDetails={eventDetails}/>
             </div>
 
             <div className="flex-col w-1/3">
