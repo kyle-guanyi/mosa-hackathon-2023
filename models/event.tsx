@@ -1,5 +1,7 @@
 import { Schema, model, models, Document, Types } from 'mongoose';
 
+import { DateTime } from "luxon";
+
 type IEvent = Document & {
   creator: Types.ObjectId;
   attendees: Types.ObjectId[];
@@ -18,6 +20,7 @@ type IEvent = Document & {
   uploadedPictures: string[];
   eventImage: string;
   lastEdited: Date;
+  UTCEventTime: Date;
 };
 
 const eventSchema = new Schema({
@@ -90,6 +93,25 @@ const eventSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  UTCEventTime: {
+    type: Date,
+  }
+});
+
+eventSchema.pre<IEvent>('save', async function (next) {
+  const eventDateTime = DateTime.fromJSDate(this.startDate, {
+    zone: this.timeZone,
+  });
+
+  const [hours, minutes] = this.startTime.split(':').map(Number);
+  const eventStartTime = eventDateTime.set({
+    hour: hours,
+    minute: minutes,
+  });
+
+  this.UTCEventTime = eventStartTime.toUTC().toJSDate(); // Convert to UTC and save as JavaScript Date
+
+  next();
 });
 
 const Event = models.Event || model('Event', eventSchema);
