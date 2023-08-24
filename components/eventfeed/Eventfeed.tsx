@@ -1,17 +1,20 @@
 'use client';
 import React, { useState, useEffect } from "react";
-import Card from "./Card";
+import EventCard from "./EventCard";
+
 
 const EventCardList = ({data}) => {
     return (
-        <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+
+        <div className="mt-16 gap-2 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
             {data.map((event) => (
-                <Card
+                <EventCard
                     key={event._id}
                     event={event}
                 />
             ))}
         </div>
+
     );
 }
 
@@ -51,7 +54,6 @@ const EventFeed = ({selectedDate}) => {
                 return true;
             }
         });
-        // console.log(results)
 
         if (sortOption) {
             const sortedEvents = [...results].sort((a, b) => {
@@ -62,8 +64,6 @@ const EventFeed = ({selectedDate}) => {
             setFilteredEvents(sortedEvents);
         } else {
             const sortedEvents = [...results].reverse();
-            //console.log("Reversed List");
-            //console.log(sortedEvents);
             setFilteredEvents(sortedEvents);
         }
 

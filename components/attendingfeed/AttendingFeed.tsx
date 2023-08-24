@@ -2,13 +2,13 @@
 
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import Card from "../eventfeed/Card";
+import EventCard from "../eventfeed/EventCard";
 
 const EventCardList = ({ data }) => {
   return (
     <div className="flex-col">
       {data.map((event) => (
-        <Card key={event._id} event={event} />
+        <EventCard key={event._id} event={event} />
       ))}
     </div>
   );

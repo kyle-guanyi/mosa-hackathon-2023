@@ -15,7 +15,7 @@ const RootLayout = ({ children }) => {
     <html lang='en'>
       <body>
         <Provider>
-          <Nav className='fixed' />
+          <Nav />
           <main className='main flex-col'>
             {children}
           </main>

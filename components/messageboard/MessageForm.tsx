@@ -1,6 +1,6 @@
 import Dropzone from "components/Dropzone"
 
-const CreateMessage = ({ message, setMessage, handleMessageSubmit, handleKeysArray }) => {
+const CreateMessage = ({ message, setMessage, handleMessageSubmit, handleKeysArray, existingFiles }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     handleMessageSubmit(e); 
@@ -21,7 +21,7 @@ const CreateMessage = ({ message, setMessage, handleMessageSubmit, handleKeysArr
           Post Message
         </button>
       </form>
-      <Dropzone handleKeysArray={handleKeysArray} maxUploads={5} />
+      <Dropzone handleKeysArray={handleKeysArray} maxUploads={5} existingFiles={existingFiles} />
     </section>
   );
 };

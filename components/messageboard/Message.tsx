@@ -18,6 +18,7 @@ const Message = ({ message, onDeleteItem, onPatchMessage }) => {
   const [editedMessage, setEditedMessage] = useState({
     _id: message._id,
     content: message.content,
+    uploadedMessagePictures: message.uploadedMessagePictures,
   });
 
   //switch between form vs display
@@ -130,6 +131,7 @@ const Message = ({ message, onDeleteItem, onPatchMessage }) => {
         method: "PATCH",
         body: JSON.stringify({
           content: editedComment.content,
+          uploadedMessagePictures: editedComment.uploadedMessagePictures,
         }),
       });
 
@@ -158,6 +160,10 @@ const Message = ({ message, onDeleteItem, onPatchMessage }) => {
     }
   };
 
+  const handlePatchMessagePictures = async (keysArray) => {
+    setEditedMessage({ ...message, uploadedMessagePictures: keysArray});
+  };
+
   return (
     <div>
       {messageEditing ? (
@@ -165,6 +171,8 @@ const Message = ({ message, onDeleteItem, onPatchMessage }) => {
           message={editedMessage}
           setMessage={setEditedMessage}
           handleMessageSubmit={handleMessageEditSubmit}
+          handleKeysArray={handlePatchMessagePictures}
+          existingFiles={editedMessage.uploadedMessagePictures}
         />
       ) : (
         <>

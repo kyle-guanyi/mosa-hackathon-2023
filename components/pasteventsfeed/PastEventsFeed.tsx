@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import Card from "../eventfeed/Card";
+import Card from "../eventfeed/EventCard";
 
 const EventCardList = ({ data }) => {
     return (

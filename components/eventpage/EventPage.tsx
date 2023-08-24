@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { DateTime, IANAZone } from "luxon";
-import PhotoFeed from "/components/phototimeline/PhotoFeed";
+import PhotoTimeline from "/components/phototimeline/PhotoTimeline";
 
 const EventPage = ({
   eventDetails,
@@ -203,7 +203,7 @@ const EventPage = ({
           </div>
         </div>
       </div>
-      <div className="w-1/5 bg-purple-700 hidden md:block ">Photo Timeline <PhotoFeed event={eventDetails}/></div>
+      <div className="w-1/5 bg-purple-700 hidden md:block ">Photo Timeline <PhotoTimeline event={eventDetails}/></div>
     </div>
   );
 };
