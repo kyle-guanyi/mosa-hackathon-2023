@@ -1,11 +1,12 @@
 import React from "react";
 import UserCard from "./UserCard";
-import MessageBoard from "/components/messageboard/MessageBoard"
+import MessageBoard from "/components/messageboard/MessageBoard";
 import { FiClock } from "react-icons/Fi";
 import { CiLocationOn } from "react-icons/Ci";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
+import { DateTime, IANAZone } from "luxon";
 
 const EventPage = ({
   eventDetails,
@@ -31,9 +32,11 @@ const EventPage = ({
   const fetchEventImage = async () => {
     try {
       const keysArray = [eventDetails.eventImage]; // Convert to an array
-      const response = await fetch(`/api/media?keys=${encodeURIComponent(JSON.stringify(keysArray))}`);
+      const response = await fetch(
+        `/api/media?keys=${encodeURIComponent(JSON.stringify(keysArray))}`
+      );
       const data = await response.json();
-      console.log(data)
+      console.log(data);
 
       if (response.ok) {
         setEventImage(data.urls[0]); // Assuming the data structure is { success: true, urls: [profilePictureUrl] }
@@ -54,12 +57,22 @@ const EventPage = ({
   const [isLoading, setIsLoading] = useState(true);
   const { data: session } = useSession();
 
+  const [userEventDateTime, setUserEventDateTime] = useState(null);
+
   // UseEffect to set isLoading to false once data is fetched
   useEffect(() => {
     if (eventDetails && creatorInfo && attendeesInfo) {
       setIsLoading(false);
+
+      if (session?.user.id) {
+        const dateTimeObject = DateTime.fromISO(eventDetails.UTCEventTime);
+        const userTimezone = DateTime.local().zoneName;
+        const userEventDateTime = dateTimeObject.setZone(userTimezone);
+        setUserEventDateTime(userEventDateTime);
+        console.log("This is the user event date time", userEventDateTime)
+      }
     }
-  }, [eventDetails, creatorInfo, attendeesInfo]);
+  }, [eventDetails, creatorInfo, attendeesInfo, session?.user.id]);
 
   return (
     <div className="h-screen w-full bg-red-500 flex">
@@ -78,23 +91,22 @@ const EventPage = ({
         <div className="w-full h-1/10 bg-green-500 font-satoshi">
           <h1 className="text-3xl">{eventDetails.eventName}</h1>
           {eventDetails?.eventImage ? (
-              <Image
-                  src={eventImage}
-                  alt="event_banner"
-                  width={120}
-                  height={120}
-                  className="mx-auto rounded-full object-contain"
-              />
+            <Image
+              src={eventImage}
+              alt="event_banner"
+              width={120}
+              height={120}
+              className="mx-auto rounded-full object-contain"
+            />
           ) : (
-              <Image
-                  src="/assets/images/ben.png"
-                  alt="event_banner"
-                  width={120}
-                  height={120}
-                  className="mx-auto rounded-full object-contain"
-              />
+            <Image
+              src="/assets/images/ben.png"
+              alt="event_banner"
+              width={120}
+              height={120}
+              className="mx-auto rounded-full object-contain"
+            />
           )}
-
         </div>
         <div className=" w-full h-5/6 bg-blue-500 flex-col">
           <div className="flex flex-row justify-between">
@@ -107,29 +119,29 @@ const EventPage = ({
               <div className="pb-3">
                 {session?.user.id === eventDetails.creator && (
                   <div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      handleEdit(eventDetails._id);
-                    }}
-                    className="blue_btn"
-                  >
-                    Update Event
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const shouldDelete = window.confirm(
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleEdit(eventDetails._id);
+                      }}
+                      className="blue_btn"
+                    >
+                      Update Event
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const shouldDelete = window.confirm(
                           "Are you sure you want to delete this event?"
-                      );
-                      if (shouldDelete) {
-                        handleDelete(eventDetails._id);
-                      }
-                    }}
-                    className="blue_btn"
-                  >
-                    Delete Event
-                  </button>
+                        );
+                        if (shouldDelete) {
+                          handleDelete(eventDetails._id);
+                        }
+                      }}
+                      className="blue_btn"
+                    >
+                      Delete Event
+                    </button>
                   </div>
                 )}
               </div>
@@ -162,7 +174,7 @@ const EventPage = ({
               <div className="pt-5 text-blue-900">
                 <a href="{eventDetails.zoomLink}">Zoom Link</a>
               </div>
-              <MessageBoard eventDetails={eventDetails}/>
+              <MessageBoard eventDetails={eventDetails} />
             </div>
 
             <div className="flex-col w-1/3">
@@ -174,6 +186,8 @@ const EventPage = ({
                   {startDate} at {eventDetails.startTime}{" "}
                   {eventDetails.timeZone}
                 </div>
+                <p>Event Date: {userEventDateTime?.toFormat("cccc, LLLL d, yyyy")}</p>
+                <p>Start Time: {userEventDateTime?.toFormat("hh:mm a")}</p>
               </div>
 
               <div className="flex-row flex items-center">
