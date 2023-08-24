@@ -8,6 +8,8 @@ import { useSession } from "next-auth/react";
 
 const Message = ({ message, onDeleteItem }) => {
   const [userName, setUserName] = useState("");
+  const [editingCommentId, setEditingCommentId] = useState(null);
+  const { data: session } = useSession();
 
   const fetchUserName = async () => {
     const response = await fetch(`/api/user/${message.author}`);
@@ -21,8 +23,14 @@ const Message = ({ message, onDeleteItem }) => {
     }
   }, [message.author]);
 
-  const [submitting, setSubmitting] = useState(false);
-  const { data: session } = useSession();
+
+  const handleEditComment = (commentId) => {
+    setEditingCommentId(commentId);
+  };
+
+  
+  const [submitting, setSubmitting] = useState(false); //unsure if needed
+  
 
   const [messageComments, setMessageComments] = useState([]);
   const [comment, setComment] = useState({
@@ -89,6 +97,51 @@ const Message = ({ message, onDeleteItem }) => {
     }
   };
 
+  
+
+  
+
+  const handleCommentEditSubmit = async (editedContent, commentId) => {
+    try {
+      const response = await fetch(`/api/comment/${commentId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ content: editedContent }),
+      });
+  
+      if (response.ok) {
+        fetchMessageComments(); // Refresh comments after edit
+        setEditingCommentId(null); // Clear editing state
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  // Define the handleCommentSubmit function
+  const handleCommentSubmit = async (content) => {
+    try {
+      const response = await fetch("/api/comment/new", {
+        method: "POST",
+        body: JSON.stringify({
+          post: message._id,
+          author: session?.user.id,
+          content: content,
+        }),
+      });
+
+      if (response.ok) {
+        setComment({ content: "" });
+        fetchMessageComments();
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <div>
       <p>{message.content}</p>
@@ -107,16 +160,55 @@ const Message = ({ message, onDeleteItem }) => {
       <CommentForm 
         comment={comment}
         setComment={setComment}
-        handleCommentSubmit={createComment} 
+        handleCommentSubmit={createComment} // For new comment creation
+        handleCommentEditSubmit={(editedContent, commentId) => handleCommentEditSubmit(editedContent, commentId)} // For comment editing
       />
       {messageComments.slice().reverse().map(messageComment => (
-        <Comment key={messageComment._id} comment={messageComment} 
-        
-        onDeleteComment={() => handleDeleteComment(messageComment._id)}
-        />
-      ))}
-    </div>
-  );
-};
+        <div key={messageComment._id}>
+        {editingCommentId === messageComment._id ? (
+          <>
+            <Comment
+              comment={messageComment}
+              onDeleteComment={() => handleDeleteComment(messageComment._id)}
+              onPatchComment={() => handleEditComment(messageComment._id)}
+            />
+            <button onClick={() => setEditingCommentId(null)}>Cancel Edit</button>
+            <CommentForm
+              comment={messageComment} // Pass the comment object to populate the form
+              setComment={setComment} // Update the comment state
+              handleCommentEditSubmit={(editedContent) => handleCommentEditSubmit(editedContent, messageComment._id)}
+            />
+          </>
+        ) : (
+          <div>
+            <Comment
+              comment={messageComment}
+              onDeleteComment={() => handleDeleteComment(messageComment._id)}
+              onPatchComment={() => handleEditComment(messageComment._id)}
+            />
+            <button onClick={() => setEditingCommentId(messageComment._id)}>Edit Comment</button>
+          </div>
+        )}
+      </div>
+    ))}
+    
+    {/* Display the CommentForm for adding new comments */}
+    {!editingCommentId && (
+       <div>
+       <CommentForm
+         comment={comment}
+         setComment={setComment}
+         handleCommentSubmit={handleCommentSubmit}
+         handleCommentEditSubmit={(editedContent, commentId) =>
+           handleCommentEditSubmit(editedContent, commentId)
+         }
+       />
+     </div>
+    )
+  }
+  </div>
+  )
+}
+
 
 export default Message;

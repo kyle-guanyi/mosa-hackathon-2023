@@ -17,7 +17,30 @@ export const GET = async (request, { params }) => {
 };
 
 //PATCH (update)
+export const PATCH = async (request, { params }) => {
+  try {
+    await connectToDB();
 
+    const commentId = params?.id;
+    const newContent = JSON.parse(request.body).content; // Extract the updated content from the request body
+
+    // Find and update the comment by ID
+    const updatedComment = await Comment.findByIdAndUpdate(
+      commentId,
+      { content: newContent },
+      { new: true } // Return the updated comment
+    );
+
+    if (!updatedComment) {
+      return new Response("Comment not found", { status: 404 });
+    }
+
+    return new Response(JSON.stringify(updatedComment), { status: 200 });
+  } catch (error) {
+    console.error("Error updating comment", error); // Log the error for debugging
+    return new Response("Failed to update comment", { status: 500 });
+  }
+};
 
 //DELETE (delete)
 export const DELETE = async (request, { params }) => {
