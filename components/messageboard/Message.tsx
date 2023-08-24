@@ -84,10 +84,10 @@ const Message = ({ message, onDeleteItem, onPatchMessage }) => {
       if (response.ok) {
         setUploadedMessagePictures(data.urls);
       } else {
-        console.error("Error fetching initial pictures");
+        console.error("Error fetching message pictures");
       }
     } catch (error) {
-      console.error("Error fetching initial pictures: ", error);
+      console.error("Error fetching message pictures: ", error);
     }
   };
 
