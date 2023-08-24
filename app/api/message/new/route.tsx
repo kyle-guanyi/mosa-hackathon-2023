@@ -2,7 +2,7 @@ import { connectToDB } from "utils/database";
 import Message from "models/message";
 
 export const POST = async (request) => {
-  const { event, author, content, createdAt } = await request.json();
+  const { event, author, content, createdAt, uploadedMessagePictures } = await request.json();
 
   try {
     await connectToDB();
@@ -11,6 +11,7 @@ export const POST = async (request) => {
       author,
       content,
       createdAt,
+      uploadedMessagePictures, 
     });
 
     await newMessage.save();

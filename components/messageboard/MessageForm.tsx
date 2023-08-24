@@ -1,21 +1,28 @@
-import React, { useState } from 'react';
+import Dropzone from "components/Dropzone"
 
-const CreateMessage = ({ message, setMessage, handleMessageSubmit }) => {
-
+const CreateMessage = ({ message, setMessage, handleMessageSubmit, handleKeysArray }) => {
   const handleSubmit = (e) => {
-    e.preventDefault(); // Prevent default form submission
-    handleMessageSubmit(); // Call your custom submission logic
+    e.preventDefault();
+    handleMessageSubmit(e); 
   };
 
   return (
-    <form onSubmit={handleSubmit} className="mt-10 w-full max-w-2xl flex flex-col gap-7 glassmorphism">
-      <textarea
-        value={message.content}
-        onChange={(e) => setMessage({...message, content: e.target.value})}
-        className="form_input"
-      />
-      <button type="submit" className="blue_btn">Post Message</button>
-    </form>
+    <section>
+      <form
+        onSubmit={handleSubmit}
+        className="mt-10 w-full max-w-2xl flex flex-col gap-7 glassmorphism"
+      >
+        <textarea
+          value={message.content}
+          onChange={(e) => setMessage({ ...message, content: e.target.value })}
+          className="form_input"
+        />
+        <button type="submit" className="blue_btn">
+          Post Message
+        </button>
+      </form>
+      <Dropzone handleKeysArray={handleKeysArray} maxUploads={5} />
+    </section>
   );
 };
 

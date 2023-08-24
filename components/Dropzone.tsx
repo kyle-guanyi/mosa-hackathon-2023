@@ -35,7 +35,11 @@ const rejectStyle = {
   borderColor: "#ff1744",
 };
 
-export default function FileUpload({ handleKeysArray, maxUploads }) {
+export default function FileUpload({
+  handleKeysArray,
+  maxUploads,
+  initialFiles,
+}) {
   const [files, setFiles] = useState<any>([]);
   const [rejected, setRejected] = useState<any>([]);
 
@@ -111,7 +115,9 @@ export default function FileUpload({ handleKeysArray, maxUploads }) {
     e.preventDefault();
 
     if (!files?.length) {
-      window.alert("Please upload at least one valid file type before submitting.");
+      window.alert(
+        "Please upload at least one valid file type before submitting."
+      );
       return;
     }
 
@@ -152,6 +158,33 @@ export default function FileUpload({ handleKeysArray, maxUploads }) {
     [isFocused, isDragAccept, isDragReject]
   );
 
+  const [initialPictures, setInitialPictures] = useState([]);
+
+  const fetchInitialPictures = async () => {
+    try {
+      const keysArray = initialFiles;
+      const response = await fetch(
+        `/api/media?keys=${encodeURIComponent(JSON.stringify(keysArray))}`
+      );
+      const data = await response.json();
+      console.log(data);
+
+      if (response.ok) {
+        setInitialPictures(data.urls);
+      } else {
+        console.error("Error fetching initial pictures");
+      }
+    } catch (error) {
+      console.error("Error fetching initial pictures: ", error);
+    }
+  };
+
+  useEffect(() => {
+    if (initialFiles?.length > 0) {
+      fetchInitialPictures();
+    }
+  }, [initialFiles]);
+
   return (
     <form onSubmit={handleSubmit}>
       <div {...getRootProps({ style })}>
@@ -175,14 +208,18 @@ export default function FileUpload({ handleKeysArray, maxUploads }) {
         <div className="flex items-center justify-between">
           <h2 className="title text-3xl font-semibold">Preview Files</h2>
           <div className="flex gap-4">
-            <button type="button" onClick={() => {
-              const shouldDelete = window.confirm(
+            <button
+              type="button"
+              onClick={() => {
+                const shouldDelete = window.confirm(
                   "Are you sure you want to delete all uploaded files?"
-              );
-              if (shouldDelete) {
-                removeAll();
-              }
-            }} className="red_btn">
+                );
+                if (shouldDelete) {
+                  removeAll();
+                }
+              }}
+              className="red_btn"
+            >
               Remove all files
             </button>
             <button type="submit" className="blue_btn">
@@ -191,6 +228,29 @@ export default function FileUpload({ handleKeysArray, maxUploads }) {
           </div>
         </div>
 
+        {initialPictures?.length > 0 && (
+          <div>
+            <h3 className="title text-lg font-semibold text-neutral-600 mt-10 border-b pb-3">
+              Initial Files
+            </h3>
+            <ul className="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-10">
+              {initialPictures?.map((file, index) => (
+                <li key={index} className="relative h-32 rounded-md shadow-lg">
+                  <Image
+                    className="h-full w-full object-contain rounded-md"
+                    src={file}
+                    alt={"Initial Image"}
+                    width={100}
+                    height={100}
+                    onLoad={() => {
+                      URL.revokeObjectURL(file);
+                    }}
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
         {/* Accepted files */}
         <h3 className="title text-lg font-semibold text-neutral-600 mt-10 border-b pb-3">
           Accepted Files

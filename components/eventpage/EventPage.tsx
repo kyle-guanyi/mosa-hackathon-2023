@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { DateTime, IANAZone } from "luxon";
+import PhotoFeed from "/components/phototimeline/PhotoFeed";
 
 const EventPage = ({
   eventDetails,
@@ -17,6 +18,7 @@ const EventPage = ({
   handleRemove,
   handleEdit,
   handleDelete,
+  addImagesToEvent,
 }) => {
   const startDate = new Date(eventDetails.startDate).toLocaleDateString(
     "en-US",
@@ -56,7 +58,6 @@ const EventPage = ({
 
   const [isLoading, setIsLoading] = useState(true);
   const { data: session } = useSession();
-
   const [userEventDateTime, setUserEventDateTime] = useState(null);
 
   // UseEffect to set isLoading to false once data is fetched
@@ -174,7 +175,7 @@ const EventPage = ({
               <div className="pt-5 text-blue-900">
                 <a href="{eventDetails.zoomLink}">Zoom Link</a>
               </div>
-              <MessageBoard eventDetails={eventDetails} />
+              <MessageBoard eventDetails={eventDetails} addImagesToEvent={addImagesToEvent}/>
             </div>
 
             <div className="flex-col w-1/3">
@@ -202,7 +203,7 @@ const EventPage = ({
           </div>
         </div>
       </div>
-      <div className="w-1/5 bg-purple-700 hidden md:block ">Photo Timeline</div>
+      <div className="w-1/5 bg-purple-700 hidden md:block ">Photo Timeline <PhotoFeed event={eventDetails}/></div>
     </div>
   );
 };

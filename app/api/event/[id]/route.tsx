@@ -28,6 +28,8 @@ export const PATCH = async (request, { params }) => {
     return PATCH_INTERESTED(request, {params});
   } else if (request.nextUrl.searchParams.get("type") === "eventImage") {
     return PATCH_EVENT_IMAGE(request, {params});
+  } else if (request.nextUrl.searchParams.get("type") === "uploadedPictures") {
+    return PATCH_UPLOADED_PICTURES(request, {params});
   }
 
   const { isPublic, eventName, isVirtual, location, zoomLink, startDate, startTime, timeZone, eventDescription, closestCity } = await request.json();
@@ -46,7 +48,7 @@ export const PATCH = async (request, { params }) => {
       return new Response("Event not found", { status: 404 });
     }
 
-    // Update the user with new data
+    // Update the event with new data
     existingEvent.isPublic = isPublic;
     existingEvent.eventName = eventName;
     existingEvent.isVirtual = isVirtual;
@@ -136,7 +138,7 @@ export const PATCH_EVENT_IMAGE = async (request, { params }) => {
       return new Response("Event not found", { status: 404 });
     }
 
-    // update user's attending events array
+    // update event's banner image
     existingEvent.eventImage = eventImage;
 
     await existingEvent.save();
@@ -147,6 +149,32 @@ export const PATCH_EVENT_IMAGE = async (request, { params }) => {
     return new Response("Error updating event's image", { status: 500 });
   }
 };
+
+export const PATCH_UPLOADED_PICTURES = async (request, { params }) => {
+  const { uploadedPictures } = await request.json();
+
+  try {
+    await connectToDB();
+
+    // Find the existing event by ID
+    const existingEvent = await Event.findById(params?.id);
+
+    if (!existingEvent) {
+      return new Response("Event not found", { status: 404 });
+    }
+
+    // update event's uploaded pictures
+    existingEvent.uploadedPictures = uploadedPictures;
+
+    await existingEvent.save();
+
+    return new Response("Successfully updated event's uploaded pictures", { status: 200 });
+  } catch (error) {
+    console.error("Error updating event's uploaded pictures", error); // Log the error for debugging
+    return new Response("Error updating event's uploaded pictures", { status: 500 });
+  }
+};
+
 
 //DELETE (delete)
 export const DELETE = async (request, { params }) => {

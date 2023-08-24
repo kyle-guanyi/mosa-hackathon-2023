@@ -1,11 +1,8 @@
-import React, { useState } from 'react';
-import Dropzone from "components/Dropzone"
-
-const CreateComment = ({ comment, setComment, handleCommentSubmit, handleKeysArray }) => {
+const CreateComment = ({ comment, setComment, handleCommentSubmit }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    handleCommentSubmit();
+    handleCommentSubmit(e);
   };
 
   return (
@@ -16,7 +13,6 @@ const CreateComment = ({ comment, setComment, handleCommentSubmit, handleKeysArr
         className="form_input"
       />
       <button type="submit" className="blue_btn">Post Comment</button>
-      <Dropzone handleKeysArray={handleKeysArray} maxUploads={5}/>
     </form>
   );
 };

@@ -34,7 +34,6 @@ const Card = ({ event }) => {
     }
   }, [event?.eventImage]);
 
-  
 
   const handleEventClick = () => {
     router.push(`/event/${event._id}`);

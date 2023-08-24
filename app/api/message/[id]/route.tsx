@@ -22,6 +22,10 @@ export const GET = async (request, { params }) => {
 export const PATCH = async (request, { params }) => {
   const { content } = await request.json();
 
+  if (request.nextUrl.searchParams.get("type") === "pic") {
+    return PATCH_MESSAGE_PICTURES(request, {params});
+  }
+
   try {
     await connectToDB();
 
@@ -44,6 +48,28 @@ export const PATCH = async (request, { params }) => {
   }
 };
 
+export const PATCH_MESSAGE_PICTURES = async (request, { params }) => {
+  const { uploadedMessagePictures } = await request.json();
+
+  try {
+    await connectToDB();
+
+    const existingMessage = await Message.findById(params.id);
+
+    if (!existingMessage) {
+      return new Response("Message not found", { status: 404 });
+    }
+
+    existingMessage.uploadedMessagePictures = uploadedMessagePictures;
+
+    await existingMessage.save();
+
+    return new Response("Successfully updated messages's uploaded pictures", { status: 200 });
+  } catch (error) {
+    console.error("Error updating message's uploaded pictures", error); // Log the error for debugging
+    return new Response("Error updating message's uploaded pictures", { status: 500 });
+  }
+};
 
 //DELETE (delete)
 

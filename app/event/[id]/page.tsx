@@ -14,7 +14,7 @@ const Event = ({ params }) => {
     try {
       const response = await fetch(`/api/event/${params?.id}`);
       const eventData = await response.json();
-
+      console.log("This is the eventData", eventData)
       const [creatorResponse, ...attendeesResponses] = await Promise.all([
         fetch(`/api/user/${eventData.creator}`),
         ...eventData.attendees.map((attendeeId) =>
@@ -191,6 +191,31 @@ const Event = ({ params }) => {
     }
   }
 
+  const addImagesToEvent = async (keysArray) => {
+    if (eventDetails.uploadedPictures) {
+      const updatedPictures = [...eventDetails.uploadedPictures, ...keysArray];
+      setEventDetails({ ...eventDetails, uploadedPictures: updatedPictures });
+    } else {
+      setEventDetails({ ...eventDetails, uploadedPictures: keysArray });
+    }
+  }
+
+  const updateEventUploadedImages = async () => {
+    const response = await fetch(`/api/event/${eventDetails._id}?type=uploadedPictures`, {
+      method: "PATCH",
+      body: JSON.stringify({
+        uploadedPictures: eventDetails.uploadedPictures,
+      }),
+    });
+    
+  };
+
+  useEffect(() => {
+    if (eventDetails?.uploadedPictures) {
+      updateEventUploadedImages();
+    }
+  }, [eventDetails?.uploadedPictures]);
+
   return (
     <EventPage
       eventDetails={eventDetails}
@@ -201,6 +226,7 @@ const Event = ({ params }) => {
       handleRemove={handleRemove}
       handleEdit={handleEdit}
       handleDelete={handleDelete}
+      addImagesToEvent={addImagesToEvent}
     />
   );
 };

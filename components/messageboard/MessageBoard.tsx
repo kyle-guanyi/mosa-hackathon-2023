@@ -5,18 +5,15 @@ import Message from "./Message";
 import MessageForm from "./MessageForm";
 import { useSession } from "next-auth/react";
 
-const MessageBoard = ({ eventDetails }) => {
+const MessageBoard = ({ eventDetails, addImagesToEvent }) => {
   const [eventMessages, setEventMessages] = useState([]);
   const [message, setMessage] = useState({
     content: "",
+    uploadedMessagePictures: [],
   });
   const [submitting, setSubmitting] = useState(false);
 
   const { data: session } = useSession();
-  console.log("This my event details id");
-  console.log(eventDetails._id);
-
-  
 
   const fetchEventMessages = async () => {
     const response = await fetch(`/api/message/${eventDetails._id}`);
@@ -46,11 +43,12 @@ const MessageBoard = ({ eventDetails }) => {
           event: eventDetails._id,
           author: session?.user.id,
           content: message.content,
+          uploadedMessagePictures: message.uploadedMessagePictures,
         }),
       });
 
       if(response.ok) {
-        setMessage({ content: ""});
+        setMessage({ content: "" });
         fetchEventMessages();
       }
 
@@ -99,13 +97,19 @@ const MessageBoard = ({ eventDetails }) => {
     }
   };
 
+  const handleKeysArray = async (keysArray) => {
+    setMessage({ ...message, uploadedMessagePictures: keysArray});
+    addImagesToEvent(keysArray)
+  }
+  
   return (
     <div>
       <div> MessageBoard </div>
       <MessageForm 
         message={message}
         setMessage={setMessage}
-        handleMessageSubmit={createMessage} 
+        handleMessageSubmit={createMessage}
+        handleKeysArray={handleKeysArray}
       />
       {eventMessages.slice().reverse().map((eventMessage) => {
       return (
@@ -113,8 +117,7 @@ const MessageBoard = ({ eventDetails }) => {
         message={eventMessage} 
         onDeleteItem={() => handleDeleteMessage(eventMessage._id)}
         // added for edit
-        onPatchMessage={editMessage}
-        
+        onPatchMessage={editMessage}       
         />
       );
     })}

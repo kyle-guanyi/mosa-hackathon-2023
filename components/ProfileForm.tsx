@@ -82,18 +82,6 @@ const classesTaken = [
     label: "CIT 5150 Fundamentals of Linear Algebra and Optimization",
   },
   {
-    value: "CIT 5150 Fundamentals of Linear Algebra and Optimization",
-    label: "CIT 5150 Fundamentals of Linear Algebra and Optimization",
-  },
-  {
-    value: "CIT 5150 Fundamentals of Linear Algebra and Optimization",
-    label: "CIT 5150 Fundamentals of Linear Algebra and Optimization",
-  },
-  {
-    value: "CIT 5150 Fundamentals of Linear Algebra and Optimization",
-    label: "CIT 5150 Fundamentals of Linear Algebra and Optimization",
-  },
-  {
     value: "CIT 5210 Artificial Intelligence",
     label: "CIT 5210 Artificial Intelligence",
   },
@@ -187,162 +175,107 @@ const InterestFields = [
 
 const Timezones = [
   {
-    value: "UTC-12:00 - International Date Line West (IDLW)",
+    value: "Etc/GMT+12",
     label: "UTC-12:00 - International Date Line West (IDLW)",
   },
   {
-    value: "UTC-11:00 - Niue Time (NUT), Samoa Standard Time (SST)",
+    value: "Pacific/Niue",
     label: "UTC-11:00 - Niue Time (NUT), Samoa Standard Time (SST)",
   },
   {
-    value: "UTC-09:30 - Marquesas Islands Time (MART)",
+    value: "Pacific/Marquesas",
     label: "UTC-09:30 - Marquesas Islands Time (MART)",
   },
+  { value: "America/Adak", label: "UTC-09:00 - Alaska Standard Time (AKST)" },
   {
-    value: "UTC-09:00 - Alaska Standard Time (AKST)",
-    label: "UTC-09:00 - Alaska Standard Time (AKST)",
-  },
-  {
-    value: "UTC-08:00 - Pacific Standard Time (PST)",
+    value: "America/Los_Angeles",
     label: "UTC-08:00 - Pacific Standard Time (PST)",
   },
   {
-    value: "UTC-07:00 - Mountain Standard Time (MST)",
+    value: "America/Denver",
     label: "UTC-07:00 - Mountain Standard Time (MST)",
   },
   {
-    value: "UTC-06:00 - Central Standard Time (CST)",
+    value: "America/Chicago",
     label: "UTC-06:00 - Central Standard Time (CST)",
   },
   {
-    value: "UTC-05:00 - Eastern Standard Time (EST)",
+    value: "America/New_York",
     label: "UTC-05:00 - Eastern Standard Time (EST)",
   },
   {
-    value: "UTC-04:00 - Atlantic Standard Time (AST)",
+    value: "America/Halifax",
     label: "UTC-04:00 - Atlantic Standard Time (AST)",
   },
   {
-    value: "UTC-03:30 - Newfoundland Standard Time (NST)",
+    value: "America/St_Johns",
     label: "UTC-03:30 - Newfoundland Standard Time (NST)",
   },
+  { value: "America/Manaus", label: "UTC-03:00 - Amazon Standard Time (AMT)" },
   {
-    value: "UTC-03:00 - Amazon Standard Time (AMT)",
-    label: "UTC-03:00 - Amazon Standard Time (AMT)",
-  },
-  {
-    value: "UTC-02:00 - Fernando de Noronha Time (FNT)",
+    value: "America/Noronha",
     label: "UTC-02:00 - Fernando de Noronha Time (FNT)",
   },
   {
-    value: "UTC-01:00 - Azores Standard Time (AZOST)",
+    value: "Atlantic/Azores",
     label: "UTC-01:00 - Azores Standard Time (AZOST)",
   },
+  { value: "Etc/GMT", label: "UTC+00:00 - Greenwich Mean Time (GMT)" },
+  { value: "Europe/Paris", label: "UTC+01:00 - Central European Time (CET)" },
+  { value: "Europe/Kiev", label: "UTC+02:00 - Eastern European Time (EET)" },
+  { value: "Europe/Moscow", label: "UTC+03:00 - Moscow Standard Time (MSK)" },
+  { value: "Asia/Tehran", label: "UTC+03:30 - Iran Standard Time (IRST)" },
+  { value: "Asia/Dubai", label: "UTC+04:00 - Gulf Standard Time (GST)" },
+  { value: "Asia/Kabul", label: "UTC+04:30 - Afghanistan Time (AFT)" },
+  { value: "Asia/Kolkata", label: "UTC+05:30 - Indian Standard Time (IST)" },
+  { value: "Asia/Kathmandu", label: "UTC+05:45 - Nepal Time (NPT)" },
+  { value: "Asia/Dhaka", label: "UTC+06:00 - Bangladesh Time (BST)" },
+  { value: "Asia/Yangon", label: "UTC+06:30 - Myanmar Time (MMT)" },
+  { value: "Asia/Bangkok", label: "UTC+07:00 - Indochina Time (ICT)" },
+  { value: "Asia/Shanghai", label: "UTC+08:00 - China Standard Time (CST)" },
   {
-    value: "UTC+00:00 - Greenwich Mean Time (GMT)",
-    label: "UTC+00:00 - Greenwich Mean Time (GMT)",
-  },
-  {
-    value: "UTC+01:00 - Central European Time (CET)",
-    label: "UTC+01:00 - Central European Time (CET)",
-  },
-  {
-    value: "UTC+02:00 - Eastern European Time (EET)",
-    label: "UTC+02:00 - Eastern European Time (EET)",
-  },
-  {
-    value: "UTC+03:00 - Moscow Standard Time (MSK)",
-    label: "UTC+03:00 - Moscow Standard Time (MSK)",
-  },
-  {
-    value: "UTC+03:30 - Iran Standard Time (IRST)",
-    label: "UTC+03:30 - Iran Standard Time (IRST)",
-  },
-  {
-    value: "UTC+04:00 - Gulf Standard Time (GST)",
-    label: "UTC+04:00 - Gulf Standard Time (GST)",
-  },
-  {
-    value: "UTC+04:30 - Afghanistan Time (AFT)",
-    label: "UTC+04:30 - Afghanistan Time (AFT)",
-  },
-  {
-    value: "UTC+05:00 - Pakistan Standard Time (PKT)",
-    label: "UTC+05:00 - Pakistan Standard Time (PKT)",
-  },
-  {
-    value: "UTC+05:30 - Indian Standard Time (IST)",
-    label: "UTC+05:30 - Indian Standard Time (IST)",
-  },
-  {
-    value: "UTC+05:45 - Nepal Time (NPT)",
-    label: "UTC+05:45 - Nepal Time (NPT)",
-  },
-  {
-    value: "UTC+06:00 - Bangladesh Time (BST)",
-    label: "UTC+06:00 - Bangladesh Time (BST)",
-  },
-  {
-    value: "UTC+06:30 - Myanmar Time (MMT)",
-    label: "UTC+06:30 - Myanmar Time (MMT)",
-  },
-  {
-    value: "UTC+07:00 - Indochina Time (ICT)",
-    label: "UTC+07:00 - Indochina Time (ICT)",
-  },
-  {
-    value: "UTC+08:00 - China Standard Time (CST)",
-    label: "UTC+08:00 - China Standard Time (CST)",
-  },
-  {
-    value: "UTC+08:45 - Southeastern Western Australia Standard Time (CWST)",
+    value: "Australia/Eucla",
     label: "UTC+08:45 - Southeastern Western Australia Standard Time (CWST)",
   },
+  { value: "Asia/Tokyo", label: "UTC+09:00 - Japan Standard Time (JST)" },
   {
-    value: "UTC+09:00 - Japan Standard Time (JST)",
-    label: "UTC+09:00 - Japan Standard Time (JST)",
-  },
-  {
-    value: "UTC+09:30 - Australian Central Standard Time (ACST)",
+    value: "Australia/Adelaide",
     label: "UTC+09:30 - Australian Central Standard Time (ACST)",
   },
   {
-    value: "UTC+10:00 - Japan Standard Time(JST), Korea Standard Time (KST)",
-    label: "UTC+10:00 - Japan Standard Time(JST), Korea Standard Time (KST)",
+    value: "Asia/Seoul",
+    label: "UTC+09:00 - Japan Standard Time (JST), Korea Standard Time (KST)",
   },
   {
-    value: "UTC+10:30 - Lord Howe Standard Time (LHST)",
+    value: "Australia/Lord_Howe",
     label: "UTC+10:30 - Lord Howe Standard Time (LHST)",
   },
   {
-    value: "UTC+11:00 - Solomon Islands Time (SBT)",
+    value: "Pacific/Guadalcanal",
     label: "UTC+11:00 - Solomon Islands Time (SBT)",
   },
+  { value: "Pacific/Norfolk", label: "UTC+11:30 - Norfolk Island Time (NFT)" },
   {
-    value: "UTC+11:30 - Norfolk Island Time (NFT)",
-    label: "UTC+11:30 - Norfolk Island Time (NFT)",
-  },
-  {
-    value: "UTC+12:00 - New Zealand Standard Time (NZST)",
+    value: "Pacific/Auckland",
     label: "UTC+12:00 - New Zealand Standard Time (NZST)",
   },
   {
-    value: "UTC+12:45 - Chatham Standard Time (CHAST)",
+    value: "Pacific/Chatham",
     label: "UTC+12:45 - Chatham Standard Time (CHAST)",
   },
-  {
-    value: "UTC+13:00 - Tonga Time (TOT)",
-    label: "UTC+13:00 - Tonga Time (TOT)",
-  },
-  {
-    value: "UTC+14:00 - Line Island Time (LINT)",
-    label: "UTC+14:00 - Line Island Time (LINT)",
-  },
+  { value: "Pacific/Tongatapu", label: "UTC+13:00 - Tonga Time (TOT)" },
+  { value: "Pacific/Kiritimati", label: "UTC+14:00 - Line Island Time (LINT)" },
 ];
 
 // @ts-ignore
-const ProfileForm = ({ type, user, setUser, submitting, handleSubmit, handleKeysArray }) => {
-  
+const ProfileForm = ({
+  type,
+  user,
+  setUser,
+  submitting,
+  handleSubmit,
+  handleKeysArray,
+}) => {
   return (
     <section className="w-full max-w-full flex-start flex-col">
       <h1 className="head_text text-left">
@@ -388,7 +321,9 @@ const ProfileForm = ({ type, user, setUser, submitting, handleSubmit, handleKeys
           </span>
           <Select
             options={ClosestCity}
-            value={ClosestCity.find(city => city.value === user.closestMainCity)}
+            value={ClosestCity.find(
+              (city) => city.value === user.closestMainCity
+            )}
             onChange={(selectedOption) =>
               setUser({ ...user, closestMainCity: selectedOption.value })
             }
@@ -402,7 +337,7 @@ const ProfileForm = ({ type, user, setUser, submitting, handleSubmit, handleKeys
           </span>
           <Select
             options={Gender}
-            value={Gender.find(gender => gender.value === user.gender)}
+            value={Gender.find((gender) => gender.value === user.gender)}
             onChange={(selectedOption) =>
               setUser({ ...user, gender: selectedOption.value })
             }
@@ -431,9 +366,13 @@ const ProfileForm = ({ type, user, setUser, submitting, handleSubmit, handleKeys
           <Select
             options={classesTaken}
             closeMenuOnSelect={false}
-            value={classesTaken.filter(classTaken => user.classesTaken.includes(classTaken.value))}
+            value={classesTaken.filter((classTaken) =>
+              user.classesTaken.includes(classTaken.value)
+            )}
             onChange={(selectedOptions) => {
-              const selectedValues = selectedOptions.map(option => option.value);
+              const selectedValues = selectedOptions.map(
+                (option) => option.value
+              );
               setUser({ ...user, classesTaken: selectedValues });
             }}
             isMulti
@@ -447,13 +386,17 @@ const ProfileForm = ({ type, user, setUser, submitting, handleSubmit, handleKeys
           </span>
           <Select
             options={InterestFields}
-            value={InterestFields.filter(field => user.fieldOfInterest.includes(field.value))}
+            value={InterestFields.filter((field) =>
+              user.fieldOfInterest.includes(field.value)
+            )}
             closeMenuOnSelect={false}
             onChange={(selectedOptions) => {
-              const selectedValues = selectedOptions.map(option => option.value);
+              const selectedValues = selectedOptions.map(
+                (option) => option.value
+              );
               setUser({ ...user, fieldOfInterest: selectedValues });
             }}
-            isMulti 
+            isMulti
           />
         </label>
 
@@ -464,7 +407,9 @@ const ProfileForm = ({ type, user, setUser, submitting, handleSubmit, handleKeys
           </span>
           <Select
             options={Timezones}
-            value={Timezones.find(timezone => timezone.value === user.timeZone)}
+            value={Timezones.find(
+              (timezone) => timezone.value === user.timeZone
+            )}
             onChange={(selectedOption) =>
               setUser({ ...user, timeZone: selectedOption.value })
             }
@@ -487,8 +432,11 @@ const ProfileForm = ({ type, user, setUser, submitting, handleSubmit, handleKeys
           </button>
         </div>
       </form>
-      <Dropzone handleKeysArray={handleKeysArray}
-            maxUploads={1}/>
+      <Dropzone
+        handleKeysArray={handleKeysArray}
+        maxUploads={1}
+        initialFiles={[user.userUpdatedProfileImage]}
+      />
     </section>
   );
 };
