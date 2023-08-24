@@ -23,7 +23,7 @@ const CreateEvent = () => {
     startTime: "",
     timeZone: "",
     closestCity: "",
-    eventImage:"",
+    eventImage: null,
   });
 
   const createEvent = async (e) => {

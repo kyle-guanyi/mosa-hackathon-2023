@@ -46,7 +46,7 @@ const EventPage = ({
   };
 
   useEffect(() => {
-    if (eventDetails?.eventImage !== "") {
+    if (eventDetails?.eventImage) {
       fetchEventImage();
     }
   }, [eventDetails?.eventImage]);
@@ -77,7 +77,7 @@ const EventPage = ({
       <div className="w-3/5 bg-green-700 flex-grow">
         <div className="w-full h-1/10 bg-green-500 font-satoshi">
           <h1 className="text-3xl">{eventDetails.eventName}</h1>
-          {eventDetails?.eventImage === "" ? (
+          {eventDetails?.eventImage ? (
               <Image
                   src={eventImage}
                   alt="event_banner"
@@ -87,14 +87,13 @@ const EventPage = ({
               />
           ) : (
               <Image
-                  src="/public/assets/images/ben.png"
+                  src="/assets/images/ben.png"
                   alt="event_banner"
                   width={120}
                   height={120}
                   className="mx-auto rounded-full object-contain"
               />
           )}
-
 
         </div>
         <div className=" w-full h-5/6 bg-blue-500 flex-col">
