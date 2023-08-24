@@ -205,8 +205,8 @@ const EventForm = ({ type, event, setEvent, submitting, handleSubmit, handleKeys
           </span>
           <input
             type="date"
-            value={event.startDate.toISOString().substring(0, 10)}
-            onChange={(e) => setEvent({ ...event, startDate: new Date(e.target.value) })}
+            value={event.startDate ? new Date(event.startDate).toISOString().substring(0, 10) : ''}
+            onChange={(e) => setEvent({ ...event, startDate: e.target.value })}
             required
             className="form_input"
           />

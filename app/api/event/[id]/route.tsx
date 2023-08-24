@@ -32,6 +32,8 @@ export const PATCH = async (request, { params }) => {
 
   const { isPublic, eventName, isVirtual, location, zoomLink, startDate, startTime, timeZone, eventDescription, closestCity } = await request.json();
 
+  console.log("this is the request: ", new Date(startDate))
+
   try {
     await connectToDB();
 
@@ -50,17 +52,18 @@ export const PATCH = async (request, { params }) => {
     existingEvent.isVirtual = isVirtual;
     existingEvent.location = location;
     existingEvent.zoomLink = zoomLink;
-    existingEvent.startDate = startDate;
+    existingEvent.startDate = new Date(startDate);
     existingEvent.startTime = startTime;
     existingEvent.timeZone = timeZone;
     existingEvent.eventDescription = eventDescription;
     existingEvent.closestCity = closestCity;
-    existingEvent.lastEdited = Date.now,
+    existingEvent.lastEdited = Date.now();
 
     await existingEvent.save();
 
     return new Response("Successfully updated the Event", { status: 200 });
   } catch (error) {
+    console.error("Error:", error); // Log the error for debugging
     return new Response("Error Updating Event", { status: 500 });
   }
 };

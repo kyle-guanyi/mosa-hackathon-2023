@@ -19,9 +19,9 @@ const CreateEvent = () => {
     isVirtual: false,
     isCompleted: false,
     interested: [],
-    startDate: new Date(),
-    startTime: "12:00 PM",
-    timeZone: "EST",
+    startDate: null,
+    startTime: "",
+    timeZone: "",
     closestCity: "",
     eventImage:"",
   });

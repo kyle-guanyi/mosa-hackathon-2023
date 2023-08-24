@@ -26,32 +26,34 @@ const UpdateEvent = ({ params }) => {
 
   const [isCreator, setIsCreator] = useState(false);
 
+  const getEventDetails = async () => {
+    const response = await fetch(`/api/event/${params.id}`);
+    const data = await response.json();
+    console.log(data);
+
+    setEvent({
+      eventName: data.eventName,
+      eventDescription: data.eventDescription,
+      location: data.location,
+      zoomLink: data.zoomLink,
+      isPublic: data.isPublic,
+      isVirtual: data.isVirtual,
+      startDate: data.startDate,
+      startTime: data.startTime,
+      timeZone: data.timeZone,
+      closestCity: data.closestCity,
+    });
+
+    if (data.creator === session?.user?.id) {
+      setIsCreator(true);
+    }
+  };
+
   useEffect(() => {
-    const getEventDetails = async () => {
-      const response = await fetch(`/api/event/${params.id}`);
-      const data = await response.json();
-      console.log(data);
-
-      setEvent({
-        eventName: data.eventName,
-        eventDescription: data.eventDescription,
-        location: data.location,
-        zoomLink: data.zoomLink,
-        isPublic: data.isPublic,
-        isVirtual: data.isVirtual,
-        startDate: data.startDate,
-        startTime: data.startTime,
-        timeZone: data.timeZone,
-        closestCity: data.closestCity,
-      });
-
-      if (data.creator === session?.user?.id) {
-        setIsCreator(true);
-      }
-    };
-
-    if (params.id) getEventDetails();
-  }, [params.id]);
+    if (session) {
+      if (params.id) getEventDetails();
+    }
+  }, [params.id, session]);
 
   if (!isCreator) {
     return <div>You are not the creator of this event.</div>;
