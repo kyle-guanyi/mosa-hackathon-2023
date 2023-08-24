@@ -26,16 +26,20 @@ export const PATCH = async (request, { params }) => {
     return PATCH_ATTENDEES(request, {params});
   } else if (request.nextUrl.searchParams.get("type") === "interested") {
     return PATCH_INTERESTED(request, {params});
+  } else if (request.nextUrl.searchParams.get("type") === "eventImage") {
+    return PATCH_EVENT_IMAGE(request, {params});
   }
 
-  const { isPublic, eventName, isVirtual, location, zoomLink, startDate, startTime, timeZone, eventDescription } = await request.json();
+  const { isPublic, eventName, isVirtual, location, zoomLink, startDate, startTime, timeZone, eventDescription, closestCity } = await request.json();
 
   try {
     await connectToDB();
 
+
     // Find the existing event by ID
     const existingEvent = await Event.findById(params?.id);
 
+    console.log("this is the existing event:", existingEvent);
     if (!existingEvent) {
       return new Response("Event not found", { status: 404 });
     }
@@ -50,6 +54,8 @@ export const PATCH = async (request, { params }) => {
     existingEvent.startTime = startTime;
     existingEvent.timeZone = timeZone;
     existingEvent.eventDescription = eventDescription;
+    existingEvent.closestCity = closestCity;
+    existingEvent.lastEdited = Date.now,
 
     await existingEvent.save();
 
@@ -111,6 +117,31 @@ export const PATCH_INTERESTED = async (request, { params }) => {
   } catch (error) {
     console.error("Error updating event's interested users", error); // Log the error for debugging
     return new Response("Error updating event's interested users", { status: 500 });
+  }
+};
+
+export const PATCH_EVENT_IMAGE = async (request, { params }) => {
+  const { eventImage } = await request.json();
+
+  try {
+    await connectToDB();
+
+    // Find the existing event by ID
+    const existingEvent = await Event.findById(params?.id);
+
+    if (!existingEvent) {
+      return new Response("Event not found", { status: 404 });
+    }
+
+    // update user's attending events array
+    existingEvent.eventImage = eventImage;
+
+    await existingEvent.save();
+
+    return new Response("Successfully updated event's image", { status: 200 });
+  } catch (error) {
+    console.error("Error updating event's image", error); // Log the error for debugging
+    return new Response("Error updating event's image", { status: 500 });
   }
 };
 

@@ -1,8 +1,6 @@
 import Link from "next/link";
-import Dropdown from "./Dropdown";
-import React, { useState, useEffect } from "react";
 import Select from "react-select";
-
+import Dropzone from "components/Dropzone";
 
 const Timezones = [
   { value: "UTC-12:00 - International Date Line West (IDLW)", label: "UTC-12:00 - International Date Line West (IDLW)"},
@@ -93,7 +91,7 @@ const ClosestCity = [
 
 
 // @ts-ignore
-const EventForm = ({ type, event, setEvent, submitting, handleSubmit }) => {
+const EventForm = ({ type, event, setEvent, submitting, handleSubmit, handleKeysArray }) => {
 
   return (
     <section className="w-full max-w-full flex-start flex-col mx-auto">
@@ -180,7 +178,9 @@ const EventForm = ({ type, event, setEvent, submitting, handleSubmit }) => {
           <span className="font-satoshi font-semibold text-base text-gray-700">
             Closest City
           </span>
-          <Select options={ClosestCity} onChange={(selectedOption) => setEvent({ ...event, closestCity: selectedOption.value })} />
+          <Select options={ClosestCity}
+                  value={ClosestCity.find(city => city.value === event.closestCity)}
+                  onChange={(selectedOption) => setEvent({ ...event, closestCity: selectedOption.value })} />
         </label>
 
 
@@ -205,8 +205,8 @@ const EventForm = ({ type, event, setEvent, submitting, handleSubmit }) => {
           </span>
           <input
             type="date"
-            value={event.startDate}
-            onChange={(e) => setEvent({ ...event, startDate: e.target.value })}
+            value={event.startDate.toISOString().substring(0, 10)}
+            onChange={(e) => setEvent({ ...event, startDate: new Date(e.target.value) })}
             required
             className="form_input"
           />
@@ -229,7 +229,7 @@ const EventForm = ({ type, event, setEvent, submitting, handleSubmit }) => {
           <span className="font-satoshi font-semibold text-base text-gray-700">
             Time Zone
           </span>
-          <Select options ={Timezones} onChange={(selectedOption) => setEvent({ ...event, timeZone: selectedOption.value })} />
+          <Select options ={Timezones} value={Timezones.find(timezone => timezone.value === event.timeZone)} onChange={(selectedOption) => setEvent({ ...event, timeZone: selectedOption.value })} />
           </label>
 
         <div className="flex-end mx-3 mb-5 gap-4">
@@ -246,6 +246,8 @@ const EventForm = ({ type, event, setEvent, submitting, handleSubmit }) => {
           </button>
         </div>
       </form>
+      <Dropzone handleKeysArray={handleKeysArray}
+                maxUploads={1}/>
     </section>
   );
 };

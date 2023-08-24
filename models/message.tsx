@@ -16,6 +16,13 @@ const messageSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  lastEdited: {
+    type: Date,
+    default: Date.now,
+  },
+  uploadedMessagePictures: {
+    type: [String],
+  },
 });
 
 const Message = models.Message || model("Message", messageSchema);

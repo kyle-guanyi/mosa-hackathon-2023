@@ -1,23 +1,5 @@
 import { Schema, model, models, Document, Types } from "mongoose";
 
-// interface IUser extends Document {
-//   //from google email
-//   email: string;
-//   firstName: string; profile.name.split(" ")[0]
-//   lastName: string; profile.name.split(" ")[1]
-//   googleProfileImage: string;
-//
-//   // from user input
-//   userUpdatedProfileImage: string; // if user uploads profile image
-//
-//   closestMainCity: string;
-//   gender: string;
-//   bio: string;
-//   classesTaken: Array<string>;
-//   fieldsOfInterest: Array<string>;
-//   attendingEvents: Types.ObjectId[];
-// }
-
 const UserSchema = new Schema({
   email: {
     type: String,
@@ -69,6 +51,10 @@ const UserSchema = new Schema({
 
   attendingEvents: {
     type: [{ type: Schema.Types.ObjectId, ref: 'Event' }],
+  },
+
+  userUploadedPictures: {
+    type: [String], // Array of strings
   },
 });
 

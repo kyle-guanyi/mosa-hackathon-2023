@@ -21,9 +21,16 @@ const Comment = ({ comment, onDeleteComment }) => {
     <div>
       <p>{comment.content}</p>
       <p>Author: {userName}</p>
+        <p>{comment.createdAt}</p>
       {/* Check if current user is the owner */}
       {session?.user.id === comment.author && (
-        <button onClick={onDeleteComment} className="blue_btn">Delete Comment</button>
+        <button onClick={() => {
+            const shouldDelete = window.confirm(
+                "Are you sure you want to delete this comment?"
+            );
+            if (shouldDelete) {
+                onDeleteComment();
+            }}} className="blue_btn">Delete Comment</button>
       )}
     </div>
   );

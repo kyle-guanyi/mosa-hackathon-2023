@@ -61,6 +61,7 @@ const UpdateEvent = ({ params }) => {
     e.preventDefault();
     setIsSubmitting(true);
 
+    console.log("this is the updated event stuff: ", event)
     if (!params.id) return alert("Missing Event Id!");
 
     try {
@@ -90,6 +91,31 @@ const UpdateEvent = ({ params }) => {
     }
   }
 
+  const updateEventImage = async (newEventImage) => {
+    setIsSubmitting(true);
+
+    if (!params.id) return alert("Missing Event Id!");
+
+    console.log(newEventImage)
+    try {
+      const response = await fetch(`/api/event/${params.id}?type=eventImage`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          eventImage: newEventImage,
+        }),
+      });
+
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleKeysArray = async (keysArray) => {
+    updateEventImage(keysArray[0]);
+  }
+
   return (
     <EventForm
       type="Update"
@@ -97,6 +123,7 @@ const UpdateEvent = ({ params }) => {
       setEvent={setEvent}
       submitting={submitting}
       handleSubmit={updateEvent}
+      handleKeysArray={handleKeysArray}
     />
   );
 };

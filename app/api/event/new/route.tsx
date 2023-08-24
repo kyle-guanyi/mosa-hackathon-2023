@@ -15,7 +15,8 @@ export const POST = async (request) => {
         startDate,
         startTime,
         timeZone,
-        isCompleted } = await request.json();
+        isCompleted,
+        eventImage } = await request.json();
 
     try {
         await connectToDB();
@@ -34,6 +35,7 @@ export const POST = async (request) => {
             startTime,
             timeZone,
             isCompleted,
+            eventImage,
         })
 
         await newEvent.save();
@@ -44,4 +46,6 @@ export const POST = async (request) => {
         return new Response("Failed to create a new event", { status: 500 });
     }
 }
+
+
 

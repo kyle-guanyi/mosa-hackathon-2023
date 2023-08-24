@@ -11,13 +11,13 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
 
   const fetchProfilePicture = async () => {
     try {
-      const keysArray = [profileDetails.userUpdatedProfileImage]; // Convert to an array
+      const keysArray = [profileDetails.userUpdatedProfileImage];
       const response = await fetch(`/api/media?keys=${encodeURIComponent(JSON.stringify(keysArray))}`);
       const data = await response.json();
       console.log(data)
 
       if (response.ok) {
-        setProfilePicture(data.urls[0]); // Assuming the data structure is { success: true, urls: [profilePictureUrl] }
+        setProfilePicture(data.urls[0]);
       } else {
         console.error("Error fetching profile picture");
       }

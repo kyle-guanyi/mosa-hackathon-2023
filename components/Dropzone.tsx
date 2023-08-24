@@ -111,6 +111,11 @@ export default function FileUpload({ handleKeysArray, maxUploads }) {
     e.preventDefault();
 
     if (!files?.length) {
+      window.alert("Please upload at least one valid file type before submitting.");
+      return;
+    }
+
+    if (!files?.length) {
       return;
     }
 
@@ -170,7 +175,14 @@ export default function FileUpload({ handleKeysArray, maxUploads }) {
         <div className="flex items-center justify-between">
           <h2 className="title text-3xl font-semibold">Preview Files</h2>
           <div className="flex gap-4">
-            <button type="button" onClick={removeAll} className="red_btn">
+            <button type="button" onClick={() => {
+              const shouldDelete = window.confirm(
+                  "Are you sure you want to delete all uploaded files?"
+              );
+              if (shouldDelete) {
+                removeAll();
+              }
+            }} className="red_btn">
               Remove all files
             </button>
             <button type="submit" className="blue_btn">

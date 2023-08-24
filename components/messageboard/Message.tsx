@@ -93,8 +93,16 @@ const Message = ({ message, onDeleteItem }) => {
     <div>
       <p>{message.content}</p>
       <p>Author: {userName}</p>
+      <p>{message.createdAt}</p>
       {session?.user.id === message.author && (
-        <button onClick={onDeleteItem} className="blue_btn">Delete Message</button>
+        <button onClick={() => {
+          const shouldDelete = window.confirm(
+              "Are you sure you want to delete this message and its associated comments?"
+          );
+          if (shouldDelete) {
+            onDeleteItem();
+          }
+        }} className="blue_btn">Delete Message</button>
       )}
       <CommentForm 
         comment={comment}

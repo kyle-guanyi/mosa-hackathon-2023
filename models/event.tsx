@@ -15,6 +15,9 @@ type IEvent = Document & {
   timeZone: string;
   eventDescription: string;
   isCompleted?: boolean;
+  uploadedPictures: string[];
+  eventImage: string;
+  lastEdited: Date;
 };
 
 const eventSchema = new Schema({
@@ -76,6 +79,16 @@ const eventSchema = new Schema({
   eventDescription: {
     type: String,
     required: true,
+  },
+  eventImage: {
+    type: String,
+  },
+  uploadedPictures: {
+    type: [String],
+  },
+  lastEdited: {
+    type: Date,
+    default: Date.now,
   },
 });
 

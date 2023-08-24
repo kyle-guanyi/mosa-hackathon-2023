@@ -5,6 +5,7 @@ import { FiClock } from "react-icons/Fi";
 import { CiLocationOn } from "react-icons/Ci";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 
 const EventPage = ({
   eventDetails,
@@ -24,6 +25,31 @@ const EventPage = ({
       day: "numeric",
     }
   );
+
+  const [eventImage, setEventImage] = useState("");
+
+  const fetchEventImage = async () => {
+    try {
+      const keysArray = [eventDetails.eventImage]; // Convert to an array
+      const response = await fetch(`/api/media?keys=${encodeURIComponent(JSON.stringify(keysArray))}`);
+      const data = await response.json();
+      console.log(data)
+
+      if (response.ok) {
+        setEventImage(data.urls[0]); // Assuming the data structure is { success: true, urls: [profilePictureUrl] }
+      } else {
+        console.error("Error fetching profile picture");
+      }
+    } catch (error) {
+      console.error("Error fetching profile picture:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (eventDetails?.eventImage !== "") {
+      fetchEventImage();
+    }
+  }, [eventDetails?.eventImage]);
 
   const [isLoading, setIsLoading] = useState(true);
   const { data: session } = useSession();
@@ -51,6 +77,25 @@ const EventPage = ({
       <div className="w-3/5 bg-green-700 flex-grow">
         <div className="w-full h-1/10 bg-green-500 font-satoshi">
           <h1 className="text-3xl">{eventDetails.eventName}</h1>
+          {eventDetails?.eventImage === "" ? (
+              <Image
+                  src={eventImage}
+                  alt="event_banner"
+                  width={120}
+                  height={120}
+                  className="mx-auto rounded-full object-contain"
+              />
+          ) : (
+              <Image
+                  src="/public/assets/images/ben.png"
+                  alt="event_banner"
+                  width={120}
+                  height={120}
+                  className="mx-auto rounded-full object-contain"
+              />
+          )}
+
+
         </div>
         <div className=" w-full h-5/6 bg-blue-500 flex-col">
           <div className="flex flex-row justify-between">
@@ -75,7 +120,12 @@ const EventPage = ({
                   <button
                     type="button"
                     onClick={() => {
-                      handleDelete(eventDetails._id);
+                      const shouldDelete = window.confirm(
+                          "Are you sure you want to delete this event?"
+                      );
+                      if (shouldDelete) {
+                        handleDelete(eventDetails._id);
+                      }
                     }}
                     className="blue_btn"
                   >

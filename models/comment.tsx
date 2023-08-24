@@ -16,6 +16,13 @@ const commentSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  lastEdited: {
+    type: Date,
+    default: Date.now,
+  },
+  uploadedCommentPictures: {
+    type: [String], // Array of strings
+  },
 });
 
 const Comment = models.Comment || model("Comment", commentSchema);

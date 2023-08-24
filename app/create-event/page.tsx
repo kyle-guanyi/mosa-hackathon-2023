@@ -23,11 +23,14 @@ const CreateEvent = () => {
     startTime: "12:00 PM",
     timeZone: "EST",
     closestCity: "",
+    eventImage:"",
   });
 
   const createEvent = async (e) => {
     e.preventDefault();
     setSubmitting(true);
+
+    console.log(event);
 
     try {
       const response = await fetch("/api/event/new", {
@@ -47,6 +50,7 @@ const CreateEvent = () => {
           closestCity: event.closestCity,
           zoomLink: event.zoomLink,
           isCompleted: event.isCompleted,
+          eventImage: event.eventImage,
         }),
       });
 
@@ -60,6 +64,10 @@ const CreateEvent = () => {
     }
   };
 
+  const handleKeysArray = async (keysArray) => {
+    setEvent({ ...event, eventImage: keysArray[0]});
+  }
+
   return (
     <EventForm
       type="Create"
@@ -67,6 +75,7 @@ const CreateEvent = () => {
       setEvent={setEvent}
       submitting={submitting}
       handleSubmit={createEvent}
+      handleKeysArray={handleKeysArray}
     />
   );
 };
