@@ -74,6 +74,29 @@ const Message = ({ message, onDeleteItem }) => {
       setSubmitting(false);
     }
   };
+
+  const editComment = async (editedComment) => {
+    setSubmitting(true);
+    try {
+      console.log("Reached edited comment", editedComment)
+      const response = await fetch(`/api/comment/${editedComment._id}`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          content: editedComment.content,
+        }),
+      });
+
+      if(response.ok) {
+        fetchMessageComments();
+      }
+
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   const handleDeleteComment = async (commentId) => {
     try {
       const response = await fetch(`/api/comment/${commentId}`, {
@@ -87,6 +110,10 @@ const Message = ({ message, onDeleteItem }) => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handlePatchComment = async (commentId) => {
+
   };
 
   return (
@@ -113,6 +140,7 @@ const Message = ({ message, onDeleteItem }) => {
         <Comment key={messageComment._id} comment={messageComment} 
         
         onDeleteComment={() => handleDeleteComment(messageComment._id)}
+        onPatchComment={editComment}
         />
       ))}
     </div>

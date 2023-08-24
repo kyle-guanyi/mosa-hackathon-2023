@@ -17,7 +17,30 @@ export const GET = async (request, { params }) => {
 };
 
 //PATCH (update)
+export const PATCH = async (request, { params }) => {
+  const { content } = await request.json();
 
+  try {
+    await connectToDB();
+
+    // Find the existing event by ID
+    const existingComment = await Comment.findById(params?.id);
+
+    if (!existingComment) {
+      return new Response("Comment not found", { status: 404 });
+    }
+
+    // update event's attendees
+    existingComment.content = content;
+
+    await existingComment.save();
+
+    return new Response("Successfully updated comment", { status: 200 });
+  } catch (error) {
+    console.error("Error updating comment", error); // Log the error for debugging
+    return new Response("Error updating comment's contents", { status: 500 });
+  }
+};
 
 //DELETE (delete)
 export const DELETE = async (request, { params }) => {
@@ -36,3 +59,4 @@ export const DELETE = async (request, { params }) => {
     return new Response("Failed to delete comment", {status: 500});
   }
 }
+
