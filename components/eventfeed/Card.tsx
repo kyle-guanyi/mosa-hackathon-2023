@@ -68,7 +68,7 @@ const Card = ({ event }) => {
             />
           ) : (
             <Image
-              src="/assets/images/ben.png"
+              src="/assets/images/benv2.png"
               alt="event_banner"
               width={120}
               height={120}
