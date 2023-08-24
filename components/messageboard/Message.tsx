@@ -5,9 +5,31 @@ import React from 'react';
 import Comment from './Comment';
 import CommentForm from './CommentForm';
 import { useSession } from "next-auth/react";
+import MessageBoard from "./MessageBoard";
+import CreateMessage from "./MessageForm";
 
-const Message = ({ message, onDeleteItem }) => {
+const Message = ({ message, onDeleteItem, onPatchMessage }) => {
   const [userName, setUserName] = useState("");
+
+  //for editing mode
+  const[messageEditing, setMessageEditing] = useState(false);
+
+  //content to populate the messageform
+  const [editedMessage, setEditedMessage] = useState({
+    _id: message._id,
+    content: message.content,
+  })
+  
+  //switch between form vs display
+  const onEditMessage = async () => {
+    setMessageEditing(true);
+  }
+
+  // add the editedMessage into the dtabase where the message is stored
+  const handleMessageEditSubmit = () => {
+    onPatchMessage(editedMessage);
+    setMessageEditing(false);
+  }
 
   const fetchUserName = async () => {
     const response = await fetch(`/api/user/${message.author}`);
@@ -112,12 +134,19 @@ const Message = ({ message, onDeleteItem }) => {
     }
   };
 
-  const handlePatchComment = async (commentId) => {
-
-  };
-
   return (
     <div>
+
+      {messageEditing ? (
+        <CreateMessage
+          message={editedMessage}
+          setMessage={setEditedMessage}
+          handleMessageSubmit={handleMessageEditSubmit}
+        />
+      ): (
+      <>
+
+
       <p>{message.content}</p>
       <p>Author: {userName}</p>
       <p>{message.createdAt}</p>
@@ -131,6 +160,12 @@ const Message = ({ message, onDeleteItem }) => {
           }
         }} className="blue_btn">Delete Message</button>
       )}
+      {session?.user.id === message.author && (
+            // When button is clicked, the passed in onEditComment will handle onEditComment
+            <button onClick={onEditMessage} className="blue_btn">
+              Edit Message
+            </button>
+      )}
       <CommentForm 
         comment={comment}
         setComment={setComment}
@@ -143,6 +178,8 @@ const Message = ({ message, onDeleteItem }) => {
         onPatchComment={editComment}
         />
       ))}
+      </>
+      )}
     </div>
   );
 };

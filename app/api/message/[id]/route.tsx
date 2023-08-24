@@ -19,6 +19,31 @@ export const GET = async (request, { params }) => {
 }
 
 //PATCH (update)
+export const PATCH = async (request, { params }) => {
+  const { content } = await request.json();
+
+  try {
+    await connectToDB();
+
+    // Find the existing event by ID
+    const existingMessage = await Message.findById(params?.id);
+
+    if (!existingMessage) {
+      return new Response("Message not found", { status: 404 });
+    }
+
+    // update event's attendees
+    existingMessage.content = content;
+
+    await existingMessage.save();
+
+    return new Response("Successfully updated message", { status: 200 });
+  } catch (error) {
+    console.error("Error updating message", error); // Log the error for debugging
+    return new Response("Error updating message's contents", { status: 500 });
+  }
+};
+
 
 //DELETE (delete)
 

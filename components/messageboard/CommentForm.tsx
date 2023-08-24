@@ -3,11 +3,9 @@ import React, { useState } from 'react';
 const CreateComment = ({ comment, setComment, handleCommentSubmit }) => {
 
   const handleSubmit = (e) => {
-    e.preventDefault(); // Prevent default form submission
-    handleCommentSubmit(); // Call your custom submission logic
+    e.preventDefault();
+    handleCommentSubmit();
   };
-
-  console.log("This is my create comment field", comment)
 
   return (
     <form onSubmit={handleSubmit} className="mt-10 w-full max-w-2xl flex flex-col gap-7 glassmorphism">

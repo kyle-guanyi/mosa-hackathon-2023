@@ -15,9 +15,6 @@ const Comment = ({ comment, onDeleteComment, onPatchComment }) => {
     content: comment.content,
   });
 
-  console.log("This is my editedComment ", editedComment)
-  console.log(editedComment._id)
-
   const fetchUserName = async () => {
     const response = await fetch(`/api/user/${comment.author}`);
     const data = await response.json();

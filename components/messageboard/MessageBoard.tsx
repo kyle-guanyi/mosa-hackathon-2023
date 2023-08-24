@@ -16,6 +16,8 @@ const MessageBoard = ({ eventDetails }) => {
   console.log("This my event details id");
   console.log(eventDetails._id);
 
+  
+
   const fetchEventMessages = async () => {
     const response = await fetch(`/api/message/${eventDetails._id}`);
     if (response.status === 404) {
@@ -60,6 +62,28 @@ const MessageBoard = ({ eventDetails }) => {
     }
   };
 
+  const editMessage = async (editedMessage) => {
+    setSubmitting(true);
+    try {
+      console.log("Reached edited message", editedMessage)
+      const response = await fetch(`/api/message/${editedMessage._id}`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          content: editedMessage.content,
+        }),
+      });
+
+      if(response.ok) {
+        fetchEventMessages();
+      }
+
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   const handleDeleteMessage = async (messageId) => {
     try {
       const response = await fetch(`/api/message/${messageId}`, {
@@ -88,6 +112,8 @@ const MessageBoard = ({ eventDetails }) => {
         <Message key={eventMessage._id} 
         message={eventMessage} 
         onDeleteItem={() => handleDeleteMessage(eventMessage._id)}
+        // added for edit
+        onPatchMessage={editMessage}
         
         />
       );
