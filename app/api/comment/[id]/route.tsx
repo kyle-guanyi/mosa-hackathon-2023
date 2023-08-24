@@ -20,6 +20,10 @@ export const GET = async (request, { params }) => {
 export const PATCH = async (request, { params }) => {
   const { content } = await request.json();
 
+  if (request.nextUrl.searchParams.get("type") === "pic") {
+    return PATCH_COMMENT_PICTURES(request, {params});
+  }
+
   try {
     await connectToDB();
 
@@ -39,6 +43,29 @@ export const PATCH = async (request, { params }) => {
   } catch (error) {
     console.error("Error updating comment", error); // Log the error for debugging
     return new Response("Error updating comment's contents", { status: 500 });
+  }
+};
+
+export const PATCH_COMMENT_PICTURES = async (request, { params }) => {
+  const { uploadedCommentPictures } = await request.json();
+
+  try {
+    await connectToDB();
+
+    const existingComment = await Comment.findById(params.id);
+
+    if (!existingComment) {
+      return new Response("Comment not found", { status: 404 });
+    }
+
+    existingComment.uploadedCommentPictures = uploadedCommentPictures;
+
+    await existingComment.save();
+
+    return new Response("Successfully updated comment's updated pictures", { status: 200 });
+  } catch (error) {
+    console.error("Error updating comment's updated pictures", error); // Log the error for debugging
+    return new Response("Error updating comment's updated pictures", { status: 500 });
   }
 };
 

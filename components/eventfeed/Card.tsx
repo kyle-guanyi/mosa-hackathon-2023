@@ -9,6 +9,33 @@ import { DateTime } from "luxon"
 const Card = ({ event }) => {
   const router = useRouter();
 
+  // fetch profilepic for user
+  const [eventPicture, setEventPicture] = useState("");
+  const fetchEventPicture = async () => {
+      try {
+        const keysArray = [event.eventImage]; // Convert to an array
+        const response = await fetch(`/api/media?keys=${encodeURIComponent(JSON.stringify(keysArray))}`);
+        const data = await response.json();
+        console.log(data)
+  
+        if (response.ok) {
+          setEventPicture(data.urls[0]); 
+        } else {
+          console.error("Error fetching event picture");
+        }
+      } catch (error) {
+        console.error("Error fetching event picture:", error);
+      }
+    };
+
+  useEffect(() => {
+    if (event?.eventImage) {
+      fetchEventPicture();
+    }
+  }, [event?.eventImage]);
+
+  
+
   const handleEventClick = () => {
     router.push(`/event/${event._id}`);
   };
@@ -32,6 +59,23 @@ const Card = ({ event }) => {
         <div className="flex flex-col">
           <h3 className="font-satoshi font-semibold">{event.eventName}</h3>
           <p className="text-xs">{event.location || "Virtual Event"}</p>
+          {event?.eventImage ? (
+            <Image
+              src={eventPicture}
+              alt="event_banner"
+              width={120}
+              height={120}
+              className="mx-auto rounded-full object-contain"
+            />
+          ) : (
+            <Image
+              src="/assets/images/ben.png"
+              alt="event_banner"
+              width={120}
+              height={120}
+              className="mx-auto rounded-full object-contain"
+            />
+          )}
           <div className="text-xs justify-between flex">
             <p>{event.startDate.substring(0, 10)}</p>
             <p>

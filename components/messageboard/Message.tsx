@@ -134,6 +134,27 @@ const Message = ({ message, onDeleteItem, onPatchMessage }) => {
     }
   };
 
+  const updateCommentPictures = async (keysArray) => {
+    setSubmitting(true);
+
+    if (!session?.user.id) return alert("Missing User Id!");
+    console.log(keysArray)
+    try {
+      const response = await fetch(`/api/comment/${comment._id}?type=pic`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          uploadedCommentPictures: keysArray,
+        }),
+      });
+
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+
   return (
     <div>
 
@@ -170,6 +191,7 @@ const Message = ({ message, onDeleteItem, onPatchMessage }) => {
         comment={comment}
         setComment={setComment}
         handleCommentSubmit={createComment} 
+        handleKeysArray={updateCommentPictures}
       />
       {messageComments.slice().reverse().map(messageComment => (
         <Comment key={messageComment._id} comment={messageComment} 
