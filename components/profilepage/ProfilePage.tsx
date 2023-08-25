@@ -325,7 +325,6 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
             >
               Show {show ? "Less" : "More"}
             </Button>
-            <Text></Text>
           </div>
           <Divider />
           <div className="pt-4 pb-4 w-full">

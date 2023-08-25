@@ -1,7 +1,13 @@
 "use client";
 import axios from "axios";
 import Image from "next/image";
-import React, { useCallback, useEffect, useMemo, useState, FormEvent } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  FormEvent,
+} from "react";
 import { useDropzone } from "react-dropzone";
 import { BsUpload, BsXCircleFill } from "react-icons/bs";
 import {
@@ -131,16 +137,13 @@ export default function FileUpload({
 
     if (!files?.length) {
       toast({
-        title: 'Please upload at least one valid file before submitting.',
+        title: "Please upload at least one valid file before submitting.",
         description: "Supported file types are .png, .jpg, and .jpeg",
-        status: 'error',
+        status: "error",
         duration: 4000,
         isClosable: true,
-      })
-      return;
-    }
-
-    if (!files?.length) {
+      });
+      onReplaceClose();
       return;
     }
 
@@ -162,8 +165,8 @@ export default function FileUpload({
       handleKeysArray(data.keysArray);
       updateInitialFiles(data.keysArray);
 
-
       setFiles([]);
+      onReplaceClose();
     } catch (err) {
       console.log(err);
     }
@@ -206,8 +209,9 @@ export default function FileUpload({
     }
   }, [initialFiles]);
 
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  const cancelRef = React.useRef()
+  const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure();
+  const { isOpen: isReplaceOpen, onOpen: onReplaceOpen, onClose: onReplaceClose } = useDisclosure();
+  const cancelRef = React.useRef();
 
   return (
     <form onSubmit={handleSubmit}>
@@ -230,126 +234,185 @@ export default function FileUpload({
       {/* Preview */}
       <section className="mt-5">
         <div className="flex items-center justify-center">
-  
           <div className="flex">
-          <>
-          <Button
+            <>
+              <Button
+                colorScheme="red"
+                isActive={true}
+                className="hover:opacity-80"
+                onClick={onDeleteOpen}
+              >
+                Delete all accepted image(s)
+              </Button>
+              <AlertDialog
+                motionPreset="slideInBottom"
+                leastDestructiveRef={cancelRef}
+                onClose={onDeleteClose}
+                isOpen={isDeleteOpen}
+                isCentered
+              >
+                <AlertDialogOverlay />
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    Delete all accepted images?
+                  </AlertDialogHeader>
+                  <AlertDialogCloseButton className="hover:opacity-50" />
+                  <AlertDialogBody>
+                    Are you sure you want to delete all accepted files? <br />{" "}
+                    <br />
+                    <em>This cannot be undone.</em>
+                  </AlertDialogBody>
+                  <AlertDialogFooter>
+                    <Button ref={cancelRef} onClick={onDeleteClose}>
+                      No
+                    </Button>
+                    <Button
                       colorScheme="red"
+                      variant={"solid"}
                       isActive={true}
                       className="hover:opacity-80"
-                      onClick={onOpen}
+                      ml={3}
+                      onClick={() => {
+                        removeAll();
+                        onDeleteClose();
+                      }}
                     >
-                      Delete all uploaded image(s)
+                      Yes
                     </Button>
-                    <AlertDialog
-                      motionPreset="slideInBottom"
-                      leastDestructiveRef={cancelRef}
-                      onClose={onClose}
-                      isOpen={isOpen}
-                      isCentered
-                    >
-                      <AlertDialogOverlay />
-                      <AlertDialogContent>
-                        <AlertDialogHeader>Delete all uploaded images?</AlertDialogHeader>
-                        <AlertDialogCloseButton className="hover:opacity-50"/>
-                        <AlertDialogBody>
-                          Are you sure you want to delete all uploaded files <br /> <br />
-                          <em>This cannot be undone.</em>
-                        </AlertDialogBody>
-                        <AlertDialogFooter>
-                          <Button ref={cancelRef} onClick={onClose}>
-                            No
-                          </Button>
-                          <Button
-                            colorScheme="red"
-                            variant={"solid"}
-                            isActive={true}
-                            className="hover:opacity-80"
-                            ml={3}
-                            onClick={() => {
-                              removeAll();
-                              onClose();
-                            }}
-                          >
-                            Yes
-                          </Button>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
-    </>
-    <Button
-                            colorScheme="facebook"
-                            variant={"solid"}
-                            isActive={true}
-                            className="hover:opacity-80"
-                            ml={3}
-                            type="submit"
-                          >
-                            Submit uploaded image(s)
-                          </Button>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </>
+            {initialFiles?.length === 0 ? (
+              <Button
+                colorScheme="facebook"
+                variant={"solid"}
+                isActive={true}
+                className="hover:opacity-80"
+                ml={3}
+                type="submit"
+              >
+                Submit uploaded image(s)
+              </Button>
+            ) : (
+              <>
+                <Button
+                  colorScheme="facebook"
+                  variant={"solid"}
+                  isActive={true}
+                  className="hover:opacity-80"
+                  ml={3}
+                  onClick={onReplaceOpen}
+                >
+                  Replace uploaded image(s)
+                </Button>
+                <AlertDialog
+                  motionPreset="slideInBottom"
+                  leastDestructiveRef={cancelRef}
+                  onClose={onReplaceClose}
+                  isOpen={isReplaceOpen}
+                  isCentered
+                >
+                  <AlertDialogOverlay />
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      Replace currently uploaded image(s)
+                    </AlertDialogHeader>
+                    <AlertDialogCloseButton className="hover:opacity-50" />
+                    <AlertDialogBody>
+                      Are you sure you want to replace your current uploaded
+                      file(s) with your new file(s)?
+                      <br /> <br />
+                      <em>This cannot be undone.</em>
+                    </AlertDialogBody>
+                    <AlertDialogFooter>
+                      <Button ref={cancelRef} onClick={onReplaceClose}>
+                        No
+                      </Button>
+                      <Button
+                        colorScheme="red"
+                        variant={"solid"}
+                        isActive={true}
+                        className="hover:opacity-80"
+                        ml={3}
+                        onClick={handleSubmit}
+                      >
+                        Yes
+                      </Button>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </>
+            )}
           </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
-    {/* Initial Files */}
-    {initialPictures?.length > 0 && (
-      <div>
-        <h3 className="title text-lg font-semibold text-neutral-600 mb-3">
-          Currently Uploaded File(s)
-        </h3>
-        <ul className="grid grid-cols-1 gap-4">
-          {initialPictures?.map((file, index) => (
-            <li key={index} className="relative h-32 rounded-md shadow-lg">
-               <Image
+          {/* Initial Files */}
+          {initialPictures?.length > 0 && (
+            <div>
+              <h3 className="title text-lg font-semibold text-neutral-600 mb-3">
+                Currently Uploaded File(s)
+              </h3>
+              <ul className="grid grid-cols-1 gap-4">
+                {initialPictures?.map((file, index) => (
+                  <li
+                    key={index}
+                    className="relative h-32 rounded-md shadow-lg"
+                  >
+                    <Image
+                      className="h-full w-full object-contain rounded-md"
+                      src={file}
+                      alt={"Initial Image"}
+                      width={100}
+                      height={100}
+                      onLoad={() => {
+                        URL.revokeObjectURL(file);
+                      }}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Accepted Files */}
+          <div>
+            <h3 className="title text-lg font-semibold text-neutral-600 mb-3">
+              Accepted Files
+            </h3>
+            <ul className="grid grid-cols-1 gap-4">
+              {files.map((file) => (
+                <li
+                  key={file.name}
+                  className="relative h-32 rounded-md shadow-lg"
+                >
+                  <Image
                     className="h-full w-full object-contain rounded-md"
-                    src={file}
-                    alt={"Initial Image"}
+                    src={file.preview}
+                    alt={file.name}
                     width={100}
                     height={100}
                     onLoad={() => {
-                      URL.revokeObjectURL(file);
+                      URL.revokeObjectURL(file.preview);
                     }}
                   />
-            </li>
-          ))}
-        </ul>
-      </div>
-    )}
-
-    {/* Accepted Files */}
-    <div>
-      <h3 className="title text-lg font-semibold text-neutral-600 mb-3">
-        Accepted Files
-      </h3>
-      <ul className="grid grid-cols-1 gap-4">
-        {files.map((file) => (
-          <li key={file.name} className="relative h-32 rounded-md shadow-lg">
-             <Image
-                className="h-full w-full object-contain rounded-md"
-                src={file.preview}
-                alt={file.name}
-                width={100}
-                height={100}
-                onLoad={() => {
-                  URL.revokeObjectURL(file.preview);
-                }}
-              />
-              <button
-                type="button"
-                // w-7 h-7 border border-secondary-400 bg-secondary-400 rounded-full flex justify-center items-center absolute -top-3 -right-3 hover:bg-white transition-colors
-                className="absolute -top-3 -right-3"
-                onClick={() => removeFile(file.name)}
-              >
-                <BsXCircleFill className="w-7 h-7 rounded-full bg-white hover:fill-upenn-red transition-colors" />
-              </button>
-              <p className="mt-2 text-neutral-500 text-[14px] font-medium break-words">
-                {file.name}
-              </p>
-          </li>
-        ))}
-      </ul>
-    </div>
-  </div>
+                  <button
+                    type="button"
+                    // w-7 h-7 border border-secondary-400 bg-secondary-400 rounded-full flex justify-center items-center absolute -top-3 -right-3 hover:bg-white transition-colors
+                    className="absolute -top-3 -right-3"
+                    onClick={() => removeFile(file.name)}
+                  >
+                    <BsXCircleFill className="w-7 h-7 rounded-full bg-white hover:fill-upenn-red transition-colors" />
+                  </button>
+                  <p className="mt-2 text-neutral-500 text-[14px] font-medium break-words">
+                    {file.name}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
 
         {/* Rejected Files */}
         <h3 className="title text-lg font-semibold text-neutral-600 mt-12 border-b pb-3">

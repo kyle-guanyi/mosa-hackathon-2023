@@ -59,7 +59,7 @@ const EventPage = ({
 
   const fetchEventImage = async () => {
     try {
-      const keysArray = [eventDetails.eventImage]; // Convert to an array
+      const keysArray = [eventDetails.eventImage];
       const response = await fetch(
         `/api/media?keys=${encodeURIComponent(JSON.stringify(keysArray))}`
       );
@@ -67,7 +67,7 @@ const EventPage = ({
       console.log(data);
 
       if (response.ok) {
-        setEventImage(data.urls[0]); // Assuming the data structure is { success: true, urls: [profilePictureUrl] }
+        setEventImage(data.urls[0]); 
       } else {
         console.error("Error fetching profile picture");
       }

@@ -6,10 +6,55 @@ import Comment from "./Comment";
 import CommentForm from "./CommentForm";
 import { useSession } from "next-auth/react";
 import CreateMessage from "./MessageForm";
-import Image from "next/image";
+import NextImage from "next/image";
+import {
+  Card,
+  CardHeader,
+  Flex,
+  Avatar,
+  Box,
+  Heading,
+  Text,
+  IconButton,
+  CardBody,
+  CardFooter,
+  Image,
+  Collapse,
+  Button,
+  Grid,
+  GridItem,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  Menu,
+  MenuItem,
+  MenuButton,
+  MenuList,
+  useToast,
+} from "@chakra-ui/react";
+import { BsThreeDotsVertical } from "react-icons/bs";
+import { FiTrash2 } from "react-icons/Fi";
+import { EditIcon } from "@chakra-ui/icons";
 
-const Message = ({ message, onDeleteItem, onPatchMessage }) => {
-  const [userName, setUserName] = useState("");
+const Message = ({ message, onDeleteItem, onPatchMessage, handlePatchEventPictures }) => {
+  const [userInfo, setUserInfo] = useState({
+    firstName: "",
+    lastName: "",
+    googleProfileImage: "",
+    userUpdatedProfileImage: "",
+  });
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const [show, setShow] = React.useState(false);
+  const handleToggle = () => setShow(!show);
+
+  const [selectedImageIndex, setSelectedImageIndex] = useState(null);
 
   //for editing mode
   const [messageEditing, setMessageEditing] = useState(false);
@@ -19,6 +64,7 @@ const Message = ({ message, onDeleteItem, onPatchMessage }) => {
     _id: message._id,
     content: message.content,
     uploadedMessagePictures: message.uploadedMessagePictures,
+    originalPictures: message.uploadedMessagePictures
   });
 
   //switch between form vs display
@@ -26,21 +72,46 @@ const Message = ({ message, onDeleteItem, onPatchMessage }) => {
     setMessageEditing(true);
   };
 
-  // add the editedMessage into the dtabase where the message is stored
+  // add the editedMessage into the database where the message is stored
   const handleMessageEditSubmit = () => {
     onPatchMessage(editedMessage);
+    handlePatchEventPictures(editedMessage);
+    onClose();
     setMessageEditing(false);
   };
 
-  const fetchUserName = async () => {
+
+  const fetchUserInfo = async () => {
     const response = await fetch(`/api/user/${message.author}`);
     const data = await response.json();
-    setUserName(data.firstName + " " + data.lastName);
+    setUserInfo({
+      firstName: data.firstName,
+      lastName: data.lastName,
+      googleProfileImage: data.googleProfileImage,
+      userUpdatedProfileImage: data.userUpdatedProfileImage,
+    });
+
+    if (data.userUpdatedProfileImage) {
+      const userUpdatedProfileImageResponse = await fetch(
+        `/api/media?keys=${encodeURIComponent(
+          JSON.stringify([data.userUpdatedProfileImage])
+        )}`
+      );
+      const userUpdatedProfileImageData =
+        await userUpdatedProfileImageResponse.json();
+
+      if (userUpdatedProfileImageResponse.ok) {
+        setUserInfo((prevUserInfo) => ({
+          ...prevUserInfo,
+          userUpdatedProfileImage: userUpdatedProfileImageData.urls[0],
+        }));
+      }
+    }
   };
 
   useEffect(() => {
     if (message.author) {
-      fetchUserName();
+      fetchUserInfo();
     }
   }, [message.author]);
 
@@ -161,80 +232,150 @@ const Message = ({ message, onDeleteItem, onPatchMessage }) => {
   };
 
   const handlePatchMessagePictures = async (keysArray) => {
-    setEditedMessage({ ...message, uploadedMessagePictures: keysArray});
+    console.log("These are the new pictures", keysArray)
+    setEditedMessage({ ...editedMessage, uploadedMessagePictures: keysArray });
+    toast({
+      title: "Your newly uploaded image(s) have been attached to your message.",
+      description: "Be sure to submit your edits to replace your previously uploaded image(s).",
+      status: "info",
+      duration: 5000,
+      isClosable: true,
+    });
   };
 
+  const toast = useToast();
+
+
   return (
-    <div>
-      {messageEditing ? (
-        <CreateMessage
-          message={editedMessage}
-          setMessage={setEditedMessage}
-          handleMessageSubmit={handleMessageEditSubmit}
-          handleKeysArray={handlePatchMessagePictures}
-          existingFiles={editedMessage.uploadedMessagePictures}
-        />
-      ) : (
-        <>
-          <p>{message.content}</p>
-          <p>Author: {userName}</p>
-          <p>{message.createdAt}</p>
-          <ul className="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-10">
-            {uploadedMessagePictures?.map((file, index) => (
-              <li key={index} className="relative h-32 rounded-md shadow-lg">
+    <Card maxW="md">
+      <CardHeader>
+        <Flex>
+          <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
+            <Avatar
+              name={`${userInfo.firstName} ${userInfo.lastName}`}
+              src={
+                userInfo.userUpdatedProfileImage || userInfo.googleProfileImage
+              }
+            />
+            <Box>
+              <Heading size="sm">
+                {userInfo.firstName} {userInfo.lastName}
+              </Heading>
+            </Box>
+          </Flex>
+          {session?.user.id === message.author && (
+            <Menu autoSelect={false}>
+              <MenuButton
+                as={IconButton}
+                aria-label="Options"
+                icon={<BsThreeDotsVertical />}
+                variant="ghost"
+              />
+              <MenuList>
+                <MenuItem
+                  icon={<EditIcon />}
+                  isDisabled={false}
+                  className="hover:bg-gray-100 focus:bg-gray-100"
+                  onClick={onOpen}
+                >
+                  Edit Post
+                </MenuItem>
+                <Modal isOpen={isOpen} onClose={onClose}>
+                  <ModalOverlay />
+                  <ModalContent>
+                    <ModalHeader>Edit Post</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                      <CreateMessage
+                        message={editedMessage}
+                        setMessage={setEditedMessage}
+                        handleMessageSubmit={handleMessageEditSubmit}
+                        handleKeysArray={handlePatchMessagePictures}
+                        existingFiles={editedMessage.uploadedMessagePictures}
+                        type={"Edit"}
+                      />
+                    </ModalBody>
+
+                    <ModalFooter>
+                      <Button colorScheme="blue" mr={3} onClick={onClose}>
+                        Close
+                      </Button>
+                    </ModalFooter>
+                  </ModalContent>
+                </Modal>
+                <MenuItem
+                  icon={<FiTrash2 />}
+                  isDisabled={false}
+                  className="hover:bg-gray-100 focus:bg-gray-100"
+                >
+                  Delete Post
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          )}
+        </Flex>
+        <CardBody>
+          <Collapse
+            startingHeight={100}
+            in={show || message.content.length <= 100}
+            className="mx-auto text-justify"
+          >
+            {message.content}
+          </Collapse>
+          {message.content.length > 300 && ( // Show button only if text is longer than 100 characters
+            <Button
+              size="sm"
+              isActive="true"
+              className="hover:opacity-80"
+              onClick={handleToggle}
+              mt="1rem"
+            >
+              Show {show ? "Less" : "More"}
+            </Button>
+          )}
+        </CardBody>
+      </CardHeader>
+      <Grid templateColumns="repeat(5, 1fr)" gap={3}>
+        {uploadedMessagePictures?.map((file, index) => (
+          <GridItem pl="2" key={index} className="cursor-pointer">
+            <Image
+              src={file}
+              alt={"Uploaded Message Image"}
+              boxSize="150px"
+              objectFit="cover"
+              onLoad={() => {
+                URL.revokeObjectURL(file);
+              }}
+              onClick={() => {
+                setSelectedImageIndex(index);
+                onOpen();
+              }}
+            />
+            <Modal
+              isOpen={isOpen && selectedImageIndex !== null}
+              onClose={() => {
+                setSelectedImageIndex(null);
+                onClose();
+              }}
+              size="xl"
+            >
+              <ModalOverlay />
+              <ModalContent>
+                <ModalCloseButton />
                 <Image
-                  className="h-full w-full object-contain rounded-md"
-                  src={file}
+                  src={uploadedMessagePictures[selectedImageIndex]}
                   alt={"Uploaded Message Image"}
-                  width={100}
-                  height={100}
+                  objectFit="cover"
                   onLoad={() => {
                     URL.revokeObjectURL(file);
                   }}
                 />
-              </li>
-            ))}
-          </ul>
-          {session?.user.id === message.author && (
-            <button
-              onClick={() => {
-                const shouldDelete = window.confirm(
-                  "Are you sure you want to delete this message and its associated comments?"
-                );
-                if (shouldDelete) {
-                  onDeleteItem();
-                }
-              }}
-              className="blue_btn"
-            >
-              Delete Message
-            </button>
-          )}
-          {session?.user.id === message.author && (
-            // When button is clicked, the passed in onEditComment will handle onEditComment
-            <button onClick={onEditMessage} className="blue_btn">
-              Edit Message
-            </button>
-          )}
-          <CommentForm
-            comment={comment}
-            setComment={setComment}
-            handleCommentSubmit={createComment}
-          />
-          {messageComments
-            .slice()
-            .reverse()
-            .map((messageComment) => (
-              <Comment
-                key={messageComment._id}
-                comment={messageComment}
-                onDeleteComment={() => handleDeleteComment(messageComment._id)}
-                onPatchComment={editComment}
-              />
-            ))}
-        </>
-      )}
-    </div>
+              </ModalContent>
+            </Modal>
+          </GridItem>
+        ))}
+      </Grid>
+    </Card>
   );
 };
 

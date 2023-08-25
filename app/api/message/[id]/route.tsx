@@ -20,7 +20,7 @@ export const GET = async (request, { params }) => {
 
 //PATCH (update)
 export const PATCH = async (request, { params }) => {
-  const { content } = await request.json();
+  const { content, uploadedMessagePictures } = await request.json();
 
   if (request.nextUrl.searchParams.get("type") === "pic") {
     return PATCH_MESSAGE_PICTURES(request, {params});
@@ -38,13 +38,14 @@ export const PATCH = async (request, { params }) => {
 
     // update event's attendees
     existingMessage.content = content;
+    existingMessage.uploadedMessagePictures = uploadedMessagePictures;
 
     await existingMessage.save();
 
     return new Response("Successfully updated message", { status: 200 });
   } catch (error) {
     console.error("Error updating message", error); // Log the error for debugging
-    return new Response("Error updating message's contents", { status: 500 });
+    return new Response("Error updating message", { status: 500 });
   }
 };
 

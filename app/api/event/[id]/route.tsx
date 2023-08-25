@@ -151,7 +151,7 @@ export const PATCH_EVENT_IMAGE = async (request, { params }) => {
 };
 
 export const PATCH_UPLOADED_PICTURES = async (request, { params }) => {
-  const { uploadedPictures } = await request.json();
+  const { uploadedPictures, originalPictures } = await request.json();
 
   try {
     await connectToDB();
@@ -162,9 +162,15 @@ export const PATCH_UPLOADED_PICTURES = async (request, { params }) => {
     if (!existingEvent) {
       return new Response("Event not found", { status: 404 });
     }
-
+    console.log("these are the new pictures", uploadedPictures)
+    console.log("these are the existing pictures", existingEvent.uploadedPictures)
+    console.log("these are the pictures to be filtered out", existingEvent.originalPictures)
+    // filter our old images
+    existingEvent.uploadedPictures = existingEvent.uploadedPictures.filter(picture => !originalPictures.includes(picture));
+    console.log("after filtering", existingEvent.uploadedPictures)
     // update event's uploaded pictures
-    existingEvent.uploadedPictures = uploadedPictures;
+    existingEvent.uploadedPictures.push(...uploadedPictures);
+    console.log("after adding", existingEvent.uploadedPictures)
 
     await existingEvent.save();
 

@@ -48,13 +48,13 @@ const MessageBoard = ({ eventDetails, addImagesToEvent }) => {
         }),
       });
 
-      if(response.ok) {
+      if (response.ok) {
         setMessage({ content: "" });
-        addImagesToEvent(message.uploadedMessagePictures)
+        if (message.uploadedMessagePictures) {
+          addImagesToEvent(message.uploadedMessagePictures);
+        }
         fetchEventMessages();
       }
-
-
     } catch (error) {
       console.log(error);
     } finally {
@@ -65,18 +65,18 @@ const MessageBoard = ({ eventDetails, addImagesToEvent }) => {
   const editMessage = async (editedMessage) => {
     setSubmitting(true);
     try {
-      console.log("Reached edited message", editedMessage)
+      console.log("Reached edited message", editedMessage);
       const response = await fetch(`/api/message/${editedMessage._id}`, {
         method: "PATCH",
         body: JSON.stringify({
           content: editedMessage.content,
+          uploadedMessagePictures: editedMessage.uploadedMessagePictures,
         }),
       });
 
-      if(response.ok) {
+      if (response.ok) {
         fetchEventMessages();
       }
-
     } catch (error) {
       console.log(error);
     } finally {
@@ -87,7 +87,7 @@ const MessageBoard = ({ eventDetails, addImagesToEvent }) => {
   const handleDeleteMessage = async (messageId) => {
     try {
       const response = await fetch(`/api/message/${messageId}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
 
       if (response.ok) {
@@ -100,28 +100,58 @@ const MessageBoard = ({ eventDetails, addImagesToEvent }) => {
   };
 
   const handleKeysArray = async (keysArray) => {
-    setMessage({ ...message, uploadedMessagePictures: keysArray});
-  }
+    setMessage({ ...message, uploadedMessagePictures: keysArray });
+  };
   
+  const handlePatchEventPictures = async (editedMessage) => {
+    setSubmitting(true);
+    try {
+      console.log("Reached edited message", editedMessage);
+      const response = await fetch(`/api/event/${eventDetails._id}?type=uploadedPictures`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          uploadedPictures: editedMessage.uploadedMessagePictures,
+          originalPictures: editedMessage.originalPictures,
+        }),
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <div>
-      <div> <Heading as='h3' size='md'>MessageBoard</Heading> </div>
-      <MessageForm 
+      <div>
+        {" "}
+        <Heading as="h3" size="md">
+          MessageBoard
+        </Heading>{" "}
+      </div>
+      <MessageForm
         message={message}
         setMessage={setMessage}
         handleMessageSubmit={createMessage}
         handleKeysArray={handleKeysArray}
+        existingFiles={[]}
+        type="Submit"
       />
-      {eventMessages.slice().reverse().map((eventMessage) => {
-      return (
-        <Message key={eventMessage._id} 
-        message={eventMessage} 
-        onDeleteItem={() => handleDeleteMessage(eventMessage._id)}
-        // added for edit
-        onPatchMessage={editMessage}       
-        />
-      );
-    })}
+      {eventMessages
+        .slice()
+        .reverse()
+        .map((eventMessage) => {
+          return (
+            <Message
+              key={eventMessage._id}
+              message={eventMessage}
+              onDeleteItem={() => handleDeleteMessage(eventMessage._id)}
+              // added for edit
+              onPatchMessage={editMessage}
+              handlePatchEventPictures={handlePatchEventPictures}
+            />
+          );
+        })}
     </div>
   );
 };

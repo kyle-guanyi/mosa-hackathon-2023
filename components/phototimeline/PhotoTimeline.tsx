@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
+import NextImage from "next/image";
+import { useDisclosure, Modal, Grid, GridItem, Image, ModalOverlay, ModalContent, ModalCloseButton } from "@chakra-ui/react";
 
 const PhotoTimeline = ({ event }) => {
   const [uploadedEventPictures, setUploadedEventPictures] = useState([]);
@@ -29,25 +30,53 @@ const PhotoTimeline = ({ event }) => {
     if (event.uploadedPictures?.length > 0) {
       fetchUploadedEventPictures();
     }
-  }, [event]);
+  }, [event.uploadedPictures]);
+
+  const [selectedImageIndex, setSelectedImageIndex] = useState(null);
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <ul className="mt-6 grid grid-cols-2 sm:grid-cols-1 gap-10">
-      {uploadedEventPictures.map((file, index) => (
-        <li key={index} className="relative h-32 rounded-md shadow-lg">
-          <Image
-            className="h-full w-full object-contain rounded-md"
-            src={file}
-            alt={"Uploaded Message Image"}
-            width={100}
-            height={100}
-            onLoad={() => {
-              URL.revokeObjectURL(file);
-            }}
-          />
-        </li>
-      ))}
-    </ul>
+    <Grid templateColumns="repeat(2, 1fr)" gap={3}>
+    {uploadedEventPictures?.map((file, index) => (
+      <GridItem pl="2" key={index} className="cursor-pointer">
+        <Image
+          src={file}
+          alt={"Uploaded Message Image"}
+          boxSize="150px"
+          objectFit="cover"
+          onLoad={() => {
+            URL.revokeObjectURL(file);
+          }}
+          onClick={() => {
+            setSelectedImageIndex(index);
+            onOpen();
+          }}
+        />
+        <Modal
+          isOpen={isOpen && selectedImageIndex !== null}
+          onClose={() => {
+            setSelectedImageIndex(null);
+            onClose();
+          }}
+          size="xl"
+        >
+          <ModalOverlay />
+          <ModalContent>
+            <ModalCloseButton />
+            <Image
+              src={uploadedEventPictures[selectedImageIndex]}
+              alt={"Uploaded Message Image"}
+              objectFit="cover"
+              onLoad={() => {
+                URL.revokeObjectURL(file);
+              }}
+            />
+          </ModalContent>
+        </Modal>
+      </GridItem>
+    ))}
+  </Grid>
   );
 };
 export default PhotoTimeline;

@@ -1,5 +1,5 @@
 import Dropzone from "components/Dropzone";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Collapse,
   Image,
@@ -28,6 +28,8 @@ const CreateMessage = ({
   setMessage,
   handleMessageSubmit,
   handleKeysArray,
+  existingFiles,
+  type,
 }) => {
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -36,7 +38,7 @@ const CreateMessage = ({
     e.preventDefault();
     if (message.content === "") {
       toast({
-        title: "The message cannot be empty!",
+        title: "The post cannot be empty!",
         status: "error",
         duration: 3000,
         isClosable: true,
@@ -47,7 +49,15 @@ const CreateMessage = ({
     }
   };
 
+
+
   const [initialFiles, setInitialFiles] = useState(message.uploadedMessagePictures);
+
+  useEffect(() => {
+    if (existingFiles) {
+      setInitialFiles(existingFiles);
+    }
+  }, [existingFiles]);
 
   const updateInitialFiles = (newFiles) => {
     setInitialFiles(newFiles);
@@ -60,7 +70,7 @@ const CreateMessage = ({
           id="bio"
           value={message.content}
           onChange={(e) => setMessage({ ...message, content: e.target.value })}
-          placeholder="Write your message here"
+          placeholder="Write your post here"
           required
         />
       </CardBody>
@@ -86,14 +96,13 @@ const CreateMessage = ({
         </ModalContent>
       </Modal>
     </>
-
         <Button
           colorScheme="facebook"
           isActive={true}
           className="hover:opacity-80"
           onClick={handleSubmit}
         >
-          Submit Message
+          {type === "Submit" ? ("Submit Post") : ("Confirm Edits") }
         </Button>
       </CardFooter>
     </Card>
