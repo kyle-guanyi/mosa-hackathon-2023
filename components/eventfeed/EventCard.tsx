@@ -15,16 +15,21 @@ import {
   Image,
   Divider,
   AvatarGroup,
+  Skeleton,
+  SkeletonCircle,
   Avatar,
 } from "@chakra-ui/react";
 
 const EventCard = ({ event }) => {
   const router = useRouter();
 
+  const [isLoading, setIsLoading] = useState(true);
+
   // fetch profilepic for user
   const [eventPicture, setEventPicture] = useState("");
   const fetchEventPicture = useCallback(async () => {
     try {
+      setIsLoading(true);
       const keysArray = [event.eventImage]; // Convert to an array
       const response = await fetch(
         `/api/media?keys=${encodeURIComponent(JSON.stringify(keysArray))}`
@@ -36,8 +41,10 @@ const EventCard = ({ event }) => {
       } else {
         console.error("Error fetching event picture");
       }
+      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching event picture:", error);
+      setIsLoading(false);
     }
   }, [event.eventImage]);
 
@@ -57,6 +64,7 @@ const EventCard = ({ event }) => {
   ]);
   const fetchEventAttendeesPicture = useCallback(async () => {
     try {
+      setIsLoading(true);
       const attendeeInfoResponse = await fetch(`/api/event/${event._id}`);
       const attendeeInfoData = await attendeeInfoResponse.json();
 
@@ -79,12 +87,12 @@ const EventCard = ({ event }) => {
 
       setEventAttendeesPictures(updatedEventAttendeesPictures);
 
-
       const userUpdatedProfileImageKeysArray = attendeesResponses.map(
         (attendeeData) => attendeeData.userUpdatedProfileImage
       );
 
-      const filteredUserUpdatedProfileImageKeysArray = userUpdatedProfileImageKeysArray.filter(key => key);
+      const filteredUserUpdatedProfileImageKeysArray =
+        userUpdatedProfileImageKeysArray.filter((key) => key);
 
       if (filteredUserUpdatedProfileImageKeysArray.length > 0) {
         const userUpdatedProfileImageResponse = await fetch(
@@ -105,14 +113,18 @@ const EventCard = ({ event }) => {
           );
           console.log("These are the updated pictures: ", updatedPictures);
           setEventAttendeesPictures(updatedPictures);
+          setIsLoading(false);
         } else {
           console.error("Error fetching attendee picture information");
+          setIsLoading(false);
         }
       } else {
         console.log("No valid keys for user updated profile images.");
+        setIsLoading(false);
       }
     } catch (error) {
       console.error("Error fetching attendee picture information:", error);
+      setIsLoading(false);
     }
   }, [event?.attendees]);
 
@@ -194,15 +206,20 @@ const EventCard = ({ event }) => {
       maxW="90%"
       className="m-auto cursor-pointer hover:-translate-y-2 hover:opacity-80 transition-all"
       onClick={handleEventClick}
+      height={isLoading ? "320px" : "auto"}
+      minWidth="300px" // Add this line for minimum width
+      minHeight="400px" // Add this line for minimum height
     >
       <CardBody>
-        {event?.eventImage ? (
+        {isLoading ? (
+          <Skeleton height="300px" width="100%" borderRadius="lg" />
+        ) : event?.eventImage ? (
           <Image
             borderRadius="lg"
             src={eventPicture}
             alt="Cover Picture"
-            height="300px" // Adjust the height as needed
-            width="100%" // Adjust the width as needed
+            height="300px"
+            width="100%"
             objectFit="cover"
           />
         ) : (
@@ -210,44 +227,62 @@ const EventCard = ({ event }) => {
             borderRadius="lg"
             src="/assets/images/ben.png"
             alt="Default Cover Picture"
-            height="300px" // Adjust the height as needed
-            width="100%" // Adjust the width as needed
+            height="300px"
+            width="100%"
             objectFit="cover"
           />
         )}
         <Stack mt="6" spacing="3">
-          <Heading size="md">{event.eventName}</Heading>
-          <Heading size="sm">{event.closestCity}</Heading>
-          <Text>{event.location || "Virtual Event"}</Text>
-          <Text>
-            Event's Local Time:
-            <br />
-            {DateTime.fromISO(event.startDate.substring(0, 10)).toFormat(
-              "EEEE, MMMM d, yyyy"
-            )}
-            , {event.startTime} {convertIANAToTimezoneAcronym(event.timeZone)}
-          </Text>
-          <Text color="blue.600">
-            Time in {DateTime.local().zoneName}
-            <br />
-            {userEventDateTime?.toFormat("cccc, LLLL d, yyyy")},{" "}
-            {userEventDateTime?.toFormat("h:mm a")}
-          </Text>
+          {isLoading ? (
+            <>
+              <Skeleton height="20px" width="100%" />
+              <Skeleton height="15px" width="100%" />
+              <Skeleton height="15px" width="100%" />
+              <Skeleton height="15px" width="100%" />
+              <Skeleton height="20px" width="100%" />
+            </>
+          ) : (
+            <>
+              <Heading size="md">{event.eventName}</Heading>
+              <Heading size="sm">{event.closestCity}</Heading>
+              <Text>{event.location || "Virtual Event"}</Text>
+              <Text>
+                Event's Local Time:
+                <br />
+                {DateTime.fromISO(event.startDate.substring(0, 10)).toFormat(
+                  "EEEE, MMMM d, yyyy"
+                )}
+                , {event.startTime}{" "}
+                {convertIANAToTimezoneAcronym(event.timeZone)}
+              </Text>
+              <Text color="blue.600">
+                Time in {DateTime.local().zoneName}
+                <br />
+                {userEventDateTime?.toFormat("cccc, LLLL d, yyyy")},{" "}
+                {userEventDateTime?.toFormat("h:mm a")}
+              </Text>
+            </>
+          )}
         </Stack>
       </CardBody>
       <Divider />
       <CardFooter>
-        <AvatarGroup size="md" max={3}>
-          {eventAttendeesPictures.map((attendee, index) => (
-            <Avatar
-              key={index}
-              name={`${attendee.firstName} ${attendee.lastName}`}
-              src={
-                attendee.userUpdatedProfileImage || attendee.googleProfileImage
-              }
-            />
-          ))}
-        </AvatarGroup>
+        {isLoading ? (
+          <SkeletonCircle size="10" mr="2" />
+        ) : (
+          <AvatarGroup size="md" max={3}>
+            {eventAttendeesPictures.map((attendee, index) => (
+              <Avatar
+                key={index}
+                name={`${attendee.firstName} ${attendee.lastName}`}
+                src={
+                  attendee.userUpdatedProfileImage ||
+                  attendee.googleProfileImage
+                }
+              />
+            ))}
+          </AvatarGroup>
+        )}
       </CardFooter>
     </Card>
   );

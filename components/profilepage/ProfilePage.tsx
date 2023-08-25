@@ -167,6 +167,9 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
           userUpdatedProfileImage: newProfileImage,
         }),
       });
+      if (response.ok) {
+        handleEdit();
+      }
     } catch (error) {
       console.log(error);
     } finally {

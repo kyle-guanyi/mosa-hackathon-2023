@@ -9,10 +9,11 @@ import { useRouter } from "next/navigation";
 import {
   Button,
   Image,
+  Spinner,
 } from "@chakra-ui/react";
 
 const LogIn = () => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
   const [providers, setProviders] = useState(null);
 
@@ -26,15 +27,19 @@ const LogIn = () => {
     setUpProviders();
   }, []);
 
-  const handleLoggedIn = () => {
-    router.push(`/home`)
-  };
-
   useEffect(() => {
     if (session?.user) {
-      handleLoggedIn();
+      router.push(`/home`)
     }
   }, [session]);
+
+  if (status === "loading") {
+    return (
+      <div className="fixed inset-0 flex-center">
+        <Spinner size="xl" />
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 flex-center flex-col">
