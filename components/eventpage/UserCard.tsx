@@ -46,7 +46,7 @@ const UserCard = ({ user }) => {
 
   return (
     <div
-      className="cursor-pointer hover:-translate-y-1 hover:opacity-80 transition-all"
+      className="cursor-pointer pb-2 hover:-translate-y-1 hover:opacity-80 transition-all"
       onClick={handleProfileClick}
     >
       <Card maxW="xs">
@@ -62,7 +62,7 @@ const UserCard = ({ user }) => {
                 <Heading size="sm">
                   {user?.firstName} {user?.lastName}
                 </Heading>
-                <Text>{user?.email}</Text>
+                <Text fontSize='xs'>{user?.email}</Text>
               </Box>
             </Flex>
           </Flex>

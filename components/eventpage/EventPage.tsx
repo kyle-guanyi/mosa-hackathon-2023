@@ -5,7 +5,7 @@ import { FiClock } from "react-icons/Fi";
 import { CiLocationOn } from "react-icons/Ci";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
+import NextImage from "next/image";
 import { DateTime, IANAZone } from "luxon";
 import PhotoTimeline from "/components/phototimeline/PhotoTimeline";
 import {
@@ -18,6 +18,11 @@ import {
   AlertDialogFooter,
   AlertDialogBody,
   Button,
+  Heading,
+  Image,
+  Divider,
+  Center,
+  Collapse,
 } from "@chakra-ui/react";
 
 const EventPage = ({
@@ -42,6 +47,9 @@ const EventPage = ({
       day: "numeric",
     }
   );
+
+  const [show, setShow] = React.useState(false);
+  const handleToggle = () => setShow(!show);
 
   const [eventImage, setEventImage] = useState("");
 
@@ -90,10 +98,12 @@ const EventPage = ({
   }, [eventDetails, creatorInfo, attendeesInfo, session?.user.id]);
 
   return (
-    <div className="h-screen w-full bg-red-500 flex">
-      <div className="w-1/5 bg-blue-500">
+    <div className="h-full w-full bg-red-500 flex">
+      <div className="w-1/6 bg-blue-500 p-4">
         <div className="w-full h-full bg-yellow-500">
-          Attendees:
+          <Heading as="h2" size="md" className="pb-4 pt-4">
+            Attending:
+          </Heading>
           <div className="flex-col">
             {!isLoading &&
               attendeesInfo.map((user) => (
@@ -102,19 +112,22 @@ const EventPage = ({
           </div>
         </div>
       </div>
-      <div className="w-3/5 bg-green-700 flex-grow">
+      <Center height="100%">
+        <Divider orientation="vertical" />
+      </Center>
+      <div className="w-3/5 bg-green-700 flex-grow pl-4 pr-4">
         <div className="w-full h-1/10 bg-green-500 font-satoshi">
-          <h1 className="text-3xl">{eventDetails.eventName}</h1>
           {eventDetails?.eventImage ? (
             <Image
+              borderRadius="lg"
               src={eventImage}
-              alt="event_banner"
-              width={120}
-              height={120}
-              className="mx-auto rounded-full object-contain"
+              alt="Cover Picture"
+              height="300px" // Adjust the height as needed
+              width="100%" // Adjust the width as needed
+              objectFit="cover"
             />
           ) : (
-            <Image
+            <NextImage
               src="/assets/images/ben.png"
               alt="event_banner"
               width={120}
@@ -122,27 +135,40 @@ const EventPage = ({
               className="mx-auto rounded-full object-contain"
             />
           )}
+
+          <Heading as="h1" size="xl" className="pt-4 pb-4">
+            {eventDetails.eventName}
+          </Heading>
         </div>
+
         <div className=" w-full h-5/6 bg-blue-500 flex-col">
           <div className="flex flex-row justify-between">
             <div>
-              <div>Hosted By:</div>
-              <div>{!isLoading && <UserCard user={creatorInfo} />}</div>
+              <div className="pb-2">
+                <Heading as="h3" size="md">
+                  Hosted By:
+                </Heading>
+              </div>
+              <div className="pb-2">
+                {!isLoading && <UserCard user={creatorInfo} />}
+              </div>
             </div>
 
             <div>
               <div className="pb-3">
                 {session?.user.id === eventDetails.creator && (
                   <div>
-                    <button
+                    <Button
                       type="button"
                       onClick={() => {
                         handleEdit(eventDetails._id);
                       }}
-                      className="blue_btn"
+                      colorScheme="facebook"
+                      isActive={true}
+                      className="hover:opacity-80 mr-4"
                     >
                       Update Event
-                    </button>
+                    </Button>
                     <Button
                       colorScheme="red"
                       isActive={true}
@@ -161,10 +187,14 @@ const EventPage = ({
                       <AlertDialogOverlay />
                       <AlertDialogContent>
                         <AlertDialogHeader>Delete Event?</AlertDialogHeader>
-                        <AlertDialogCloseButton className="hover:opacity-50"/>
+                        <AlertDialogCloseButton className="hover:opacity-50" />
                         <AlertDialogBody>
-                          Are you sure you want to delete this event? <br /> <br />
-                          <em>All messages, comments, and uploaded pictures associated with this event will also be deleted.</em>
+                          Are you sure you want to delete this event? <br />{" "}
+                          <br />
+                          <em>
+                            All messages, comments, and uploaded pictures
+                            associated with this event will also be deleted.
+                          </em>
                         </AlertDialogBody>
                         <AlertDialogFooter>
                           <Button ref={cancelRef} onClick={onClose}>
@@ -187,38 +217,63 @@ const EventPage = ({
                 )}
               </div>
               <div>
-                <button
+                <Button
                   type="button"
+                  isActive={true}
+                  className="hover:opacity-80 mr-4"
                   onClick={(e) =>
                     !user.attendingEvents.includes(eventDetails._id)
                       ? handleAdd(eventDetails._id)
                       : handleRemove(eventDetails._id)
                   }
-                  className={`mx-auto ${
+                  colorScheme={
                     !user.attendingEvents.includes(eventDetails._id)
-                      ? "blue_btn"
-                      : "red_btn"
-                  }`}
+                      ? "facebook"
+                      : "red"
+                  }
                 >
                   {!user.attendingEvents.includes(eventDetails._id)
                     ? "Add Event"
                     : "Remove Event"}
-                </button>
+                </Button>
               </div>
             </div>
           </div>
-
+          <Divider />
           <div className="flex-row flex justify-between">
             <div className="flex-col justify-start">
-              <div className="pt-10">Event Details:</div>
-              <div className="pt-4">{eventDetails.eventDescription}</div>
-              <div className="pt-5 text-blue-900">
-                <a href="{eventDetails.zoomLink}">Zoom Link</a>
+              <div className="pt-10">
+                <Heading as="h3" size="md">
+                  Event Details:
+                </Heading>
               </div>
+              <div>
+                <Collapse
+                  startingHeight={20}
+                  in={show}
+                  className="mx-auto text-justify"
+                >
+                  {eventDetails.eventDescription}
+                </Collapse>
+                <Button
+                  size="sm"
+                  isActive={true}
+                  className="hover:opacity-80"
+                  onClick={handleToggle}
+                  mt="1rem"
+                >
+                  Show {show ? "Less" : "More"}
+                </Button>
+              </div>
+              <div className="pt-5 text-blue-900"><Heading as="h3" size="md"><a href="{eventDetails.zoomLink}">Zoom Link</a></Heading>
+                
+              </div>
+              <div className="pt-4">
               <MessageBoard
                 eventDetails={eventDetails}
                 addImagesToEvent={addImagesToEvent}
               />
+              </div>
             </div>
 
             <div className="flex-col w-1/3">
