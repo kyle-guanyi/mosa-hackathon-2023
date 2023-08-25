@@ -46,9 +46,14 @@ https://nodejs.org/en/download/
 
 
 Step 3: Download required packages
+
 ```npm i react select```
+
 ```npm i react-calendar```
+
 ```npm install luxon```
+
+```npm i @chakra-ui/react @chakra-ui/next-js @emotion/react @emotion/styled framer-motion```
 
 ### Deployment
 
