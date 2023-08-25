@@ -26,6 +26,10 @@ const CreateEvent = () => {
     eventImage: null,
   });
 
+  const [user, setUser] = useState({
+    attendingEvents: [],
+  });
+  
   const createEvent = async (e) => {
     e.preventDefault();
     setSubmitting(true);
@@ -55,7 +59,31 @@ const CreateEvent = () => {
       });
 
       if (response.ok) {
-        router.push("/");
+        const responseData = await response.json(); // Parse the response JSON
+        const eventId = responseData._id;
+  
+        const userDataResponse = await fetch(`/api/user/${session?.user.id}`);
+        const userData = await userDataResponse.json();
+  
+        setUser({
+          attendingEvents: userData.attendingEvents,
+        });
+  
+        const updatedAttendingEvents = [...user.attendingEvents, eventId];
+  
+        const userResponse = await fetch(
+          `/api/user/${session?.user.id}?type=attending`,
+          {
+            method: "PATCH",
+            body: JSON.stringify({
+              attendingEvents: updatedAttendingEvents,
+            }),
+          }
+        );
+
+        if (userResponse.ok) {
+          router.push("/");
+        }
       }
     } catch (error) {
       console.log(error);
@@ -65,8 +93,8 @@ const CreateEvent = () => {
   };
 
   const handleKeysArray = async (keysArray) => {
-    setEvent({ ...event, eventImage: keysArray[0]});
-  }
+    setEvent({ ...event, eventImage: keysArray[0] });
+  };
 
   return (
     <EventForm

@@ -25,12 +25,6 @@ const Calendar = ( { handleDate }) => {
   const renderEventDot = (date) => {
     const dateString = date.toISOString().split("T")[0];
 
-    console.log("This is the dateString")
-    console.log(dateString); // Add this line
-    
-    console.log("This is the filteredEvents map")
-    console.log(filteredEvents.map(event => new Date(event.startDate).toISOString().split("T")[0])); // Add this line
-
     if (filteredEvents.some((event) => new Date(event.startDate).toISOString().split("T")[0] === dateString)) {
       return <div className="relative justify-center items-center ">
           <div className="event-dot"> </div>
@@ -52,8 +46,6 @@ const Calendar = ( { handleDate }) => {
 
   // to obtain session ID
   const { data: session } = useSession();
-
-  console.log(session?.user.id);
 
   const [filteredEvents, setFilteredEvents] = useState([]);
 
@@ -92,8 +84,6 @@ const Calendar = ( { handleDate }) => {
           userAttendingEvents.attendingEvents.includes(event._id)
         );
         setFilteredEvents(filtered);
-        console.log("These are the filtered events if I had events");
-        console.log(filtered);
       } else {
         // If user is not attending any events, set filteredEvents to the same as events
         console.log("No attending events");
