@@ -1,93 +1,69 @@
 "use client";
 
-import React from "react";
-import { Avatar, Image, Box } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import NextImage from 'next/image';
+
+import { useState, useEffect } from 'react';
+import { signIn, useSession, getProviders } from 'next-auth/react';
+import { useRouter } from "next/navigation";
+
 import {
-  Table,
-  Thead,
-  Tbody,
-  Tfoot,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-  TableContainer,
-} from '@chakra-ui/react'
+  Button,
+  Image,
+} from "@chakra-ui/react";
 
-const ProfilePage = ({ profileDetails, handleEdit }) => {
-  const [profilePicture, setProfilePicture] = useState("");
+const LogIn = () => {
+  const { data: session } = useSession();
+  const router = useRouter();
+  const [providers, setProviders] = useState(null);
 
-  const fetchProfilePicture = async () => {
-    try {
-      const keysArray = [profileDetails.userUpdatedProfileImage];
-      const response = await fetch(
-        `/api/media?keys=${encodeURIComponent(JSON.stringify(keysArray))}`
-      );
-      const data = await response.json();
-      console.log(data);
+  useEffect(() => {
+    const setUpProviders = async () => {
+      const response = await getProviders();
 
-      if (response.ok) {
-        setProfilePicture(data.urls[0]);
-      } else {
-        console.error("Error fetching profile picture");
-      }
-    } catch (error) {
-      console.error("Error fetching profile picture:", error);
-    }
+      setProviders(response);
+    };
+
+    setUpProviders();
+  }, []);
+
+  const handleLoggedIn = () => {
+    router.push(`/home`)
   };
 
   useEffect(() => {
-    if (profileDetails?.userUpdatedProfileImage) {
-      fetchProfilePicture();
+    if (session?.user) {
+      handleLoggedIn();
     }
-  }, [profileDetails?.userUpdatedProfileImage]);
+  }, [session]);
 
   return (
-    <section className="w-full flex-col flex-1 text-center bg-slate-500">
-      <div className="pt-4 flex">
-        {profileDetails?.userUpdatedProfileImage ? (
-          <Image
-            className="mx-auto"
-            boxSize="300px"
-            borderRadius="full"
-            objectFit="cover"
-            alt={profileDetails?.firstName}
-            src={profilePicture}
-          />
-        ) : (
-          profileDetails?.googleProfileImage && (
-            <Image
-              className="mx-auto"
-              boxSize="300px"
-              borderRadius="full"
-              objectFit="cover"
-              alt={profileDetails?.firstName}
-              src={profileDetails?.googleProfileImage}
+    <div className="flex-center flex-col">
+        <div>
+          <section className="w-full flex-center">
+            <NextImage
+              className="image-contain"
+              src="/assets/images/logo.png"
+              alt="Founding Friends Logo"
+              width={720}
+              height={37}
             />
-          )
-        )}
-      </div>
-
-      <h1 className="head_text">
-        {profileDetails?.firstName} {profileDetails?.lastName}
-      </h1>
-      <div className="pt-4">
-        <h3>{profileDetails?.email}</h3>
-      </div>
-      <div className="pt-4">
-        {handleEdit && (
-          <button
-            type="button"
-            onClick={handleEdit}
-            className="mx-auto blue_btn"
-          >
-            Edit Profile
-          </button>
-        )}
-      </div>
-    </section>
+          </section>
+          <div className="flex justify-center space-x-4 mt-4">
+            {providers &&
+              Object.values(providers).map((provider) => (
+                <button
+                  type="button"
+                  key={provider.name}
+                  onClick={() => signIn(provider.id)}
+                  className="blue_btn pointer-events-auto"
+                >
+                  Log In
+                </button>
+              ))}
+          </div>
+        </div>
+    </div>
   );
 };
 
-export default ProfilePage;
+export default LogIn;

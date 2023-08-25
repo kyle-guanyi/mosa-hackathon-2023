@@ -1,6 +1,36 @@
 import Link from "next/link";
 import Select from "react-select";
 import Dropzone from "components/Dropzone";
+import React, {useState, useEffect, useRef} from "react"
+
+import {
+  Avatar,
+  Image,
+  Heading,
+  Text,
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Flex,
+  Button,
+  Divider,
+  Drawer,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  Stack,
+  Box,
+  FormLabel,
+  Input,
+  InputGroup,
+  InputLeftAddon,
+  InputRightAddon,
+  Textarea,
+} from "@chakra-ui/react";
 
 const ClosestCity = [
   { value: "Africa", label: "Africa" },
@@ -275,51 +305,40 @@ const ProfileForm = ({
   submitting,
   handleSubmit,
   handleKeysArray,
+  firstField,
+  updatedUser,
+  setUpdatedUser,
 }) => {
+  useEffect(() => {
+    setUpdatedUser(user);
+  }, [user, setUpdatedUser]);
+
   return (
-    <section className="w-full max-w-full flex-start flex-col">
-      <h1 className="head_text text-left">
-        <span className="blue_gradient">{type} Profile </span>
-      </h1>
-      <p className="desc text-left max-w-md">{type} your profile here.</p>
-      <form
-        onSubmit={handleSubmit}
-        className="mt-10 w-full max-w-2xl flex flex-col gap-7 glassmorphism"
-      >
-        {/*Prefill with first name from UPenn email but user can manually update*/}
-        <label>
-          <span className="font-satoshi font-semibold text-base text-gray-700">
-            First Name
-          </span>
-          <input
-            value={user.firstName}
-            onChange={(e) => setUser({ ...user, firstName: e.target.value })}
-            placeholder="Update your first name here..." //TODO prefill with first name from upenn email
-            required
-            className="form_input"
-          />
-        </label>
+    <Stack spacing="24px">
+      <Box>
+        <FormLabel htmlFor="firstName">First Name</FormLabel>
+        <Input
+          ref={firstField}
+          value={user.firstName}
+          onChange={(e) => setUser({ ...user, firstName: e.target.value })}
+          placeholder="Update your first name here..."
+          required
+        />
+      </Box>
 
-        {/*Prefill with last name from UPenn email but user can manually update*/}
-        <label>
-          <span className="font-satoshi font-semibold text-base text-gray-700">
-            Last Name
-          </span>
-          <input
-            value={user.lastName}
-            onChange={(e) => setUser({ ...user, lastName: e.target.value })}
-            placeholder="Update your last name here..." // TODO prefill with last name from upenn email
-            required
-            className="form_input"
-          />
-        </label>
+      <Box>
+        <FormLabel htmlFor="lastName">Last Name</FormLabel>
+        <Input
+          value={user.lastName}
+          onChange={(e) => setUser({ ...user, lastName: e.target.value })}
+          placeholder="Update your last name here..."
+          required
+        />
+      </Box>
 
-        {/*User selects closest city/country/region from dropdown menu*/}
-        <label>
-          <span className="font-satoshi font-semibold text-base text-gray-700">
-            Closest City
-          </span>
-          <Select
+      <Box id="closestCity">
+        <FormLabel htmlFor="closestCity">Closest Major City/Region</FormLabel>
+        <Select
             options={ClosestCity}
             value={ClosestCity.find(
               (city) => city.value === user.closestMainCity
@@ -327,43 +346,33 @@ const ProfileForm = ({
             onChange={(selectedOption) =>
               setUser({ ...user, closestMainCity: selectedOption.value })
             }
+            placeholder="Select your closest major city or region"
           />
-        </label>
+      </Box>
 
-        {/*User selects gender from dropdown menu*/}
-        <label>
-          <span className="font-satoshi font-semibold text-base text-gray-700">
-            Gender
-          </span>
-          <Select
+      <Box>
+        <FormLabel htmlFor="pronouns">Pronouns</FormLabel>
+        <Select
             options={Gender}
             value={Gender.find((gender) => gender.value === user.gender)}
             onChange={(selectedOption) =>
               setUser({ ...user, gender: selectedOption.value })
             }
+            placeholder="Select your pronouns here"
           />
-        </label>
+      </Box>
 
-        {/*User update bio (optional)*/}
-        <label>
-          <span className="font-satoshi font-semibold text-base text-gray-700">
-            Tell us about yourself!
-          </span>
-          <textarea
-            value={user.bio}
+      <Box>
+        <FormLabel htmlFor="bio">Tell us about yourself!</FormLabel>
+        <Textarea id="bio" value={user.bio}
             onChange={(e) => setUser({ ...user, bio: e.target.value })}
-            placeholder="Write your brief bio here..."
-            required
-            className="form_textarea"
-          />
-        </label>
+            placeholder="Write a brief bio here..."
+            required />
+      </Box>
 
-        {/*Multi-select for classes taken*/}
-        <label>
-          <span className="font-satoshi font-semibold text-base text-gray-700">
-            Classes Taken (including current classes)
-          </span>
-          <Select
+      <Box>
+        <FormLabel htmlFor="classesTaken">Classes Taken</FormLabel>
+        <Select
             options={classesTaken}
             closeMenuOnSelect={false}
             value={classesTaken.filter((classTaken) =>
@@ -376,15 +385,13 @@ const ProfileForm = ({
               setUser({ ...user, classesTaken: selectedValues });
             }}
             isMulti
+            placeholder="Select all your classes taken here"
           />
-        </label>
+      </Box>
 
-        {/*Multi-select for field(s) of interest*/}
-        <label>
-          <span className="font-satoshi font-semibold text-base text-gray-700">
-            Field(s) of Interest
-          </span>
-          <Select
+      <Box>
+        <FormLabel htmlFor="fieldsOfInterest">Fields of Interest</FormLabel>
+        <Select
             options={InterestFields}
             value={InterestFields.filter((field) =>
               user.fieldOfInterest.includes(field.value)
@@ -397,15 +404,13 @@ const ProfileForm = ({
               setUser({ ...user, fieldOfInterest: selectedValues });
             }}
             isMulti
+            placeholder="Select your fields of interest here"
           />
-        </label>
+      </Box>
 
-        {/*Dropdown menu select Time Zone*/}
-        <label>
-          <span className="font-satoshi font-semibold text-base text-gray-700">
-            Time Zone (Required)
-          </span>
-          <Select
+      <Box>
+        <FormLabel htmlFor="timeZone">Timezone</FormLabel>
+        <Select
             options={Timezones}
             value={Timezones.find(
               (timezone) => timezone.value === user.timeZone
@@ -413,31 +418,20 @@ const ProfileForm = ({
             onChange={(selectedOption) =>
               setUser({ ...user, timeZone: selectedOption.value })
             }
+            placeholder="Select your timezone here"
           />
-        </label>
+          
+      </Box>
 
-        {/*Cancel button*/}
-        <div className="flex-end mx-3 mb-5 gap-4">
-          <Link href="/profile" className="text-gray-500 text-sm">
-            Cancel
-          </Link>
-
-          {/*Submit button*/}
-          <button
-            type="submit"
-            disabled={submitting}
-            className="px-5 py-1.5 text-sm bg-primary-orange rounded-full text-white"
-          >
-            {submitting ? `${type}ing...` : type}
-          </button>
-        </div>
-      </form>
-      <Dropzone
+      <Box>
+        <FormLabel htmlFor="dropzone">Upload your profile picture here</FormLabel>
+        <Dropzone
         handleKeysArray={handleKeysArray}
         maxUploads={1}
         initialFiles={[user.userUpdatedProfileImage]}
       />
-    </section>
+      </Box>
+    </Stack>
   );
 };
 

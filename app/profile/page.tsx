@@ -11,18 +11,18 @@ const MyProfile = () => {
     const { data: session } = useSession();
     const [myUserProfile, setMyUserProfile] = useState();
 
-    useEffect(() => {
-        const fetchMyDetails = async () => {
-            const response = await fetch(`/api/user/${session?.user.id}`);
-            const data = await response.json();
-            setMyUserProfile(data);
-        };
+    const fetchMyDetails = async () => {
+        const response = await fetch(`/api/user/${session?.user.id}`);
+        const data = await response.json();
+        setMyUserProfile(data);
+    };
 
+    useEffect(() => {
         if (session?.user.id) fetchMyDetails();
     }, [session?.user.id]);
 
-    const handleEdit = (myUserProfile) => {
-        router.push(`/update-profile`);
+    const handleEdit = (e) => {
+        fetchMyDetails();
     };
 
     return (

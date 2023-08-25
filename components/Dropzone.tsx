@@ -1,12 +1,23 @@
 "use client";
 import axios from "axios";
 import Image from "next/image";
-import { useCallback, useEffect, useMemo, useState, FormEvent } from "react";
+import React, { useCallback, useEffect, useMemo, useState, FormEvent } from "react";
 import { useDropzone } from "react-dropzone";
 import { BsUpload, BsXCircleFill } from "react-icons/bs";
+import {
+  useDisclosure,
+  AlertDialog,
+  AlertDialogOverlay,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogCloseButton,
+  AlertDialogFooter,
+  AlertDialogBody,
+  Button,
+} from "@chakra-ui/react";
 
 const baseStyle = {
-  width: "100vh",
+  width: "100%",
   flex: 1,
   display: "flex",
   flexDirection: "column",
@@ -185,6 +196,9 @@ export default function FileUpload({
     }
   }, [initialFiles]);
 
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const cancelRef = React.useRef()
+
   return (
     <form onSubmit={handleSubmit}>
       <div {...getRootProps({ style })}>
@@ -208,35 +222,75 @@ export default function FileUpload({
         <div className="flex items-center justify-between">
           <h2 className="title text-3xl font-semibold">Preview Files</h2>
           <div className="flex gap-4">
-            <button
-              type="button"
-              onClick={() => {
-                const shouldDelete = window.confirm(
-                  "Are you sure you want to delete all uploaded files?"
-                );
-                if (shouldDelete) {
-                  removeAll();
-                }
-              }}
-              className="red_btn"
-            >
-              Remove all files
-            </button>
-            <button type="submit" className="blue_btn">
-              Submit Images
-            </button>
+          <>
+          <Button
+                      colorScheme="red"
+                      isActive={true}
+                      className="hover:opacity-80"
+                      onClick={onOpen}
+                    >
+                      Delete all uploaded image(s)
+                    </Button>
+                    <AlertDialog
+                      motionPreset="slideInBottom"
+                      leastDestructiveRef={cancelRef}
+                      onClose={onClose}
+                      isOpen={isOpen}
+                      isCentered
+                    >
+                      <AlertDialogOverlay />
+                      <AlertDialogContent>
+                        <AlertDialogHeader>Delete all uploaded images?</AlertDialogHeader>
+                        <AlertDialogCloseButton className="hover:opacity-50"/>
+                        <AlertDialogBody>
+                          Are you sure you want to delete all uploaded files <br /> <br />
+                          <em>This cannot be undone.</em>
+                        </AlertDialogBody>
+                        <AlertDialogFooter>
+                          <Button ref={cancelRef} onClick={onClose}>
+                            No
+                          </Button>
+                          <Button
+                            colorScheme="red"
+                            variant={"solid"}
+                            isActive={true}
+                            className="hover:opacity-80"
+                            ml={3}
+                            onClick={() => {
+                              removeAll();
+                              onClose();
+                            }}
+                          >
+                            Yes
+                          </Button>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+    </>
+    <Button
+                            colorScheme="facebook"
+                            variant={"solid"}
+                            isActive={true}
+                            className="hover:opacity-80"
+                            ml={3}
+                            type="submit"
+                          >
+                            Submit uploaded image(s)
+                          </Button>
           </div>
         </div>
 
-        {initialPictures?.length > 0 && (
-          <div>
-            <h3 className="title text-lg font-semibold text-neutral-600 mt-10 border-b pb-3">
-              Initial Files
-            </h3>
-            <ul className="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-10">
-              {initialPictures?.map((file, index) => (
-                <li key={index} className="relative h-32 rounded-md shadow-lg">
-                  <Image
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+    {/* Initial Files */}
+    {initialPictures?.length > 0 && (
+      <div>
+        <h3 className="title text-lg font-semibold text-neutral-600 mb-3">
+          Initial Files
+        </h3>
+        <ul className="grid grid-cols-1 gap-4">
+          {initialPictures?.map((file, index) => (
+            <li key={index} className="relative h-32 rounded-md shadow-lg">
+               <Image
                     className="h-full w-full object-contain rounded-md"
                     src={file}
                     alt={"Initial Image"}
@@ -246,22 +300,21 @@ export default function FileUpload({
                       URL.revokeObjectURL(file);
                     }}
                   />
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-        {/* Accepted files */}
-        <h3 className="title text-lg font-semibold text-neutral-600 mt-10 border-b pb-3">
-          Accepted Files
-        </h3>
-        {files.length >= maxUploads && (
-          <p className="text-red-500">Maximum number of uploads reached</p>
-        )}
-        <ul className="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-10">
-          {files.map((file) => (
-            <li key={file.name} className="relative h-32 rounded-md shadow-lg">
-              <Image
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    {/* Accepted Files */}
+    <div>
+      <h3 className="title text-lg font-semibold text-neutral-600 mb-3">
+        Accepted Files
+      </h3>
+      <ul className="grid grid-cols-1 gap-4">
+        {files.map((file) => (
+          <li key={file.name} className="relative h-32 rounded-md shadow-lg">
+             <Image
                 className="h-full w-full object-contain rounded-md"
                 src={file.preview}
                 alt={file.name}
@@ -282,9 +335,11 @@ export default function FileUpload({
               <p className="mt-2 text-neutral-500 text-[14px] font-medium break-words">
                 {file.name}
               </p>
-            </li>
-          ))}
-        </ul>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
 
         {/* Rejected Files */}
         <h3 className="title text-lg font-semibold text-neutral-600 mt-24 border-b pb-3">

@@ -1,10 +1,15 @@
 "use client";
 
-import Image from 'next/image';
+import NextImage from 'next/image';
 
 import { useState, useEffect } from 'react';
 import { signIn, useSession, getProviders } from 'next-auth/react';
 import { useRouter } from "next/navigation";
+
+import {
+  Button,
+  Image,
+} from "@chakra-ui/react";
 
 const LogIn = () => {
   const { data: session } = useSession();
@@ -34,9 +39,9 @@ const LogIn = () => {
   return (
     <div className="flex-center flex-col">
         <div>
-          <section className="w-full flex-center">
-            <Image
-              className="image-contain"
+          <section className="w-full flex-center ">
+            <NextImage
+              className="image-contain;"
               src="/assets/images/logo.png"
               alt="Founding Friends Logo"
               width={720}
@@ -46,25 +51,17 @@ const LogIn = () => {
           <div className="flex justify-center space-x-4 mt-4">
             {providers &&
               Object.values(providers).map((provider) => (
-                <button
+                <Button
                   type="button"
+                  colorScheme="facebook"
+                  isActive="true"
+                  className="hover:opacity-80 mx-auto"
                   key={provider.name}
                   onClick={() => signIn(provider.id)}
-                  className="blue_btn pointer-events-auto"
+                  leftIcon={<Image src="https://gdm-catalog-fmapi-prod.imgix.net/ProductLogo/5179d6b3-aa3f-403b-8cb4-718850815472.png?auto=format,compress&size=50" alt="Image" boxSize={4} />}
                 >
-                  Log In
-                </button>
-              ))}
-            {providers &&
-              Object.values(providers).map((provider) => (
-                <button
-                  type="button"
-                  key={provider.name}
-                  onClick={() => signIn(provider.id)}
-                  className="red_btn pointer-events-auto"
-                >
-                  Sign Up
-                </button>
+                  Login with UPenn Google
+                </Button>
               ))}
           </div>
         </div>
