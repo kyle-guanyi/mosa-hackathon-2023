@@ -101,10 +101,12 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
               )
             )}
           </div>
-
-          <h1 className="head_text">
+          <div className="flex">
+          <h1 className="head_text mx-auto">
             {profileDetails?.firstName} {profileDetails?.lastName}
           </h1>
+          </div>
+          
           <div className="pt-4 flex">
             <h3 className="mx-auto">{profileDetails?.email}</h3>
           </div>
