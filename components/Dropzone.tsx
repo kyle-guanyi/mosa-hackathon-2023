@@ -231,7 +231,7 @@ export default function FileUpload({
       <section className="mt-5">
         <div className="flex items-center justify-center">
   
-          <div className="flex gap-24 ">
+          <div className="flex">
           <>
           <Button
                       colorScheme="red"

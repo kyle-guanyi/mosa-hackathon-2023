@@ -50,6 +50,7 @@ const MessageBoard = ({ eventDetails, addImagesToEvent }) => {
 
       if(response.ok) {
         setMessage({ content: "" });
+        addImagesToEvent(message.uploadedMessagePictures)
         fetchEventMessages();
       }
 
@@ -100,7 +101,6 @@ const MessageBoard = ({ eventDetails, addImagesToEvent }) => {
 
   const handleKeysArray = async (keysArray) => {
     setMessage({ ...message, uploadedMessagePictures: keysArray});
-    addImagesToEvent(keysArray)
   }
   
   return (
