@@ -25,6 +25,7 @@ import {
 import MoonIcon from "@chakra-ui/icon";
 import PhoneIcon from "@chakra-ui/icon";
 import EditIcon from "@chakra-ui/icon";
+import CalendarIcon from "@chakra-ui/icon";
 
 interface Props {
   children: React.ReactNode;
@@ -42,9 +43,9 @@ const Nav = (props: Props) => {
       rounded={"md"}
       position="sticky"
       top={0}
-  left={0}
-  right={0}
-  zIndex={1000}
+      left={0}
+      right={0}
+      zIndex={1000}
       _hover={{
         textDecoration: "none",
         bg: useColorModeValue("gray.200", "gray.700"),
@@ -138,18 +139,18 @@ export default function WithAction() {
                 spacing={4}
                 display={{ base: "none", md: "flex" }}
               >
-                <a href="/create-event">Create Event</a>
+                
               </HStack>
             </HStack>
             <Flex alignItems={"center"}>
               <Button
                 variant={"solid"}
-                colorScheme={"teal"}
+                colorScheme={"facebook"}
                 size={"sm"}
                 mr={4}
-                leftIcon={<EditIcon />}
+                leftIcon={<CalendarIcon />}
               >
-                Action
+                <a href="/create-event">Create Event</a>
               </Button>
               <Menu>
                 <MenuButton

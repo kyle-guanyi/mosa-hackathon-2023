@@ -12,18 +12,19 @@ export const metadata = {
 
 const RootLayout = ({ children }) => {
   return (
-    <html lang='en'>
+    <html lang="en">
       <body>
         <Provider>
-          <Nav />
-          <main className='main flex-col'>
-            {children}
-          </main>
+          <header className="sticky top-0 z-50 flex justify-center items-center">
+            <div className="w-screen">
+              <Nav />
+            </div>
+          </header>
+          <main className="main flex-col">{children}</main>
         </Provider>
       </body>
     </html>
   );
 };
-
 
 export default RootLayout;
