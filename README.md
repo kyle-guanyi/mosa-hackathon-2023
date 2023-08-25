@@ -46,8 +46,9 @@ https://nodejs.org/en/download/
 
 
 Step 3: Download required packages
-`npm i react select`
-`npm i react-calendar`
+```npm i react select```
+```npm i react-calendar```
+```npm install luxon```
 
 ### Deployment
 
