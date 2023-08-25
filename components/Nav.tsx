@@ -10,8 +10,6 @@ import {
   Flex,
   Avatar,
   HStack,
-  Text,
-  IconButton,
   Button,
   Menu,
   MenuButton,

@@ -192,7 +192,7 @@ const EventCard = ({ event }) => {
   return (
     <Card
       maxW="90%"
-      className="m-auto cursor-pointer hover:-translate-y-2 transition-all"
+      className="m-auto cursor-pointer hover:-translate-y-2 hover:opacity-80 transition-all"
       onClick={handleEventClick}
     >
       <CardBody>

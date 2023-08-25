@@ -8,6 +8,17 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { DateTime, IANAZone } from "luxon";
 import PhotoTimeline from "/components/phototimeline/PhotoTimeline";
+import {
+  useDisclosure,
+  AlertDialog,
+  AlertDialogOverlay,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogCloseButton,
+  AlertDialogFooter,
+  AlertDialogBody,
+  Button,
+} from "@chakra-ui/react";
 
 const EventPage = ({
   eventDetails,
@@ -20,6 +31,9 @@ const EventPage = ({
   handleDelete,
   addImagesToEvent,
 }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const cancelRef = React.useRef();
+
   const startDate = new Date(eventDetails.startDate).toLocaleDateString(
     "en-US",
     {
@@ -70,7 +84,7 @@ const EventPage = ({
         const userTimezone = DateTime.local().zoneName;
         const userEventDateTime = dateTimeObject.setZone(userTimezone);
         setUserEventDateTime(userEventDateTime);
-        console.log("This is the user event date time", userEventDateTime)
+        console.log("This is the user event date time", userEventDateTime);
       }
     }
   }, [eventDetails, creatorInfo, attendeesInfo, session?.user.id]);
@@ -129,20 +143,46 @@ const EventPage = ({
                     >
                       Update Event
                     </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const shouldDelete = window.confirm(
-                          "Are you sure you want to delete this event?"
-                        );
-                        if (shouldDelete) {
-                          handleDelete(eventDetails._id);
-                        }
-                      }}
-                      className="blue_btn"
+                    <Button
+                      colorScheme="red"
+                      isActive={true}
+                      className="hover:opacity-80"
+                      onClick={onOpen}
                     >
                       Delete Event
-                    </button>
+                    </Button>
+                    <AlertDialog
+                      motionPreset="slideInBottom"
+                      leastDestructiveRef={cancelRef}
+                      onClose={onClose}
+                      isOpen={isOpen}
+                      isCentered
+                    >
+                      <AlertDialogOverlay />
+                      <AlertDialogContent>
+                        <AlertDialogHeader>Delete Event?</AlertDialogHeader>
+                        <AlertDialogCloseButton className="hover:opacity-50"/>
+                        <AlertDialogBody>
+                          Are you sure you want to delete this event? <br /> <br />
+                          <em>All messages, comments, and uploaded pictures associated with this event will also be deleted.</em>
+                        </AlertDialogBody>
+                        <AlertDialogFooter>
+                          <Button ref={cancelRef} onClick={onClose}>
+                            No
+                          </Button>
+                          <Button
+                            colorScheme="red"
+                            variant={"solid"}
+                            isActive={true}
+                            className="hover:opacity-80"
+                            ml={3}
+                            onClick={() => handleDelete(eventDetails._id)}
+                          >
+                            Yes
+                          </Button>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </div>
                 )}
               </div>
@@ -175,7 +215,10 @@ const EventPage = ({
               <div className="pt-5 text-blue-900">
                 <a href="{eventDetails.zoomLink}">Zoom Link</a>
               </div>
-              <MessageBoard eventDetails={eventDetails} addImagesToEvent={addImagesToEvent}/>
+              <MessageBoard
+                eventDetails={eventDetails}
+                addImagesToEvent={addImagesToEvent}
+              />
             </div>
 
             <div className="flex-col w-1/3">
@@ -187,7 +230,10 @@ const EventPage = ({
                   {startDate} at {eventDetails.startTime}{" "}
                   {eventDetails.timeZone}
                 </div>
-                <p>Event Date: {userEventDateTime?.toFormat("cccc, LLLL d, yyyy")}</p>
+                <p>
+                  Event Date:{" "}
+                  {userEventDateTime?.toFormat("cccc, LLLL d, yyyy")}
+                </p>
                 <p>Start Time: {userEventDateTime?.toFormat("hh:mm a")}</p>
               </div>
 
@@ -203,7 +249,9 @@ const EventPage = ({
           </div>
         </div>
       </div>
-      <div className="w-1/5 bg-purple-700 hidden md:block ">Photo Timeline <PhotoTimeline event={eventDetails}/></div>
+      <div className="w-1/5 bg-purple-700 hidden md:block ">
+        Photo Timeline <PhotoTimeline event={eventDetails} />
+      </div>
     </div>
   );
 };
