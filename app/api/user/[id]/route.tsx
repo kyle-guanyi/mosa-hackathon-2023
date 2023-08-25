@@ -28,7 +28,7 @@ export const PATCH = async (request, { params }) => {
     return PATCH_PROFILE_PIC(request, {params});
   }
 
-  const { firstName, lastName, closestMainCity, timeZone, gender, bio, classesTaken, fieldOfInterest, userUpdatedProfileImage } = await request.json();
+  const { firstName, lastName, closestMainCity, timeZone, gender, bio, classesTaken, fieldOfInterest } = await request.json();
 
   try {
     await connectToDB();
@@ -49,7 +49,6 @@ export const PATCH = async (request, { params }) => {
     existingUser.bio = bio;
     existingUser.classesTaken = classesTaken;
     existingUser.fieldOfInterest = fieldOfInterest;
-    existingUser.userUpdatedProfileImage = userUpdatedProfileImage;
 
     await existingUser.save();
 

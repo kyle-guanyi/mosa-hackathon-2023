@@ -14,6 +14,7 @@ import {
   AlertDialogFooter,
   AlertDialogBody,
   Button,
+  useToast,
 } from "@chakra-ui/react";
 
 const baseStyle = {
@@ -50,6 +51,7 @@ export default function FileUpload({
   handleKeysArray,
   maxUploads,
   initialFiles,
+  updateInitialFiles,
 }) {
   const [files, setFiles] = useState<any>([]);
   const [rejected, setRejected] = useState<any>([]);
@@ -122,13 +124,19 @@ export default function FileUpload({
     setRejected((files) => files.filter(({ file }) => file.name !== name));
   };
 
+  const toast = useToast();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!files?.length) {
-      window.alert(
-        "Please upload at least one valid file type before submitting."
-      );
+      toast({
+        title: 'Please upload at least one valid file before submitting.',
+        description: "Supported file types are .png, .jpg, and .jpeg",
+        status: 'error',
+        duration: 4000,
+        isClosable: true,
+      })
       return;
     }
 
@@ -152,6 +160,8 @@ export default function FileUpload({
 
       console.log(data.keysArray);
       handleKeysArray(data.keysArray);
+      updateInitialFiles(data.keysArray);
+
 
       setFiles([]);
     } catch (err) {

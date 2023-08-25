@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Select from "react-select";
 import Dropzone from "components/Dropzone";
-import React, {useState, useEffect, useRef} from "react"
+import React, { useState, useEffect, useRef } from "react";
 
 import {
   Avatar,
@@ -79,7 +79,7 @@ const ClosestCity = [
 const Gender = [
   { value: "He/Him/His", label: "He/Him/His" },
   { value: "She/Her/Hers", label: "She/Her/Hers" },
-  { value: "Decline to Answer", label: "They/Them/Theirs" },
+  { value: "They/Them/Theirs", label: "They/Them/Theirs" },
   { value: "Decline to Answer", label: "Decline to Answer" },
 ];
 
@@ -314,6 +314,12 @@ const ProfileForm = ({
     setUpdatedUser(user);
   }, [user, setUpdatedUser]);
 
+  const [initialFiles, setInitialFiles] = useState([user.userUpdatedProfileImage]);
+
+  const updateInitialFiles = (newFiles) => {
+    setInitialFiles(newFiles);
+  };
+
   return (
     <Stack spacing="24px">
       <Box>
@@ -340,97 +346,100 @@ const ProfileForm = ({
       <Box id="closestCity">
         <FormLabel htmlFor="closestCity">Closest Major City/Region</FormLabel>
         <Select
-            options={ClosestCity}
-            value={ClosestCity.find(
-              (city) => city.value === user.closestMainCity
-            )}
-            onChange={(selectedOption) =>
-              setUser({ ...user, closestMainCity: selectedOption.value })
-            }
-            placeholder="Select your closest major city or region"
-          />
+          options={ClosestCity}
+          value={ClosestCity.find(
+            (city) => city.value === user.closestMainCity
+          )}
+          onChange={(selectedOption) =>
+            setUser({ ...user, closestMainCity: selectedOption.value })
+          }
+          placeholder="Select your closest major city or region"
+        />
       </Box>
 
       <Box>
         <FormLabel htmlFor="pronouns">Pronouns</FormLabel>
         <Select
-            options={Gender}
-            value={Gender.find((gender) => gender.value === user.gender)}
-            onChange={(selectedOption) =>
-              setUser({ ...user, gender: selectedOption.value })
-            }
-            placeholder="Select your pronouns here"
-          />
+          options={Gender}
+          value={Gender.find((gender) => gender.value === user.gender)}
+          onChange={(selectedOption) =>
+            setUser({ ...user, gender: selectedOption.value })
+          }
+          placeholder="Select your pronouns here"
+        />
       </Box>
 
       <Box>
         <FormLabel htmlFor="bio">Tell us about yourself!</FormLabel>
-        <Textarea id="bio" value={user.bio}
-            onChange={(e) => setUser({ ...user, bio: e.target.value })}
-            placeholder="Write a brief bio here..."
-            required />
+        <Textarea
+          id="bio"
+          value={user.bio}
+          onChange={(e) => setUser({ ...user, bio: e.target.value })}
+          placeholder="Write a brief bio here..."
+          required
+        />
       </Box>
 
       <Box>
         <FormLabel htmlFor="classesTaken">Classes Taken</FormLabel>
         <Select
-            options={classesTaken}
-            closeMenuOnSelect={false}
-            value={classesTaken.filter((classTaken) =>
-              user.classesTaken.includes(classTaken.value)
-            )}
-            onChange={(selectedOptions) => {
-              const selectedValues = selectedOptions.map(
-                (option) => option.value
-              );
-              setUser({ ...user, classesTaken: selectedValues });
-            }}
-            isMulti
-            placeholder="Select all your classes taken here"
-          />
+          options={classesTaken}
+          closeMenuOnSelect={false}
+          value={classesTaken.filter((classTaken) =>
+            user.classesTaken.includes(classTaken.value)
+          )}
+          onChange={(selectedOptions) => {
+            const selectedValues = selectedOptions.map(
+              (option) => option.value
+            );
+            setUser({ ...user, classesTaken: selectedValues });
+          }}
+          isMulti
+          placeholder="Select all your classes taken here"
+        />
       </Box>
 
       <Box>
         <FormLabel htmlFor="fieldsOfInterest">Fields of Interest</FormLabel>
         <Select
-            options={InterestFields}
-            value={InterestFields.filter((field) =>
-              user.fieldOfInterest.includes(field.value)
-            )}
-            closeMenuOnSelect={false}
-            onChange={(selectedOptions) => {
-              const selectedValues = selectedOptions.map(
-                (option) => option.value
-              );
-              setUser({ ...user, fieldOfInterest: selectedValues });
-            }}
-            isMulti
-            placeholder="Select your fields of interest here"
-          />
+          options={InterestFields}
+          value={InterestFields.filter((field) =>
+            user.fieldOfInterest.includes(field.value)
+          )}
+          closeMenuOnSelect={false}
+          onChange={(selectedOptions) => {
+            const selectedValues = selectedOptions.map(
+              (option) => option.value
+            );
+            setUser({ ...user, fieldOfInterest: selectedValues });
+          }}
+          isMulti
+          placeholder="Select your fields of interest here"
+        />
       </Box>
 
       <Box>
         <FormLabel htmlFor="timeZone">Timezone</FormLabel>
         <Select
-            options={Timezones}
-            value={Timezones.find(
-              (timezone) => timezone.value === user.timeZone
-            )}
-            onChange={(selectedOption) =>
-              setUser({ ...user, timeZone: selectedOption.value })
-            }
-            placeholder="Select your timezone here"
-          />
-          
+          options={Timezones}
+          value={Timezones.find((timezone) => timezone.value === user.timeZone)}
+          onChange={(selectedOption) =>
+            setUser({ ...user, timeZone: selectedOption.value })
+          }
+          placeholder="Select your timezone here"
+        />
       </Box>
 
       <Box>
-        <FormLabel htmlFor="dropzone">Upload your profile picture here</FormLabel>
+        <FormLabel htmlFor="dropzone">
+          Upload your profile picture here
+        </FormLabel>
         <Dropzone
-        handleKeysArray={handleKeysArray}
-        maxUploads={1}
-        initialFiles={[user.userUpdatedProfileImage]}
-      />
+          handleKeysArray={handleKeysArray}
+          maxUploads={1}
+          initialFiles={initialFiles}
+          updateInitialFiles={updateInitialFiles}
+        />
       </Box>
     </Stack>
   );

@@ -4,15 +4,11 @@ import React from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import {
-  Avatar,
   Collapse,
   Image,
-  Heading,
   Text,
   Card,
   CardHeader,
-  CardBody,
-  CardFooter,
   Flex,
   Button,
   Divider,
@@ -23,15 +19,7 @@ import {
   DrawerOverlay,
   DrawerContent,
   DrawerCloseButton,
-  Stack,
-  Box,
-  FormLabel,
-  Input,
-  InputGroup,
-  InputLeftAddon,
-  Select,
-  InputRightAddon,
-  Textarea,
+  useToast
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import {
@@ -123,6 +111,8 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
 
     if (session?.user.id) getUserDetails();
   }, [session?.user.id]);
+  
+  const toast = useToast();
 
   const updateUser = async (updatedUser) => {
     setIsSubmitting(true);
@@ -141,12 +131,17 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
           bio: updatedUser.bio,
           classesTaken: updatedUser.classesTaken,
           fieldOfInterest: updatedUser.fieldOfInterest,
-          userUpdatedProfileImage: updatedUser.userUpdatedProfileImage,
         }),
       });
 
       if (response.ok) {
         handleEdit();
+        toast({
+          title: 'Profile successfully updated',
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+        })
       }
     } catch (error) {
       console.log(error);
@@ -169,6 +164,13 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
       });
       if (response.ok) {
         handleEdit();
+        toast({
+          title: 'Profile picture sucessfully updated',
+          description: "You look great!",
+          status: 'success',
+          duration: 6000,
+          isClosable: true,
+        })
       }
     } catch (error) {
       console.log(error);
@@ -237,9 +239,12 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
               <h3 className="mx-auto">{profileDetails?.email}</h3>
             </div>
             <div className="pt-1 flex">
-            {profileDetails && profileDetails.gender !== "Decline to Answer" && (
-    <h3 className="mx-auto"><em>({profileDetails.gender})</em></h3>
-  )}
+              {profileDetails &&
+                profileDetails.gender !== "Decline to Answer" && (
+                  <h3 className="mx-auto">
+                    <em>({profileDetails.gender})</em>
+                  </h3>
+                )}
             </div>
             <div className="pt-4 flex">
               {session?.user.id === profileDetails?._id && (
@@ -311,9 +316,13 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
             >
               {profileDetails?.bio}
             </Collapse>
-            <Button size="sm" 
-                          isActive="true"
-                          className="hover:opacity-80" onClick={handleToggle} mt="1rem">
+            <Button
+              size="sm"
+              isActive="true"
+              className="hover:opacity-80"
+              onClick={handleToggle}
+              mt="1rem"
+            >
               Show {show ? "Less" : "More"}
             </Button>
             <Text></Text>

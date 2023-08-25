@@ -29,14 +29,14 @@ const Home = () => {
 
   return (
     <div className="h-full w-full flex">
-      <div className="w-1/5 ">
-        <div className="w-full h-flex pb-8">
+      <div className="w-1/5">
+        <Center className="w-full h-flex flex items-center justify-center">
           <Calendar handleDate={handleDate} />
-        </div>
+        </Center>
         <div className=" w-full h-1/2">
-          <Divider/>
+          <Divider />
           <Heading className="pt-4">Your Events:</Heading>
-          
+
           <AttendingFeed />
         </div>
       </div>
@@ -44,7 +44,6 @@ const Home = () => {
         <Divider orientation="vertical" borderWidth="2px" />
       </Center>
       <div className="w-3/5">
-        
         <div className=" w-full v-full ">
           <EventFeed selectedDate={selectedDate} />
         </div>

@@ -206,9 +206,8 @@ const EventCard = ({ event }) => {
       maxW="90%"
       className="m-auto cursor-pointer hover:-translate-y-2 hover:opacity-80 transition-all"
       onClick={handleEventClick}
-      height={isLoading ? "320px" : "auto"}
-      minWidth="300px" // Add this line for minimum width
-      minHeight="400px" // Add this line for minimum height
+      minWidth="300px"
+      minHeight="400px"
     >
       <CardBody>
         {isLoading ? (
