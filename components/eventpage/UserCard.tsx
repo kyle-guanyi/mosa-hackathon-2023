@@ -46,7 +46,7 @@ const UserCard = ({ user }) => {
 
   return (
     <div
-      className="cursor-pointer hover:-translate-y-1 transition-all"
+      className="cursor-pointer hover:-translate-y-1 hover:opacity-80 transition-all"
       onClick={handleProfileClick}
     >
       <Card maxW="xs">

@@ -120,7 +120,7 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
               ml={3}
               onClick={handleEdit}
               >
-              Edit Profile
+              Edit My Profile
             </Button>
             )}
           </div>
@@ -139,7 +139,7 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
                 </Tr>
               </Thead>
               <Tbody>
-                {profileDetails?.classesTaken.map((classTaken, index) => (
+                {profileDetails?.classesTaken?.map((classTaken, index) => (
                   <Tr key={index}>
                     <Td>{classTaken}</Td>
                   </Tr>
@@ -157,7 +157,7 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
                 </Tr>
               </Thead>
               <Tbody>
-                {profileDetails?.fieldOfInterest.map((fieldInterest, index) => (
+                {profileDetails?.fieldOfInterest?.map((fieldInterest, index) => (
                   <Tr key={index}>
                     <Td>{fieldInterest}</Td>
                   </Tr>
