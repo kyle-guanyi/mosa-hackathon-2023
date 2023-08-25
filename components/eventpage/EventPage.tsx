@@ -240,6 +240,15 @@ const EventPage = ({
             </div>
           </div>
           <Divider />
+
+          <div>
+          
+          </div>          
+
+
+
+
+
           <div className="flex-row flex justify-between">
             <div className="flex-col justify-start">
               <div className="pt-10">
@@ -247,7 +256,7 @@ const EventPage = ({
                   Event Details:
                 </Heading>
               </div>
-              <div>
+              <div className="mr-20">
                 <Collapse
                   startingHeight={20}
                   in={show}
@@ -265,18 +274,24 @@ const EventPage = ({
                   Show {show ? "Less" : "More"}
                 </Button>
               </div>
-              <div className="pt-5 text-blue-900"><Heading as="h3" size="md"><a href="{eventDetails.zoomLink}">Zoom Link</a></Heading>
-                
+              <div className="pt-5 text-blue-900">
+                <Heading as="h3" size="md">
+                  <a href="{eventDetails.zoomLink}">Zoom Link</a>
+                </Heading>
               </div>
-              <div className="pt-4">
-              <MessageBoard
-                eventDetails={eventDetails}
-                addImagesToEvent={addImagesToEvent}
-              />
+
+
+
+
+              <div className="pt-4 mr-20 bg-slate-400">
+                <MessageBoard
+                  eventDetails={eventDetails}
+                  addImagesToEvent={addImagesToEvent}
+                />
               </div>
             </div>
 
-            <div className="flex-col w-1/3">
+            <div className="flex-col w-1/3 flex">
               <div className="flex-row flex items-center">
                 <span className="bannerIcon">
                   <FiClock />
@@ -285,6 +300,8 @@ const EventPage = ({
                   {startDate} at {eventDetails.startTime}{" "}
                   {eventDetails.timeZone}
                 </div>
+              </div>
+              <div>
                 <p>
                   Event Date:{" "}
                   {userEventDateTime?.toFormat("cccc, LLLL d, yyyy")}
@@ -304,8 +321,11 @@ const EventPage = ({
           </div>
         </div>
       </div>
-      <div className="w-1/5 bg-purple-700 hidden md:block ">
-        Photo Timeline <PhotoTimeline event={eventDetails} />
+      <Center height="100%">
+        <Divider orientation="vertical" />
+      </Center>
+      <div className="w-1/5 bg-purple-700 hidden md:block p-4">
+        <Heading as="h3" size="md">Photo Timeline</Heading> <PhotoTimeline event={eventDetails} />
       </div>
     </div>
   );
