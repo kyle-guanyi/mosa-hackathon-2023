@@ -22,10 +22,7 @@ import {
   useColorModeValue,
   Stack,
 } from "@chakra-ui/react";
-import MoonIcon from "@chakra-ui/icon";
-import PhoneIcon from "@chakra-ui/icon";
-import EditIcon from "@chakra-ui/icon";
-import CalendarIcon from "@chakra-ui/icon";
+import { EditIcon, PhoneIcon, MoonIcon }from "@chakra-ui/icons";
 
 interface Props {
   children: React.ReactNode;
@@ -114,13 +111,6 @@ export default function WithAction() {
       {session?.user.id ? (
         <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
           <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
-            <IconButton
-              size={"md"}
-              icon={isOpen ? <PhoneIcon /> : <MoonIcon />}
-              aria-label={"Open Menu"}
-              display={{ md: "none" }}
-              onClick={isOpen ? onClose : onOpen}
-            />
             <HStack spacing={8} alignItems={"center"}>
               <Box>
                 <Link href="/" className="flex gap-2 flex-center">
@@ -129,7 +119,7 @@ export default function WithAction() {
                     alt="University of Pennsylvania Logo"
                     width={30}
                     height={30}
-                    className="object-contain"
+                    className="object-contain hover:"
                   />
                   <p className="logo_text">Founding Friends</p>
                 </Link>
@@ -145,10 +135,11 @@ export default function WithAction() {
             <Flex alignItems={"center"}>
               <Button
                 variant={"solid"}
-                colorScheme={"facebook"}
+                isActive={true}
+                className="hover:opacity-80"
                 size={"sm"}
                 mr={4}
-                leftIcon={<CalendarIcon />}
+                leftIcon={<EditIcon />}
               >
                 <a href="/create-event">Create Event</a>
               </Button>
