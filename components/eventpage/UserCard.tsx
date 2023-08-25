@@ -1,72 +1,74 @@
 "use client";
 import React from "react";
-import Image from 'next/image';
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import ProfilePage from "components/profilepage/ProfilePage";
+import { Avatar } from "@chakra-ui/react";
+import { Card, CardHeader, Flex, Box, Heading, Text } from "@chakra-ui/react";
 
-const UserCard = ( {user} ) => { 
+const UserCard = ({ user }) => {
+  const { data: session } = useSession();
 
-    const { data: session } = useSession();
+  const router = useRouter();
+  // fetch profilepic for user
+  const [profilePicture, setProfilePicture] = useState("");
+  const fetchProfilePicture = async () => {
+    try {
+      const keysArray = [user.userUpdatedProfileImage]; // Convert to an array
+      const response = await fetch(
+        `/api/media?keys=${encodeURIComponent(JSON.stringify(keysArray))}`
+      );
+      const data = await response.json();
+      console.log(data);
 
-    const router = useRouter();
-    // fetch profilepic for user
-    const [profilePicture, setProfilePicture] = useState("");
-    const fetchProfilePicture = async () => {
-        try {
-          const keysArray = [user.userUpdatedProfileImage]; // Convert to an array
-          const response = await fetch(`/api/media?keys=${encodeURIComponent(JSON.stringify(keysArray))}`);
-          const data = await response.json();
-          console.log(data)
-    
-          if (response.ok) {
-            setProfilePicture(data.urls[0]); // Assuming the data structure is { success: true, urls: [profilePictureUrl] }
-          } else {
-            console.error("Error fetching profile picture");
-          }
-        } catch (error) {
-          console.error("Error fetching profile picture:", error);
-        }
-      };
-    
-      useEffect(() => {
-        if (user?.userUpdatedProfileImage) {
-          fetchProfilePicture();
-        }
-      }, [user?.userUpdatedProfileImage]);
+      if (response.ok) {
+        setProfilePicture(data.urls[0]); // Assuming the data structure is { success: true, urls: [profilePictureUrl] }
+      } else {
+        console.error("Error fetching profile picture");
+      }
+    } catch (error) {
+      console.error("Error fetching profile picture:", error);
+    }
+  };
 
-    // routes to profile page
-    const handleProfileClick = () => {
-        if (user?._id === session?.user.id) return router.push("/profile");
+  useEffect(() => {
+    if (user?.userUpdatedProfileImage) {
+      fetchProfilePicture();
+    }
+  }, [user?.userUpdatedProfileImage]);
 
-        router.push(`/profile/${user?._id}`)
-    };
+  // routes to profile page
+  const handleProfileClick = () => {
+    if (user?._id === session?.user.id) return router.push("/profile");
 
-    return (
-        <div className = "user_card cursor-pointer" onClick={handleProfileClick} >
-            <div className="flex justify-between items-start gap-5">
-                <div className="flex-1 flex justify-start items-center gap-3">
-                    <Image 
-                        src= {profilePicture || user?.googleProfileImage}
-                        alt="user_image"
-                        width={40}
-                        height={40}
-                        className="rounded-full object-contain"
-                    />
+    router.push(`/profile/${user?._id}`);
+  };
 
-                    <div className="flex flex-col">
-                        <h3>{user?.firstName} {user?.lastName}</h3>
-                    </div>
-                </div>
+  return (
+    <div
+      className="cursor-pointer hover:-translate-y-1 transition-all"
+      onClick={handleProfileClick}
+    >
+      <Card maxW="xs">
+        <CardHeader>
+          <Flex gap="4">
+            <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
+              <Avatar
+                name={user?.firstName}
+                src={profilePicture || user?.googleProfileImage}
+              />
 
-            </div>
-        </div>
-    )
-
-
-
-
-
-}
-export default UserCard
+              <Box>
+                <Heading size="sm">
+                  {user?.firstName} {user?.lastName}
+                </Heading>
+                <Text>{user?.email}</Text>
+              </Box>
+            </Flex>
+          </Flex>
+        </CardHeader>
+      </Card>
+    </div>
+  );
+};
+export default UserCard;
