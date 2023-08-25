@@ -16,7 +16,7 @@ const RootLayout = ({ children }) => {
       <body >
         <Provider>
           <header className="sticky top-0 z-50">
-            <div className="w-screen">
+            <div className="w-full">
               <Nav />
             </div>
           </header>
