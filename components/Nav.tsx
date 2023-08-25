@@ -22,7 +22,7 @@ import {
   useColorModeValue,
   Stack,
 } from "@chakra-ui/react";
-import { EditIcon, PhoneIcon, MoonIcon }from "@chakra-ui/icons";
+import { EditIcon }from "@chakra-ui/icons";
 
 interface Props {
   children: React.ReactNode;
@@ -38,7 +38,6 @@ const Nav = (props: Props) => {
       px={2}
       py={1}
       rounded={"md"}
-      position="sticky"
       top={0}
       left={0}
       right={0}

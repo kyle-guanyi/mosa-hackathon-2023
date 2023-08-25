@@ -13,14 +13,14 @@ export const metadata = {
 const RootLayout = ({ children }) => {
   return (
     <html lang="en">
-      <body>
+      <body className="overflow-hidden">
         <Provider>
-          <header className="sticky top-0 z-50 flex justify-center items-center">
+          <header className="sticky top-0 z-50">
             <div className="w-screen">
               <Nav />
             </div>
           </header>
-          <main className="main flex-col">{children}</main>
+          <main className="main flex-col pt-16">{children}</main>
         </Provider>
       </body>
     </html>
