@@ -37,7 +37,7 @@ const LogIn = () => {
   }, [session]);
 
   return (
-    <div className="flex-center flex-col">
+    <div className="fixed inset-0 flex-center flex-col">
         <div>
           <section className="w-full flex-center ">
             <NextImage
@@ -61,7 +61,7 @@ const LogIn = () => {
                   onClick={() => signIn(provider.id)}
                   leftIcon={<Image src="https://gdm-catalog-fmapi-prod.imgix.net/ProductLogo/5179d6b3-aa3f-403b-8cb4-718850815472.png?auto=format,compress&size=50" alt="Image" boxSize={4} />}
                 >
-                  Login with UPenn Google
+                  Login with your UPenn Google Email
                 </Button>
               ))}
           </div>

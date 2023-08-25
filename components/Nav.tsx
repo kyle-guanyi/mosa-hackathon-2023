@@ -234,13 +234,15 @@ export default function WithAction() {
               >
                 <DrawerOverlay />
                 <DrawerContent className="overflow-hidden">
-                  <DrawerCloseButton />
+                  <DrawerCloseButton className="hover:opacity-50" />
                   <DrawerHeader>
-                    <Heading colorScheme="facebook">About Us</Heading>
+                    <Heading colorScheme="facebook">
+                      About Founding Friends
+                    </Heading>
                   </DrawerHeader>
 
                   <DrawerBody>
-                    <Text className="pb-6">
+                    <Text className="pb-4">
                       {" "}
                       Introducing a digital platform that facilitates in-person
                       gatherings, our student meet-up app empowers online
@@ -253,7 +255,9 @@ export default function WithAction() {
                       allowing individuals to revisit the fond memories of past
                       events.{" "}
                     </Text>
-                    <Heading className="pb-8" colorScheme="facebook">Founding Fathers</Heading>
+                    <Heading className="pb-4" colorScheme="facebook">
+                      Founding Fathers
+                    </Heading>
                     <Card
                       direction={{ base: "column", sm: "row" }}
                       overflow="hidden"
@@ -278,8 +282,9 @@ export default function WithAction() {
                             hackathon this summer, collaborating with fellow
                             innovators to create innovative solutions.
                           </Text>
-
+                          <div className="flex space-x-4">
                           <Button
+                            size="md"
                             isActive="true"
                             className="hover:opacity-80"
                             colorScheme="linkedin"
@@ -293,9 +298,11 @@ export default function WithAction() {
                           >
                             LinkedIn
                           </Button>
+
                           <Button
+                            size="md"
                             isActive="true"
-                            className="hover:opacity-80 ml-2"
+                            className="hover:opacity-80"
                             leftIcon={<FaGithub />}
                             onClick={() =>
                               window.open(
@@ -306,6 +313,7 @@ export default function WithAction() {
                           >
                             GitHub
                           </Button>
+                          </div>
                         </CardBody>
                       </Stack>
                     </Card>
@@ -336,8 +344,9 @@ export default function WithAction() {
                             the dynamic technology sector, nurturing his thirst
                             for knowledge and innovation.
                           </Text>
-
+                          <div className="flex space-x-4">
                           <Button
+                            size="md"
                             isActive="true"
                             className="hover:opacity-80"
                             colorScheme="linkedin"
@@ -352,8 +361,9 @@ export default function WithAction() {
                             LinkedIn
                           </Button>
                           <Button
+                            size="md"
                             isActive="true"
-                            className="hover:opacity-80 ml-2"
+                            className="hover:opacity-80"
                             leftIcon={<FaGithub />}
                             onClick={() =>
                               window.open(
@@ -364,6 +374,7 @@ export default function WithAction() {
                           >
                             GitHub
                           </Button>
+                          </div>
                         </CardBody>
                       </Stack>
                     </Card>
@@ -390,8 +401,9 @@ export default function WithAction() {
                             develop groundbreaking solutions to address real
                             world challenges.
                           </Text>
-
+                          <div className="flex space-x-4">
                           <Button
+                            size="md"
                             isActive="true"
                             className="hover:opacity-80"
                             colorScheme="linkedin"
@@ -406,8 +418,9 @@ export default function WithAction() {
                             LinkedIn
                           </Button>
                           <Button
+                            size="md"
                             isActive="true"
-                            className="hover:opacity-80 ml-2"
+                            className="hover:opacity-80"
                             leftIcon={<FaGithub />}
                             onClick={() =>
                               window.open(
@@ -418,6 +431,7 @@ export default function WithAction() {
                           >
                             GitHub
                           </Button>
+                          </div>
                         </CardBody>
                       </Stack>
                     </Card>

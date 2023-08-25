@@ -13,7 +13,7 @@ export const metadata = {
 const RootLayout = ({ children }) => {
   return (
     <html lang="en">
-      <body >
+      <body className="100vh v-full">
         <Provider>
           <header className="sticky top-0 z-50">
             <div className="w-full">
