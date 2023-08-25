@@ -2,7 +2,8 @@ import React from "react";
 import UserCard from "./UserCard";
 import MessageBoard from "/components/messageboard/MessageBoard";
 import { FiClock } from "react-icons/Fi";
-import { CiLocationOn } from "react-icons/Ci";
+import { TbLocation } from "react-icons/Tb";
+import { InfoOutlineIcon } from "@chakra-ui/icons";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import NextImage from "next/image";
@@ -23,6 +24,7 @@ import {
   Divider,
   Center,
   Collapse,
+  Box,
 } from "@chakra-ui/react";
 
 const EventPage = ({
@@ -38,6 +40,8 @@ const EventPage = ({
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = React.useRef();
+
+  const { isOpen: isZoomOpen, onToggle } = useDisclosure();
 
   const startDate = new Date(eventDetails.startDate).toLocaleDateString(
     "en-US",
@@ -101,7 +105,7 @@ const EventPage = ({
     <div className="h-full w-full bg-red-500 flex">
       <div className="w-1/6 bg-blue-500 p-4">
         <div className="w-full h-full bg-yellow-500">
-          <Heading as="h2" size="md" className="pb-4 pt-4">
+          <Heading as="h2" size="md" className="pb-4">
             Attending:
           </Heading>
           <div className="flex-col">
@@ -112,9 +116,9 @@ const EventPage = ({
           </div>
         </div>
       </div>
-      <Center height="100%">
+      
         <Divider orientation="vertical" />
-      </Center>
+      
       <div className="w-3/5 bg-green-700 flex-grow pl-4 pr-4">
         <div className="w-full h-1/10 bg-green-500 font-satoshi">
           {eventDetails?.eventImage ? (
@@ -242,90 +246,119 @@ const EventPage = ({
           <Divider />
 
           <div>
-          
-          </div>          
-
-
-
-
-
-          <div className="flex-row flex justify-between">
-            <div className="flex-col justify-start">
-              <div className="pt-10">
-                <Heading as="h3" size="md">
-                  Event Details:
-                </Heading>
+            <div className="flex-row flex">
+              <div className="w-3/5 bg-red-500">
+                <div className="flex-col ">
+                  <div className="pt-2">
+                    <Heading as="h3" size="md">
+                      Event Details:
+                    </Heading>
+                  </div>
+                  <div className="mr-20">
+                    <Collapse
+                      startingHeight={100}
+                      in={show}
+                      className="mx-auto text-justify"
+                    >
+                      {eventDetails.eventDescription}
+                    </Collapse>
+                    <Button
+                      size="sm"
+                      isActive={true}
+                      className="hover:opacity-80"
+                      onClick={handleToggle}
+                      mt="1rem"
+                    >
+                      Show {show ? "Less" : "More"}
+                    </Button>
+                  </div>
+                  <div>
+                    {eventDetails?.zoomLink && (
+                      <div className="pt-4 pb-2">
+                        <Button
+                          size="sm"
+                          isActive={true}
+                          className="hover:opacity-80"
+                          mt="1rem"
+                          onClick={onToggle}
+                        >
+                          Zoom Link
+                        </Button>
+                        <Collapse in={isZoomOpen} animateOpacity>
+                          <Box
+                            p="40px"
+                            color="white"
+                            mt="4"
+                            bg="facebook.700"
+                            rounded="md"
+                            shadow="md"
+                          >
+                            {eventDetails.zoomLink}
+                          </Box>
+                        </Collapse>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
-              <div className="mr-20">
-                <Collapse
-                  startingHeight={20}
-                  in={show}
-                  className="mx-auto text-justify"
-                >
-                  {eventDetails.eventDescription}
-                </Collapse>
-                <Button
-                  size="sm"
-                  isActive={true}
-                  className="hover:opacity-80"
-                  onClick={handleToggle}
-                  mt="1rem"
-                >
-                  Show {show ? "Less" : "More"}
-                </Button>
-              </div>
-              <div className="pt-5 text-blue-900">
-                <Heading as="h3" size="md">
-                  <a href="{eventDetails.zoomLink}">Zoom Link</a>
-                </Heading>
-              </div>
 
+              <div className="flex-col w-2/5">
+                <div className="pt-2">
+                  <div className="flex-row flex items-center pb-2">
+                    <span className="bannerIcon">
+                      <FiClock />
+                    </span>
+                    <div className="ml-4">
+                      {startDate} at {eventDetails.startTime}{" "}
+                      {eventDetails.timeZone}
+                    </div>
+                  </div>
+                  <div className="flex-row flex items-center pb-2">
+                    <span className="bannerIcon">
+                      <InfoOutlineIcon/>
+                    </span>
+                    <div className="ml-4">
+                    <p>
+                      Event Date:{" "}
+                      {userEventDateTime?.toFormat("cccc, LLLL d, yyyy")}
+                    </p>
+                    <p>Start Time: {userEventDateTime?.toFormat("hh:mm a")}</p>
+                    </div>
+                    
+                  </div>
 
-
-
-              <div className="pt-4 mr-20 bg-slate-400">
-                <MessageBoard
-                  eventDetails={eventDetails}
-                  addImagesToEvent={addImagesToEvent}
-                />
+                  <div className="flex-row flex items-center pb-2">
+                    <span className="bannerIcon">
+                      <TbLocation />
+                    </span>
+                    <div className="ml-4">
+                      <div>{eventDetails.location || "Virtual Event"}</div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-
-            <div className="flex-col w-1/3 flex">
-              <div className="flex-row flex items-center">
-                <span className="bannerIcon">
-                  <FiClock />
-                </span>
-                <div className="ml-4">
-                  {startDate} at {eventDetails.startTime}{" "}
-                  {eventDetails.timeZone}
-                </div>
-              </div>
-              <div>
-                <p>
-                  Event Date:{" "}
-                  {userEventDateTime?.toFormat("cccc, LLLL d, yyyy")}
-                </p>
-                <p>Start Time: {userEventDateTime?.toFormat("hh:mm a")}</p>
-              </div>
-
-              <div className="flex-row flex items-center">
-                <span className="bannerIcon">
-                  <CiLocationOn />
-                </span>
-                <div className="ml-4">
-                  <div>{eventDetails.location || "Virtual Event"}</div>
-                </div>
-              </div>
+            <Divider />
+            <div className="pt-4 mr-20 bg-slate-400">
+              <MessageBoard
+                eventDetails={eventDetails}
+                addImagesToEvent={addImagesToEvent}
+              />
             </div>
           </div>
         </div>
       </div>
-      <Center height="100%">
+      
         <Divider orientation="vertical" />
-      </Center>
+      
       <div className="w-1/5 bg-purple-700 hidden md:block p-4">
-        <Heading as="h3" size="md">Photo Timeline</Heading> <PhotoTimeline event={eventDetails} />
+        <div className="pb-4">
+          <Heading as="h3" size="md">
+            Photo Timeline
+          </Heading>{" "}
+        </div>
+
+        <PhotoTimeline event={eventDetails} />
       </div>
     </div>
   );
