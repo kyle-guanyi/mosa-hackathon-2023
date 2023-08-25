@@ -77,8 +77,9 @@ const ClosestCity = [
 ];
 
 const Gender = [
-  { value: "Male", label: "Male" },
-  { value: "Female", label: "Female" },
+  { value: "He/Him/His", label: "He/Him/His" },
+  { value: "She/Her/Hers", label: "She/Her/Hers" },
+  { value: "Decline to Answer", label: "They/Them/Theirs" },
   { value: "Decline to Answer", label: "Decline to Answer" },
 ];
 

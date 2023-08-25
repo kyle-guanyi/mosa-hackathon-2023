@@ -7,6 +7,7 @@ import Feed from "../../components/search/Feed";
 import PastEventsFeed from "@/components/pasteventsfeed/PastEventsFeed";
 import { Divider, Center } from "@chakra-ui/react";
 import { useState } from "react";
+import { Heading } from "@chakra-ui/react";
 
 const Home = () => {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -27,25 +28,28 @@ const Home = () => {
   };
 
   return (
-    <div className="h-screen w-full flex">
+    <div className="h-full w-full flex">
       <div className="w-1/5 ">
-        <div className="w-full h-1/2">
+        <div className="w-full h-flex pb-8">
           <Calendar handleDate={handleDate} />
         </div>
         <div className=" w-full h-1/2">
+          <Divider/>
+          <Heading className="pt-4">Your Events:</Heading>
+          
           <AttendingFeed />
         </div>
       </div>
-      <Center height="100vh">
+      <Center className="v-full">
         <Divider orientation="vertical" borderWidth="2px" />
       </Center>
-      <div className="w-3/5  flex-grow">
-        <div className="w-full h-1/10 "></div>
-        <div className=" w-full h-5/6 ">
+      <div className="w-3/5">
+        
+        <div className=" w-full v-full ">
           <EventFeed selectedDate={selectedDate} />
         </div>
       </div>
-      <Center height="100vh">
+      <Center className="v-full">
         <Divider orientation="vertical" borderWidth="2px" />
       </Center>
       <div className="w-1/5 hidden md:block ">

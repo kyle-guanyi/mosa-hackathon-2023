@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import {
   Avatar,
+  Collapse,
   Image,
   Heading,
   Text,
@@ -46,15 +47,18 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
-import { AddIcon } from "@chakra-ui/icons";
+import { EditIcon } from "@chakra-ui/icons";
 
-import ProfileForm from "/components/ProfileForm"
+import ProfileForm from "/components/ProfileForm";
 
 const ProfilePage = ({ profileDetails, handleEdit }) => {
   const [profilePicture, setProfilePicture] = useState("");
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const firstField = React.useRef();
+
+  const [show, setShow] = React.useState(false);
+  const handleToggle = () => setShow(!show);
 
   const fetchProfilePicture = async () => {
     try {
@@ -95,7 +99,7 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
     fieldOfInterest: [],
     userUpdatedProfileImage: "",
   });
-  
+
   const [submitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -155,7 +159,7 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
     setIsSubmitting(true);
 
     if (!session?.user.id) return alert("Missing User Id!");
-    console.log(newProfileImage)
+    console.log(newProfileImage);
     try {
       const response = await fetch(`/api/user/${session?.user.id}?type=pic`, {
         method: "PATCH",
@@ -163,7 +167,6 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
           userUpdatedProfileImage: newProfileImage,
         }),
       });
-
     } catch (error) {
       console.log(error);
     } finally {
@@ -173,7 +176,7 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
 
   const handleKeysArray = async (keysArray) => {
     updateUserProfilePic(keysArray[0]);
-  }
+  };
 
   const [updatedUser, setUpdatedUser] = useState(null);
 
@@ -230,11 +233,16 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
             <div className="pt-4 flex">
               <h3 className="mx-auto">{profileDetails?.email}</h3>
             </div>
+            <div className="pt-1 flex">
+            {profileDetails && profileDetails.gender !== "Decline to Answer" && (
+    <h3 className="mx-auto"><em>({profileDetails.gender})</em></h3>
+  )}
+            </div>
             <div className="pt-4 flex">
               {session?.user.id === profileDetails?._id && (
                 <>
                   <Button
-                    leftIcon={<AddIcon />}
+                    leftIcon={<EditIcon />}
                     colorScheme="facebook"
                     isActive="true"
                     className="hover:opacity-80 mx-auto"
@@ -270,19 +278,17 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
                       </DrawerBody>
                       {/* You can customize the footer buttons as needed */}
                       <DrawerFooter borderTopWidth="1px">
-                        <Button
-                          variant="outline"
-                          mr={3}
-                          onClick={onClose}
-                        >
+                        <Button variant="outline" mr={3} onClick={onClose}>
                           Cancel
                         </Button>
                         <Button
                           colorScheme="facebook"
                           isActive="true"
                           className="hover:opacity-80"
-                          onClick={() => {updateUser(updatedUser);
-                          onClose();}}
+                          onClick={() => {
+                            updateUser(updatedUser);
+                            onClose();
+                          }}
                         >
                           Submit
                         </Button>
@@ -294,8 +300,20 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
             </div>
           </CardHeader>
           <Divider />
-          <div className="pt-4 pb-4 flex">
-            <Text className="mx-auto text-justify">{profileDetails?.bio}</Text>
+          <div className="pt-4 pb-4">
+            <Collapse
+              startingHeight={100}
+              in={show}
+              className="mx-auto text-justify"
+            >
+              {profileDetails?.bio}
+            </Collapse>
+            <Button size="sm" 
+                          isActive="true"
+                          className="hover:opacity-80" onClick={handleToggle} mt="1rem">
+              Show {show ? "Less" : "More"}
+            </Button>
+            <Text></Text>
           </div>
           <Divider />
           <div className="pt-4 pb-4 w-full">

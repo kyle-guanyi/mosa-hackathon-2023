@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import ReactCalendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
+import { Button } from "@chakra-ui/react";
 
 import Event from "../models/Event";
 
@@ -101,9 +102,10 @@ const Calendar = ( { handleDate }) => {
       }}
         value={value} 
         tileContent={({ date }) => renderEventDot(date)}/>
-      <button onClick={resetCalendar} className="blue_btn">
+      <Button onClick={resetCalendar} className="hover:opacity-80" colorScheme="facebook"
+                          isActive="true" >
         Reset Calendar
-      </button>
+      </Button>
     </div>
   );
 };

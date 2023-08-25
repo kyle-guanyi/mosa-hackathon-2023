@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import EventCard from "../eventfeed/EventCard";
 
+
 const EventCardList = ({ data }) => {
   return (
     <div className="flex-col">

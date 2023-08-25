@@ -218,10 +218,10 @@ export default function FileUpload({
       </div>
 
       {/* Preview */}
-      <section className="mt-10">
-        <div className="flex items-center justify-between">
-          <h2 className="title text-3xl font-semibold">Preview Files</h2>
-          <div className="flex gap-4">
+      <section className="mt-5">
+        <div className="flex items-center justify-center">
+  
+          <div className="flex gap-24 ">
           <>
           <Button
                       colorScheme="red"
@@ -285,7 +285,7 @@ export default function FileUpload({
     {initialPictures?.length > 0 && (
       <div>
         <h3 className="title text-lg font-semibold text-neutral-600 mb-3">
-          Initial Files
+          Currently Uploaded File(s)
         </h3>
         <ul className="grid grid-cols-1 gap-4">
           {initialPictures?.map((file, index) => (
@@ -342,10 +342,10 @@ export default function FileUpload({
   </div>
 
         {/* Rejected Files */}
-        <h3 className="title text-lg font-semibold text-neutral-600 mt-24 border-b pb-3">
+        <h3 className="title text-lg font-semibold text-neutral-600 mt-12 border-b pb-3">
           Rejected Files
         </h3>
-        <ul className="mt-6 flex flex-col">
+        <ul className="mt-3 flex flex-col">
           {rejected.map(({ file, errors }) => (
             <li key={file.name} className="flex items-start justify-between">
               <div>

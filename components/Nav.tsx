@@ -151,7 +151,7 @@ export default function WithAction() {
                 colorScheme="facebook"
                 isActive={true}
                 className="hover:opacity-80"
-                size={"sm"}
+                size={"md"}
                 mr={4}
                 leftIcon={<EditIcon />}
               >
@@ -219,7 +219,6 @@ export default function WithAction() {
               <Button
                 ref={btnRef}
                 colorScheme="facebook"
-                mr="8"
                 isActive="true"
                 className="hover:opacity-80 mx-auto"
                 onClick={onOpen}
