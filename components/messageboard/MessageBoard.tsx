@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Message from "./Message";
 import MessageForm from "./MessageForm";
 import { useSession } from "next-auth/react";
+import { Heading } from "@chakra-ui/react";
 
 const MessageBoard = ({ eventDetails, addImagesToEvent }) => {
   const [eventMessages, setEventMessages] = useState([]);
@@ -104,7 +105,7 @@ const MessageBoard = ({ eventDetails, addImagesToEvent }) => {
   
   return (
     <div>
-      <div> MessageBoard </div>
+      <div> <Heading as='h3' size='md'>MessageBoard</Heading> </div>
       <MessageForm 
         message={message}
         setMessage={setMessage}
