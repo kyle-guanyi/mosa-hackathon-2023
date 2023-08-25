@@ -13,7 +13,7 @@ export const metadata = {
 const RootLayout = ({ children }) => {
   return (
     <html lang="en">
-      <body className="overflow-hidden">
+      <body>
         <Provider>
           <header className="sticky top-0 z-50">
             <div className="w-screen">
