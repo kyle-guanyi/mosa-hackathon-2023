@@ -269,13 +269,13 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
               {session?.user.id === profileDetails?._id && (
                 <>
                   <Button
-                    leftIcon={<EditIcon />}
+                    rightIcon={<EditIcon />}
                     colorScheme="facebook"
                     isActive="true"
                     className="hover:opacity-80 mx-auto"
                     onClick={onOpen}
                   >
-                    Edit My Profile
+                    Edit Profile
                   </Button>
                   <Drawer
                     isOpen={isOpen}

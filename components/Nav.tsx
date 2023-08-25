@@ -50,6 +50,7 @@ import {
 } from "@chakra-ui/react";
 import { EditIcon, HamburgerIcon } from "@chakra-ui/icons";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
+import { IoHomeOutline } from "react-icons/io5"; 
 
 interface Props {
   children: React.ReactNode;
@@ -80,17 +81,18 @@ const Nav = (props: Props) => {
 
 export default function WithAction() {
   const { data: session } = useSession();
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen: isCreateEventOpen, onOpen: onCreateEventOpen, onClose: onCreateEventClose } = useDisclosure();
+  const { isOpen: isAboutOpen, onOpen: onAboutOpen, onClose: onAboutClose } = useDisclosure();
   const btnRef = React.useRef();
   const router = useRouter();
   const pathname = usePathname();
-  const [home, setHome] = useState(false)
+  const [home, setHome] = useState(false);
 
   useEffect(() => {
     if (pathname === "/home") {
       setHome(true);
     }
-  }, []); 
+  }, []);
   // const [user, setUser] = useState({
   //   googleProfileImage: "",
   //   userUpdatedProfileImage: "",
@@ -253,8 +255,8 @@ export default function WithAction() {
             isClosable: true,
           });
 
-          onClose();
-          if(home) {
+          onCreateEventClose();
+          if (home) {
             location.reload();
           }
         }
@@ -297,6 +299,20 @@ export default function WithAction() {
               ></HStack>
             </HStack>
             <Flex alignItems={"center"}>
+            {!home && <Button
+                variant={"solid"}
+                colorScheme="facebook"
+                isActive={true}
+                className="hover:opacity-80"
+                size={"md"}
+                mr={4}
+                onClick={()=>{
+                  router.push("/home");
+                }}
+                rightIcon={<IoHomeOutline />}
+              >
+                Home
+              </Button>}
               <Button
                 variant={"solid"}
                 colorScheme="facebook"
@@ -304,15 +320,15 @@ export default function WithAction() {
                 className="hover:opacity-80"
                 size={"md"}
                 mr={4}
-                onClick={onOpen}
-                leftIcon={<EditIcon />}
+                onClick={onCreateEventOpen}
+                rightIcon={<EditIcon />}
               >
                 Create Event
               </Button>
               <Modal
-                isOpen={isOpen}
+                isOpen={isCreateEventOpen}
                 size="2xl"
-                onClose={onClose}
+                onClose={onCreateEventClose}
                 closeOnOverlayClick={false}
               >
                 <ModalOverlay />
@@ -333,7 +349,7 @@ export default function WithAction() {
                   </ModalBody>
 
                   <ModalFooter>
-                    <Button variant="outline" mr={3} onClick={onClose}>
+                    <Button variant="outline" mr={3} onClick={onCreateEventClose}>
                       Cancel
                     </Button>
                     {submitting ? (
@@ -363,10 +379,11 @@ export default function WithAction() {
               <Menu>
                 <MenuButton
                   as={IconButton}
-                  size="lg"
+                  size="md"
                   aria-label="Options"
                   icon={<HamburgerIcon />}
                   variant="outline"
+                  colorScheme="facebook"
                   className="hover:bg-gray-200"
                 ></MenuButton>
                 <MenuList>
@@ -375,6 +392,229 @@ export default function WithAction() {
                       My Profile
                     </MenuItem>
                   </a>
+                  <MenuDivider />
+                  <MenuItem
+                    className="hover:bg-gray-200"
+                    onClick={onAboutOpen}
+                  >
+                    About
+                  </MenuItem>
+
+                  <Drawer
+                    isOpen={isAboutOpen}
+                    placement="right"
+                    onClose={onAboutClose}
+                    size="xl"
+                    finalFocusRef={btnRef}
+                  >
+                    <DrawerOverlay />
+                    <DrawerContent className="overflow-hidden">
+                      <DrawerCloseButton className="hover:opacity-50" />
+                      <DrawerHeader>
+                        <Heading colorScheme="facebook">
+                          About Founding Friends
+                        </Heading>
+                      </DrawerHeader>
+
+                      <DrawerBody>
+                        <Text className="pb-4">
+                          {" "}
+                          Introducing a digital platform that facilitates
+                          in-person gatherings, our student meet-up app empowers
+                          online students to design and join a range of events.
+                          Users can provide an outline for each gathering,
+                          detailing its purpose, location, and schedule, as well
+                          as initiate conversations about the agenda, share
+                          photos, and engage in related dialogues. Following the
+                          conclusion of each meetup, the details will be
+                          preserved in an archive, allowing individuals to
+                          revisit the fond memories of past events.{" "}
+                        </Text>
+                        <Heading className="pb-4" colorScheme="facebook">
+                          Founding Fathers
+                        </Heading>
+                        <Card
+                          direction={{ base: "column", sm: "row" }}
+                          overflow="hidden"
+                          variant="outline"
+                        >
+                          <Image
+                            objectFit="cover"
+                            src="https://media.licdn.com/dms/image/C4E03AQF40mBwJbL_ZQ/profile-displayphoto-shrink_800_800/0/1611695156693?e=1698278400&v=beta&t=iLM9cbJNz2324I8_YjyV3ifv0EZ0hEJeMhfgOnMpgjg"
+                            alt="Bonnie"
+                            maxW={{ base: "100%", sm: "200px" }}
+                          />
+                          <Stack>
+                            <CardBody>
+                              <Heading size="md">Bonnie Tse</Heading>
+
+                              <Text py="2">
+                                Bonnie is an online MCIT student as part of the
+                                Spring 2021 cohort. While pursuing this degree,
+                                Bonnie recently started working as a full-stack
+                                software engineer and is actively involved in
+                                the tech community as she participates in the
+                                MOSA hackathon this summer, collaborating with
+                                fellow innovators to create innovative
+                                solutions.
+                              </Text>
+                              <div className="flex space-x-4">
+                                <Button
+                                  size="md"
+                                  isActive="true"
+                                  className="hover:opacity-80"
+                                  colorScheme="linkedin"
+                                  leftIcon={<FaLinkedin />}
+                                  onClick={() =>
+                                    window.open(
+                                      "https://www.linkedin.com/in/bonnietse/",
+                                      "_blank"
+                                    )
+                                  }
+                                >
+                                  LinkedIn
+                                </Button>
+
+                                <Button
+                                  size="md"
+                                  isActive="true"
+                                  className="hover:opacity-80"
+                                  leftIcon={<FaGithub />}
+                                  onClick={() =>
+                                    window.open(
+                                      "https://github.com/bonniewt",
+                                      "_blank"
+                                    )
+                                  }
+                                >
+                                  GitHub
+                                </Button>
+                              </div>
+                            </CardBody>
+                          </Stack>
+                        </Card>
+                        <Card
+                          direction={{ base: "column", sm: "row" }}
+                          overflow="hidden"
+                          variant="outline"
+                        >
+                          <Image
+                            objectFit="cover"
+                            src="https://media.licdn.com/dms/image/D5603AQGfqevGzPNkrw/profile-displayphoto-shrink_800_800/0/1689120976379?e=1698278400&v=beta&t=qB9fqVtuKoa_V_vzpJPmlh-Geca1TApeusmG9Dg-DFI"
+                            alt="Kevin"
+                            maxW={{ base: "100%", sm: "200px" }}
+                          />
+                          <Stack>
+                            <CardBody>
+                              <Heading size="md">Kevin Nguyen</Heading>
+
+                              <Text py="2">
+                                Kevin enrolled in the Fall 2022 cohort of the
+                                MCIT program. While starting as a medical scribe
+                                with aspirations of attending medical school,
+                                his interest shifted due to the conservative
+                                nature of medicine and its sluggish adoption of
+                                modern technology. This led him to discover a
+                                passion for computer science. Through the UPenn
+                                MCIT program, he aims to leverage his newfound
+                                interest to navigate the dynamic technology
+                                sector, nurturing his thirst for knowledge and
+                                innovation.
+                              </Text>
+                              <div className="flex space-x-4">
+                                <Button
+                                  size="md"
+                                  isActive="true"
+                                  className="hover:opacity-80"
+                                  colorScheme="linkedin"
+                                  leftIcon={<FaLinkedin />}
+                                  onClick={() =>
+                                    window.open(
+                                      "https://www.linkedin.com/in/kebin-linked/",
+                                      "_blank"
+                                    )
+                                  }
+                                >
+                                  LinkedIn
+                                </Button>
+                                <Button
+                                  size="md"
+                                  isActive="true"
+                                  className="hover:opacity-80"
+                                  leftIcon={<FaGithub />}
+                                  onClick={() =>
+                                    window.open(
+                                      "https://github.com/kebinjpeg",
+                                      "_blank"
+                                    )
+                                  }
+                                >
+                                  GitHub
+                                </Button>
+                              </div>
+                            </CardBody>
+                          </Stack>
+                        </Card>
+                        <Card
+                          direction={{ base: "column", sm: "row" }}
+                          overflow="hidden"
+                          variant="outline"
+                        >
+                          <Image
+                            objectFit="cover"
+                            src="https://media.licdn.com/dms/image/C5603AQG19HBs2XI6uA/profile-displayphoto-shrink_800_800/0/1641970539103?e=1698278400&v=beta&t=mGW6wjJTFjYyYwZeE_ZW2CS7un1qWz-8UCA6dIbmCIM"
+                            alt="Kyle"
+                            maxW={{ base: "100%", sm: "200px" }}
+                          />
+                          <Stack>
+                            <CardBody>
+                              <Heading size="md">Kyle Li</Heading>
+
+                              <Text py="2">
+                                A former medical office manager and now a full
+                                stack software engineer, Kyle is part of MCIT
+                                online’s Fall 2022 cohort. He brings a unique
+                                blend of experiences to the field of technology,
+                                working to develop groundbreaking solutions to
+                                address real world challenges.
+                              </Text>
+                              <div className="flex space-x-4">
+                                <Button
+                                  size="md"
+                                  isActive="true"
+                                  className="hover:opacity-80"
+                                  colorScheme="linkedin"
+                                  leftIcon={<FaLinkedin />}
+                                  onClick={() =>
+                                    window.open(
+                                      "https://www.linkedin.com/in/kyleguanyili/",
+                                      "_blank"
+                                    )
+                                  }
+                                >
+                                  LinkedIn
+                                </Button>
+                                <Button
+                                  size="md"
+                                  isActive="true"
+                                  className="hover:opacity-80"
+                                  leftIcon={<FaGithub />}
+                                  onClick={() =>
+                                    window.open(
+                                      "https://github.com/kyle-guanyi",
+                                      "_blank"
+                                    )
+                                  }
+                                >
+                                  GitHub
+                                </Button>
+                              </div>
+                            </CardBody>
+                          </Stack>
+                        </Card>
+                      </DrawerBody>
+                    </DrawerContent>
+                  </Drawer>
                   <MenuDivider />
                   <MenuItem
                     className="hover:bg-gray-200 text-red-600"
@@ -412,14 +652,14 @@ export default function WithAction() {
                 colorScheme="facebook"
                 isActive="true"
                 className="hover:opacity-80 mx-auto"
-                onClick={onOpen}
+                onClick={onAboutOpen}
               >
                 About Us
               </Button>
               <Drawer
-                isOpen={isOpen}
+                isOpen={isAboutOpen}
                 placement="right"
-                onClose={onClose}
+                onClose={onAboutClose}
                 size="xl"
                 finalFocusRef={btnRef}
               >
