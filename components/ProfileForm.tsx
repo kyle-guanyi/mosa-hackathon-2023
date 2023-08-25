@@ -1,35 +1,15 @@
 import Link from "next/link";
 import Select from "react-select";
 import Dropzone from "components/Dropzone";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 
 import {
-  Avatar,
-  Image,
-  Heading,
-  Text,
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Flex,
-  Button,
-  Divider,
-  Drawer,
-  DrawerBody,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
   Stack,
   Box,
   FormLabel,
   Input,
-  InputGroup,
-  InputLeftAddon,
-  InputRightAddon,
   Textarea,
+  FormControl
 } from "@chakra-ui/react";
 
 const ClosestCity = [
@@ -323,6 +303,7 @@ const ProfileForm = ({
   return (
     <Stack spacing="24px">
       <Box>
+        <FormControl isRequired>
         <FormLabel htmlFor="firstName">First Name</FormLabel>
         <Input
           ref={firstField}
@@ -331,9 +312,11 @@ const ProfileForm = ({
           placeholder="Update your first name here..."
           required
         />
+        </FormControl>
       </Box>
 
       <Box>
+      <FormControl isRequired>
         <FormLabel htmlFor="lastName">Last Name</FormLabel>
         <Input
           value={user.lastName}
@@ -341,6 +324,7 @@ const ProfileForm = ({
           placeholder="Update your last name here..."
           required
         />
+        </FormControl>
       </Box>
 
       <Box id="closestCity">

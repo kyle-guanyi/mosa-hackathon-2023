@@ -19,7 +19,7 @@ import {
   DrawerOverlay,
   DrawerContent,
   DrawerCloseButton,
-  useToast
+  useToast,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import {
@@ -111,13 +111,31 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
 
     if (session?.user.id) getUserDetails();
   }, [session?.user.id]);
-  
+
   const toast = useToast();
+
+  const validateFields = () => {
+    if (!user.firstName || !user.lastName) {
+      return false;
+    }
+    return true;
+  };
 
   const updateUser = async (updatedUser) => {
     setIsSubmitting(true);
 
     if (!session?.user.id) return alert("Missing User Id!");
+
+    if (!validateFields()) {
+      toast({
+        title: "Please fill out all required fields before submitting",
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+      });
+      setIsSubmitting(false);
+      return;
+    }
 
     try {
       const response = await fetch(`/api/user/${session?.user.id}`, {
@@ -137,11 +155,12 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
       if (response.ok) {
         handleEdit();
         toast({
-          title: 'Profile successfully updated',
-          status: 'success',
+          title: "Profile successfully updated",
+          status: "success",
           duration: 5000,
           isClosable: true,
-        })
+        });
+        onClose();
       }
     } catch (error) {
       console.log(error);
@@ -165,12 +184,12 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
       if (response.ok) {
         handleEdit();
         toast({
-          title: 'Profile picture sucessfully updated',
+          title: "Profile picture sucessfully updated",
           description: "You look great!",
-          status: 'success',
+          status: "success",
           duration: 6000,
           isClosable: true,
-        })
+        });
       }
     } catch (error) {
       console.log(error);
@@ -289,17 +308,27 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
                         <Button variant="outline" mr={3} onClick={onClose}>
                           Cancel
                         </Button>
-                        <Button
-                          colorScheme="facebook"
-                          isActive="true"
-                          className="hover:opacity-80"
-                          onClick={() => {
-                            updateUser(updatedUser);
-                            onClose();
-                          }}
-                        >
-                          Submit
-                        </Button>
+                        {submitting ? (
+                          <Button
+                            colorScheme="facebook"
+                            isLoading
+                            loadingText="Submitting..."
+                            isActive={true}
+                          >
+                            Submit
+                          </Button>
+                        ) : (
+                          <Button
+                            colorScheme="facebook"
+                            isActive={true}
+                            className="hover:opacity-80"
+                            onClick={() => {
+                              updateUser(updatedUser);
+                            }}
+                          >
+                            Submit
+                          </Button>
+                        )}
                       </DrawerFooter>
                     </DrawerContent>
                   </Drawer>

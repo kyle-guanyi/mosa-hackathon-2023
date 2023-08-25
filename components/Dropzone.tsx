@@ -61,6 +61,7 @@ export default function FileUpload({
 }) {
   const [files, setFiles] = useState<any>([]);
   const [rejected, setRejected] = useState<any>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onDrop = useCallback(
     (acceptedFiles, rejectedFiles) => {
@@ -148,6 +149,7 @@ export default function FileUpload({
     }
 
     try {
+      setIsSubmitting(true);
       const formData = new FormData();
       files.forEach((file) => {
         formData.append("file", file);
@@ -163,12 +165,16 @@ export default function FileUpload({
 
       console.log(data.keysArray);
       handleKeysArray(data.keysArray);
-      updateInitialFiles(data.keysArray);
+      if (updateInitialFiles) {
+        updateInitialFiles(data.keysArray);
+      }
 
       setFiles([]);
       onReplaceClose();
     } catch (err) {
       console.log(err);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -209,8 +215,16 @@ export default function FileUpload({
     }
   }, [initialFiles]);
 
-  const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure();
-  const { isOpen: isReplaceOpen, onOpen: onReplaceOpen, onClose: onReplaceClose } = useDisclosure();
+  const {
+    isOpen: isDeleteOpen,
+    onOpen: onDeleteOpen,
+    onClose: onDeleteClose,
+  } = useDisclosure();
+  const {
+    isOpen: isReplaceOpen,
+    onOpen: onReplaceOpen,
+    onClose: onReplaceClose,
+  } = useDisclosure();
   const cancelRef = React.useRef();
 
   return (
@@ -284,16 +298,26 @@ export default function FileUpload({
               </AlertDialog>
             </>
             {initialFiles?.length === 0 ? (
-              <Button
-                colorScheme="facebook"
-                variant={"solid"}
-                isActive={true}
-                className="hover:opacity-80"
-                ml={3}
-                type="submit"
-              >
-                Submit uploaded image(s)
-              </Button>
+              isSubmitting ? (
+                <Button
+                  colorScheme="facebook"
+                  isLoading
+                  loadingText="Uploading Image(s)..."
+                  className="ml-3"
+                  isActive={true}
+                >
+                  Submit
+                </Button>
+              ) : (
+                <Button
+                  colorScheme="facebook"
+                  isActive={true}
+                  className="hover:opacity-80 ml-3"
+                  type="submit"
+                >
+                  Submit
+                </Button>
+              )
             ) : (
               <>
                 <Button
@@ -329,16 +353,25 @@ export default function FileUpload({
                       <Button ref={cancelRef} onClick={onReplaceClose}>
                         No
                       </Button>
-                      <Button
-                        colorScheme="red"
-                        variant={"solid"}
-                        isActive={true}
-                        className="hover:opacity-80"
-                        ml={3}
-                        onClick={handleSubmit}
-                      >
-                        Yes
-                      </Button>
+                      {isSubmitting ? (
+                        <Button
+                          colorScheme="facebook"
+                          isLoading
+                          loadingText="Replacing image(s)..."
+                          isActive={true}
+                        >
+                          Submit
+                        </Button>
+                      ) : (
+                        <Button
+                          colorScheme="facebook"
+                          isActive={true}
+                          className="hover:opacity-80 ml-3"
+                          onClick={handleSubmit}
+                        >
+                          Submit
+                        </Button>
+                      )}
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>

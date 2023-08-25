@@ -4,6 +4,8 @@ import Link from "next/link";
 import NextImage from "next/image";
 import { useSession, signOut } from "next-auth/react";
 import React, { useEffect, useState } from "react";
+import EventForm from "/components/EventForm";
+import { useRouter, usePathname } from "next/navigation";
 
 import {
   Box,
@@ -27,6 +29,15 @@ import {
   CardFooter,
   Heading,
   Image,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useToast,
+  Spinner,
 } from "@chakra-ui/react";
 import {
   Drawer,
@@ -37,14 +48,12 @@ import {
   DrawerContent,
   DrawerCloseButton,
 } from "@chakra-ui/react";
-import { EditIcon } from "@chakra-ui/icons";
+import { EditIcon, HamburgerIcon } from "@chakra-ui/icons";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 
 interface Props {
   children: React.ReactNode;
 }
-
-const Links = ["Create Event"];
 
 const Nav = (props: Props) => {
   const { children } = props;
@@ -73,53 +82,195 @@ export default function WithAction() {
   const { data: session } = useSession();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef();
-
-  const [user, setUser] = useState({
-    googleProfileImage: "",
-    userUpdatedProfileImage: "",
-  });
+  const router = useRouter();
+  const pathname = usePathname();
+  const [home, setHome] = useState(false)
 
   useEffect(() => {
-    const getUserDetails = async () => {
-      const response = await fetch(`/api/user/${session?.user.id}`);
-      const data = await response.json();
-      console.log(data);
+    if (pathname === "/home") {
+      setHome(true);
+    }
+  }, []); 
+  // const [user, setUser] = useState({
+  //   googleProfileImage: "",
+  //   userUpdatedProfileImage: "",
+  // });
 
-      setUser({
-        googleProfileImage: data.googleProfileImage,
-        userUpdatedProfileImage: data.userUpdatedProfileImage,
+  // useEffect(() => {
+  //   const getUserDetails = async () => {
+  //     const response = await fetch(`/api/user/${session?.user.id}`);
+  //     const data = await response.json();
+  //     console.log(data);
+
+  //     setUser({
+  //       googleProfileImage: data.googleProfileImage,
+  //       userUpdatedProfileImage: data.userUpdatedProfileImage,
+  //     });
+  //   };
+
+  //   if (session?.user.id) getUserDetails();
+  // }, [session?.user.id]);
+
+  // const [profilePicture, setProfilePicture] = useState("");
+
+  // const fetchProfilePicture = async () => {
+  //   try {
+  //     const keysArray = [user.userUpdatedProfileImage];
+  //     const response = await fetch(
+  //       `/api/media?keys=${encodeURIComponent(JSON.stringify(keysArray))}`
+  //     );
+  //     const data = await response.json();
+  //     console.log(data);
+
+  //     if (response.ok) {
+  //       setProfilePicture(data.urls[0]);
+  //     } else {
+  //       console.error("Error fetching profile picture");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching profile picture:", error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   if (user?.userUpdatedProfileImage) {
+  //     fetchProfilePicture();
+  //   }
+  // }, [user?.userUpdatedProfileImage]);
+
+  const [submitting, setSubmitting] = useState(false);
+  const [event, setEvent] = useState({
+    eventName: "",
+    eventDescription: "",
+    location: "",
+    zoomLink: "",
+    isPublic: false,
+    isVirtual: false,
+    isCompleted: false,
+    interested: [],
+    startDate: null,
+    startTime: "",
+    timeZone: "",
+    closestCity: "",
+    eventImage: null,
+  });
+
+  const [user, setUser] = useState({
+    attendingEvents: [],
+  });
+
+  const validateFields = () => {
+    if (
+      !event.eventName ||
+      !event.eventDescription ||
+      !event.startDate ||
+      !event.startTime ||
+      !event.timeZone ||
+      !event.closestCity
+    ) {
+      // Return false if any required field is missing
+      return false;
+    }
+    if (!event.isVirtual && !event.location) {
+      // Return false if location is required for in-person events and is missing
+      return false;
+    }
+    if (event.isVirtual && !event.zoomLink) {
+      // Return false if virtual link is required for virtual events and is missing
+      return false;
+    }
+    return true;
+  };
+
+  const toast = useToast();
+
+  const createEvent = async (newEvent) => {
+    setSubmitting(true);
+
+    console.log(event);
+
+    if (!validateFields()) {
+      toast({
+        title: "Please fill out all required fields before submitting",
+        status: "error",
+        duration: 4000,
+        isClosable: true,
       });
-    };
+      setSubmitting(false);
+      return;
+    }
 
-    if (session?.user.id) getUserDetails();
-  }, [session?.user.id]);
-
-  const [profilePicture, setProfilePicture] = useState("");
-
-  const fetchProfilePicture = async () => {
     try {
-      const keysArray = [user.userUpdatedProfileImage];
-      const response = await fetch(
-        `/api/media?keys=${encodeURIComponent(JSON.stringify(keysArray))}`
-      );
-      const data = await response.json();
-      console.log(data);
+      const response = await fetch("/api/event/new", {
+        method: "POST",
+        body: JSON.stringify({
+          userId: session?.user.id,
+          eventName: newEvent.eventName,
+          eventDescription: newEvent.eventDescription,
+          attendees: [session?.user.id],
+          interested: newEvent.interested,
+          isPublic: newEvent.isPublic,
+          isVirtual: newEvent.isVirtual,
+          startDate: newEvent.startDate,
+          startTime: newEvent.startTime,
+          timeZone: newEvent.timeZone,
+          location: newEvent.location,
+          closestCity: newEvent.closestCity,
+          zoomLink: newEvent.zoomLink,
+          isCompleted: newEvent.isCompleted,
+          eventImage: newEvent.eventImage,
+        }),
+      });
 
       if (response.ok) {
-        setProfilePicture(data.urls[0]);
-      } else {
-        console.error("Error fetching profile picture");
+        const responseData = await response.json(); // Parse the response JSON
+        const eventId = responseData._id;
+
+        const userDataResponse = await fetch(`/api/user/${session?.user.id}`);
+        const userData = await userDataResponse.json();
+
+        setUser({
+          attendingEvents: userData.attendingEvents,
+        });
+
+        const updatedAttendingEvents = [...user.attendingEvents, eventId];
+
+        const userResponse = await fetch(
+          `/api/user/${session?.user.id}?type=attending`,
+          {
+            method: "PATCH",
+            body: JSON.stringify({
+              attendingEvents: updatedAttendingEvents,
+            }),
+          }
+        );
+
+        if (userResponse.ok) {
+          toast({
+            title: "Event successfully created",
+            status: "success",
+            duration: 4000,
+            isClosable: true,
+          });
+
+          onClose();
+          if(home) {
+            location.reload();
+          }
+        }
       }
     } catch (error) {
-      console.error("Error fetching profile picture:", error);
+      console.log(error);
+    } finally {
+      setSubmitting(false);
     }
   };
 
-  useEffect(() => {
-    if (user?.userUpdatedProfileImage) {
-      fetchProfilePicture();
-    }
-  }, [user?.userUpdatedProfileImage]);
+  const handleKeysArray = async (keysArray) => {
+    setNewEvent({ ...event, eventImage: keysArray[0] });
+  };
+
+  const [newEvent, setNewEvent] = useState(null);
 
   return (
     <>
@@ -153,30 +304,80 @@ export default function WithAction() {
                 className="hover:opacity-80"
                 size={"md"}
                 mr={4}
+                onClick={onOpen}
                 leftIcon={<EditIcon />}
               >
-                <a href="/create-event">Create Event</a>
+                Create Event
               </Button>
+              <Modal
+                isOpen={isOpen}
+                size="2xl"
+                onClose={onClose}
+                closeOnOverlayClick={false}
+              >
+                <ModalOverlay />
+                <ModalContent>
+                  <ModalHeader>Create Event</ModalHeader>
+                  <ModalCloseButton />
+                  <ModalBody>
+                    <EventForm
+                      type="Create"
+                      event={event}
+                      setEvent={setEvent}
+                      submitting={submitting}
+                      handleSubmit={createEvent}
+                      handleKeysArray={handleKeysArray}
+                      newEvent={newEvent}
+                      setNewEvent={setNewEvent}
+                    />
+                  </ModalBody>
+
+                  <ModalFooter>
+                    <Button variant="outline" mr={3} onClick={onClose}>
+                      Cancel
+                    </Button>
+                    {submitting ? (
+                      <Button
+                        colorScheme="facebook"
+                        isLoading
+                        loadingText="Submitting..."
+                        isActive={true}
+                      >
+                        Submit
+                      </Button>
+                    ) : (
+                      <Button
+                        colorScheme="facebook"
+                        isActive={true}
+                        className="hover:opacity-80"
+                        onClick={() => {
+                          createEvent(newEvent);
+                        }}
+                      >
+                        Submit
+                      </Button>
+                    )}
+                  </ModalFooter>
+                </ModalContent>
+              </Modal>
               <Menu>
                 <MenuButton
-                  as={Button}
-                  rounded={"full"}
-                  variant={"link"}
-                  cursor={"pointer"}
-                  minW={0}
-                >
-                  {user?.userUpdatedProfileImage ? (
-                    <Avatar size={"sm"} src={profilePicture} />
-                  ) : (
-                    <Avatar size={"sm"} src={user.googleProfileImage} />
-                  )}
-                </MenuButton>
+                  as={IconButton}
+                  size="lg"
+                  aria-label="Options"
+                  icon={<HamburgerIcon />}
+                  variant="outline"
+                  className="hover:bg-gray-200"
+                ></MenuButton>
                 <MenuList>
                   <a href="/profile">
-                    <MenuItem>My Profile</MenuItem>
+                    <MenuItem className="hover:bg-gray-200">
+                      My Profile
+                    </MenuItem>
                   </a>
                   <MenuDivider />
                   <MenuItem
+                    className="hover:bg-gray-200 text-red-600"
                     onClick={() => {
                       signOut();
                     }}
@@ -187,16 +388,6 @@ export default function WithAction() {
               </Menu>
             </Flex>
           </Flex>
-
-          {isOpen ? (
-            <Box pb={4} display={{ md: "none" }}>
-              <Stack as={"nav"} spacing={4}>
-                {Links.map((link) => (
-                  <Nav key={link}>{link}</Nav>
-                ))}
-              </Stack>
-            </Box>
-          ) : null}
         </Box>
       ) : (
         <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
@@ -283,36 +474,36 @@ export default function WithAction() {
                             innovators to create innovative solutions.
                           </Text>
                           <div className="flex space-x-4">
-                          <Button
-                            size="md"
-                            isActive="true"
-                            className="hover:opacity-80"
-                            colorScheme="linkedin"
-                            leftIcon={<FaLinkedin />}
-                            onClick={() =>
-                              window.open(
-                                "https://www.linkedin.com/in/bonnietse/",
-                                "_blank"
-                              )
-                            }
-                          >
-                            LinkedIn
-                          </Button>
+                            <Button
+                              size="md"
+                              isActive="true"
+                              className="hover:opacity-80"
+                              colorScheme="linkedin"
+                              leftIcon={<FaLinkedin />}
+                              onClick={() =>
+                                window.open(
+                                  "https://www.linkedin.com/in/bonnietse/",
+                                  "_blank"
+                                )
+                              }
+                            >
+                              LinkedIn
+                            </Button>
 
-                          <Button
-                            size="md"
-                            isActive="true"
-                            className="hover:opacity-80"
-                            leftIcon={<FaGithub />}
-                            onClick={() =>
-                              window.open(
-                                "https://github.com/bonniewt",
-                                "_blank"
-                              )
-                            }
-                          >
-                            GitHub
-                          </Button>
+                            <Button
+                              size="md"
+                              isActive="true"
+                              className="hover:opacity-80"
+                              leftIcon={<FaGithub />}
+                              onClick={() =>
+                                window.open(
+                                  "https://github.com/bonniewt",
+                                  "_blank"
+                                )
+                              }
+                            >
+                              GitHub
+                            </Button>
                           </div>
                         </CardBody>
                       </Stack>
@@ -345,35 +536,35 @@ export default function WithAction() {
                             for knowledge and innovation.
                           </Text>
                           <div className="flex space-x-4">
-                          <Button
-                            size="md"
-                            isActive="true"
-                            className="hover:opacity-80"
-                            colorScheme="linkedin"
-                            leftIcon={<FaLinkedin />}
-                            onClick={() =>
-                              window.open(
-                                "https://www.linkedin.com/in/kebin-linked/",
-                                "_blank"
-                              )
-                            }
-                          >
-                            LinkedIn
-                          </Button>
-                          <Button
-                            size="md"
-                            isActive="true"
-                            className="hover:opacity-80"
-                            leftIcon={<FaGithub />}
-                            onClick={() =>
-                              window.open(
-                                "https://github.com/kebinjpeg",
-                                "_blank"
-                              )
-                            }
-                          >
-                            GitHub
-                          </Button>
+                            <Button
+                              size="md"
+                              isActive="true"
+                              className="hover:opacity-80"
+                              colorScheme="linkedin"
+                              leftIcon={<FaLinkedin />}
+                              onClick={() =>
+                                window.open(
+                                  "https://www.linkedin.com/in/kebin-linked/",
+                                  "_blank"
+                                )
+                              }
+                            >
+                              LinkedIn
+                            </Button>
+                            <Button
+                              size="md"
+                              isActive="true"
+                              className="hover:opacity-80"
+                              leftIcon={<FaGithub />}
+                              onClick={() =>
+                                window.open(
+                                  "https://github.com/kebinjpeg",
+                                  "_blank"
+                                )
+                              }
+                            >
+                              GitHub
+                            </Button>
                           </div>
                         </CardBody>
                       </Stack>
@@ -402,35 +593,35 @@ export default function WithAction() {
                             world challenges.
                           </Text>
                           <div className="flex space-x-4">
-                          <Button
-                            size="md"
-                            isActive="true"
-                            className="hover:opacity-80"
-                            colorScheme="linkedin"
-                            leftIcon={<FaLinkedin />}
-                            onClick={() =>
-                              window.open(
-                                "https://www.linkedin.com/in/kyleguanyili/",
-                                "_blank"
-                              )
-                            }
-                          >
-                            LinkedIn
-                          </Button>
-                          <Button
-                            size="md"
-                            isActive="true"
-                            className="hover:opacity-80"
-                            leftIcon={<FaGithub />}
-                            onClick={() =>
-                              window.open(
-                                "https://github.com/kyle-guanyi",
-                                "_blank"
-                              )
-                            }
-                          >
-                            GitHub
-                          </Button>
+                            <Button
+                              size="md"
+                              isActive="true"
+                              className="hover:opacity-80"
+                              colorScheme="linkedin"
+                              leftIcon={<FaLinkedin />}
+                              onClick={() =>
+                                window.open(
+                                  "https://www.linkedin.com/in/kyleguanyili/",
+                                  "_blank"
+                                )
+                              }
+                            >
+                              LinkedIn
+                            </Button>
+                            <Button
+                              size="md"
+                              isActive="true"
+                              className="hover:opacity-80"
+                              leftIcon={<FaGithub />}
+                              onClick={() =>
+                                window.open(
+                                  "https://github.com/kyle-guanyi",
+                                  "_blank"
+                                )
+                              }
+                            >
+                              GitHub
+                            </Button>
                           </div>
                         </CardBody>
                       </Stack>
