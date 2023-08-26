@@ -306,6 +306,7 @@ const Message = ({ message, onDeleteItem, onPatchMessage, handlePatchEventPictur
                 <MenuItem
                   icon={<FiTrash2 />}
                   isDisabled={false}
+                  onClick={onDeleteItem}
                   className="hover:bg-gray-100 focus:bg-gray-100"
                 >
                   Delete Post

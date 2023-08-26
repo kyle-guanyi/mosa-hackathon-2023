@@ -553,7 +553,7 @@ const EventPage = ({
             <Divider />
             <div className="pt-4 mr-20 bg-slate-400">
               <MessageBoard
-                eventDetails={event}
+                eventDetails={eventDetails}
                 addImagesToEvent={addImagesToEvent}
               />
             </div>
