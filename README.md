@@ -145,9 +145,12 @@ Which frameworks, libraries, or other tools did you use to create your project?
 * [bcrypt.js](https://www.npmjs.com/package/bcrypt) - Hash Passwords library for cybersecurity
 * [react-dropzone](https://react-dropzone.js.org/) - React hook to create a HTML5-compliant drag and drop zone for files
 * [Mongoose](https://www.npmjs.com/package/mongoose) - Database MongoDB Object Modeling Tool
+* [Luxon Library](https://www.npmjs.com/package/luxon) - Library for working with dates and times in JavaScript
+* [Framer](https://www.framer.com/about/) - Javascript library for web
 * [Axios](https://axios-http.com/) - HTTP Request Utility
 * [Amazon Web Services Software Development Kit](https://aws.amazon.com/developer/tools/) - S3 buckets for storing images
 * [Google API](https://cloud.google.com/?hl=en) - Google API for user login for Upenn email accounts only
+
 
 
 ### Acknowledgments
