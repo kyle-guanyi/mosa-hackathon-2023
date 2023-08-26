@@ -1,10 +1,11 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import EventCard from "./EventCard";
+import { Heading } from "@chakra-ui/react";
 
 const EventCardList = ({ data }) => {
   return (
-    <div className="mt-16 gap-2 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
+    <div className="mt-8 gap-y-5 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
       {data.map((event) => (
         <EventCard key={event._id} event={event} />
       ))}
@@ -68,7 +69,8 @@ const EventFeed = ({ selectedDate }) => {
       id="eventfeed"
       className="w-full border-l-1 border-r-1 border-t-1 border-gray-600"
     >
-      <div className="p-4 flex space-x-4">
+      <Heading className="justify-center text-center pb-4 pt-4"> Event Feed </Heading>
+      <div className="flex space-x-8 justify-center text-center">
         <select
           value={filterVirtual}
           onChange={(e) => setFilterVirtual(e.target.value)}
@@ -83,7 +85,7 @@ const EventFeed = ({ selectedDate }) => {
           onChange={(e) => setFilterCity(e.target.value)}
           className="block appearance-none w-1/4 bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
         >
-          <option value="">Select City</option>
+          <option value="">Select City/Major Region</option>
           <option value="Africa">Africa</option>
           <option value="Atlanta">Atlanta</option>
           <option value="Austin">Austin</option>

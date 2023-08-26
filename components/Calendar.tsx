@@ -88,7 +88,7 @@ const Calendar = ( { handleDate }) => {
   }, [userAttendingEvents, events]);
 
   return (
-    <Center className="flex-col gap-2 pb-2 pt-2">
+    <Center className="flex-col gap-2 pb-4 pt-4">
       <ReactCalendar onChange={(nextValue) => {
         onChange(nextValue);
         handleDate(nextValue);

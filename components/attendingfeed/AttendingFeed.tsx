@@ -7,7 +7,7 @@ import EventCard from "../eventfeed/EventCard";
 
 const EventCardList = ({ data }) => {
   return (
-    <div className="flex-col">
+    <div className="flex-col pt-8">
       {data.map((event) => (
         <EventCard key={event._id} event={event} />
       ))}
