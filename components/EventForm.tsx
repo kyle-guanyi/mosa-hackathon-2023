@@ -11,7 +11,7 @@ import {
   Input,
   Textarea,
   Checkbox,
-  FormControl
+  FormControl,
 } from "@chakra-ui/react";
 
 const Timezones = [
@@ -162,47 +162,49 @@ const EventForm = ({
   handleKeysArray,
   newEvent,
   setNewEvent,
+  firstField,
 }) => {
-
   useEffect(() => {
     setNewEvent(event);
   }, [event, setNewEvent]);
 
-  const [initialFiles, setInitialFiles] = useState([]);
+  const [initialFiles, setInitialFiles] = useState([event.eventImage]);
 
   const updateInitialFiles = (newFiles) => {
     setInitialFiles(newFiles);
   };
 
-
   return (
     <Stack spacing="24px">
       <Box>
-      <FormControl isRequired>
-        <FormLabel htmlFor="eventName">Event Name</FormLabel>
-        <Input
-          onChange={(e) => setEvent({ ...event, eventName: e.target.value })}
-          placeholder="Write your event name here..."
-        />
+        <FormControl isRequired>
+          <FormLabel htmlFor="eventName">Event Name</FormLabel>
+          <Input
+            ref={firstField}
+            value={event.eventName}
+            onChange={(e) => setEvent({ ...event, eventName: e.target.value })}
+            placeholder="Write your event name here..."
+          />
         </FormControl>
       </Box>
 
       <Box>
-      <FormControl isRequired>
-        <FormLabel htmlFor="eventDescription">Event Description</FormLabel>
-        <Textarea
-          value={event.eventDescription}
-          onChange={(e) =>
-            setEvent({ ...event, eventDescription: e.target.value })
-          }
-          placeholder="Write your event description here..."
-        />
+        <FormControl isRequired>
+          <FormLabel htmlFor="eventDescription">Event Description</FormLabel>
+          <Textarea
+            value={event.eventDescription}
+            onChange={(e) =>
+              setEvent({ ...event, eventDescription: e.target.value })
+            }
+            placeholder="Write your event description here..."
+          />
         </FormControl>
       </Box>
 
       <Box>
         <FormLabel htmlFor="isVirtual">Virtual Event</FormLabel>
-        <Checkbox
+        <input
+          type="checkbox"
           checked={event.isVirtual}
           onChange={(e) => setEvent({ ...event, isVirtual: e.target.checked })}
         />
@@ -210,87 +212,96 @@ const EventForm = ({
 
       <Box>
         <FormLabel htmlFor="isPublic">Public Event</FormLabel>
-        <Checkbox
+        <input
+          type="checkbox"
           checked={event.isPublic}
           onChange={(e) => setEvent({ ...event, isPublic: e.target.checked })}
         />
       </Box>
 
       <Box>
-      <FormControl isRequired={!event.isVirtual}>
-        <FormLabel htmlFor="location">Location</FormLabel>
-        <Input
-          value={event.location}
-          onChange={(e) => setEvent({ ...event, location: e.target.value })}
-          placeholder="Enter event location here..."
-          required={!event.isVirtual} // Make the field required only when isVirtual is false
-          disabled={event.isVirtual} // Disable the input when isVirtual is true
-          className={event.isVirtual ? "form_input disabled" : "form_input"}
-        />
+        <FormControl isRequired={!event.isVirtual}>
+          <FormLabel htmlFor="location">Location</FormLabel>
+          <Input
+            value={event.location}
+            onChange={(e) => setEvent({ ...event, location: e.target.value })}
+            placeholder="Enter event location here..."
+            required={!event.isVirtual} // Make the field required only when isVirtual is false
+            disabled={event.isVirtual} // Disable the input when isVirtual is true
+            className={event.isVirtual ? "form_input disabled" : "form_input"}
+          />
         </FormControl>
       </Box>
 
       <Box id="closestCity">
-      <FormControl isRequired>
-        <FormLabel htmlFor="closestCity">Closest Major City/Region</FormLabel>
-        <Select
-          options={ClosestCity}
-          value={ClosestCity.find((city) => city.value === event.closestCity)}
-          onChange={(selectedOption) =>
-            setEvent({ ...event, closestCity: selectedOption.value })
-          }
-          placeholder="Select the closest major city or region to your event"
-        />
+        <FormControl isRequired>
+          <FormLabel htmlFor="closestCity">Closest Major City/Region</FormLabel>
+          <Select
+            options={ClosestCity}
+            value={ClosestCity.find((city) => city.value === event.closestCity)}
+            onChange={(selectedOption) =>
+              setEvent({ ...event, closestCity: selectedOption.value })
+            }
+            placeholder="Select the closest major city or region to your event"
+          />
         </FormControl>
       </Box>
 
       <Box>
-      <FormControl isRequired={event.isVirtual}>
-        <FormLabel htmlFor="virtualLink">Virtual Meeting Link</FormLabel>
-        <Input
-          value={event.zoomLink}
-          onChange={(e) => setEvent({ ...event, zoomLink: e.target.value })}
-          placeholder="Enter your virtual meeting link here..."
-          required={event.isVirtual} // Make the field required only when isVirtual is false
-          disabled={!event.isVirtual} // Disable the input when isVirtual is true
-          className={event.isVirtual ? "form_input" : "form_input disabled"}
-        />
+        <FormControl isRequired={event.isVirtual}>
+          <FormLabel htmlFor="virtualLink">Virtual Meeting Link</FormLabel>
+          <Input
+            value={event.zoomLink}
+            onChange={(e) => setEvent({ ...event, zoomLink: e.target.value })}
+            placeholder="Enter your virtual meeting link here..."
+            required={event.isVirtual} // Make the field required only when isVirtual is false
+            disabled={!event.isVirtual} // Disable the input when isVirtual is true
+            className={event.isVirtual ? "form_input" : "form_input disabled"}
+          />
         </FormControl>
       </Box>
 
       <Box>
-      <FormControl isRequired>
-        <FormLabel htmlFor="startDate">Start Date</FormLabel>
-        <input
+        <FormControl isRequired>
+          <FormLabel htmlFor="startDate">Start Date</FormLabel>
+          <input
             type="date"
-            value={event.startDate ? new Date(event.startDate).toISOString().substring(0, 10) : ''}
+            value={
+              event.startDate
+                ? new Date(event.startDate).toISOString().substring(0, 10)
+                : ""
+            }
             onChange={(e) => setEvent({ ...event, startDate: e.target.value })}
             className="form_input"
           />
-          </FormControl>
+        </FormControl>
       </Box>
 
       <Box>
-      <FormControl isRequired>
-        <FormLabel htmlFor="startTime">Start Time</FormLabel>
-        <input
+        <FormControl isRequired>
+          <FormLabel htmlFor="startTime">Start Time</FormLabel>
+          <input
             type="time"
             value={event.startTime}
             onChange={(e) => setEvent({ ...event, startTime: e.target.value })}
             className="form_input"
           />
-          </FormControl>
+        </FormControl>
       </Box>
 
       <Box>
-      <FormControl isRequired>
-        <FormLabel htmlFor="timeZone">Time Zone</FormLabel>
-        <Select
-          options={Timezones}
-          value={Timezones.find((timezone) => timezone.value === event.timeZone)}
-          onChange={(selectedOption) => setEvent({ ...event, timeZone: selectedOption.value })}
-          placeholder="Select your time zone here"
-        />
+        <FormControl isRequired>
+          <FormLabel htmlFor="timeZone">Time Zone</FormLabel>
+          <Select
+            options={Timezones}
+            value={Timezones.find(
+              (timezone) => timezone.value === event.timeZone
+            )}
+            onChange={(selectedOption) =>
+              setEvent({ ...event, timeZone: selectedOption.value })
+            }
+            placeholder="Select your time zone here"
+          />
         </FormControl>
       </Box>
 

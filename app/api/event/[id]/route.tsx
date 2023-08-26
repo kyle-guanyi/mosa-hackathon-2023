@@ -47,7 +47,7 @@ export const PATCH = async (request, { params }) => {
     if (!existingEvent) {
       return new Response("Event not found", { status: 404 });
     }
-
+    
     // Update the event with new data
     existingEvent.isPublic = isPublic;
     existingEvent.eventName = eventName;

@@ -35,7 +35,7 @@ const Home = () => {
         </Center>
         <div className=" w-full h-1/2">
           <Divider />
-          <Heading className="pt-4">Your Events:</Heading>
+          <Heading className="pt-4">Your Upcoming Events</Heading>
 
           <AttendingFeed />
         </div>

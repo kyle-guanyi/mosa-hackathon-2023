@@ -111,7 +111,7 @@ const EventCard = ({ event }) => {
               userUpdatedProfileImage: userUpdatedProfileImageData.urls[index],
             })
           );
-          console.log("These are the updated pictures: ", updatedPictures);
+          // console.log("These are the updated pictures: ", updatedPictures);
           setEventAttendeesPictures(updatedPictures);
           setIsLoading(false);
         } else {

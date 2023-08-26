@@ -71,7 +71,7 @@ const AttendingFeed = () => {
         // console.log(filtered);
       } else {
         // If user is not attending any events, set filteredEvents to the same as events
-        // console.log("No attending events");
+         console.log("No attending events");
       }
     };
 

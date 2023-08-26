@@ -231,11 +231,7 @@ export default function WithAction() {
         const userDataResponse = await fetch(`/api/user/${session?.user.id}`);
         const userData = await userDataResponse.json();
 
-        setUser({
-          attendingEvents: userData.attendingEvents,
-        });
-
-        const updatedAttendingEvents = [...user.attendingEvents, eventId];
+        const updatedAttendingEvents = [...userData.attendingEvents, eventId];
 
         const userResponse = await fetch(
           `/api/user/${session?.user.id}?type=attending`,

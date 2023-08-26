@@ -138,7 +138,7 @@ export default function FileUpload({
 
     if (!files?.length) {
       toast({
-        title: "Please upload at least one valid file before submitting.",
+        title: "Please upload at least one valid file before submitting",
         description: "Supported file types are .png, .jpg, and .jpeg",
         status: "error",
         duration: 4000,
@@ -174,6 +174,12 @@ export default function FileUpload({
     } catch (err) {
       console.log(err);
     } finally {
+      toast({
+        title: "File(s) successfully uploaded",
+        status: "success",
+        duration: 4000,
+        isClosable: true,
+      });
       setIsSubmitting(false);
     }
   };
@@ -287,8 +293,25 @@ export default function FileUpload({
                       className="hover:opacity-80"
                       ml={3}
                       onClick={() => {
-                        removeAll();
-                        onDeleteClose();
+                        if(files.length == 0) {
+                          toast({
+                            title: "No file(s) had been uploaded for deletion",
+                            status: "error",
+                            duration: 4000,
+                            isClosable: true,
+                          });
+                          onDeleteClose();
+                        } else {
+                          removeAll();
+                          toast({
+                            title: "All accepted files have been deleted",
+                            status: "success",
+                            duration: 4000,
+                            isClosable: true,
+                          });
+                          onDeleteClose();
+                        }
+                        
                       }}
                     >
                       Yes
@@ -306,7 +329,7 @@ export default function FileUpload({
                   className="ml-3"
                   isActive={true}
                 >
-                  Submit
+                  Upload your selected image(s)
                 </Button>
               ) : (
                 <Button
@@ -315,7 +338,7 @@ export default function FileUpload({
                   className="hover:opacity-80 ml-3"
                   type="submit"
                 >
-                  Submit
+                  Upload your selected image(s)
                 </Button>
               )
             ) : (
@@ -328,7 +351,7 @@ export default function FileUpload({
                   ml={3}
                   onClick={onReplaceOpen}
                 >
-                  Replace uploaded image(s)
+                  Overwrite uploaded image(s)
                 </Button>
                 <AlertDialog
                   motionPreset="slideInBottom"
@@ -340,11 +363,11 @@ export default function FileUpload({
                   <AlertDialogOverlay />
                   <AlertDialogContent>
                     <AlertDialogHeader>
-                      Replace currently uploaded image(s)
+                      Overwrite currently uploaded image(s)
                     </AlertDialogHeader>
                     <AlertDialogCloseButton className="hover:opacity-50" />
                     <AlertDialogBody>
-                      Are you sure you want to replace your current uploaded
+                      Are you sure you want to overwrite your current uploaded
                       file(s) with your new file(s)?
                       <br /> <br />
                       <em>This cannot be undone.</em>
@@ -357,7 +380,7 @@ export default function FileUpload({
                         <Button
                           colorScheme="facebook"
                           isLoading
-                          loadingText="Replacing image(s)..."
+                          loadingText="Overwriting image(s)..."
                           isActive={true}
                         >
                           Submit

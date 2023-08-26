@@ -25,7 +25,19 @@ import {
   Center,
   Collapse,
   Box,
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerOverlay,
+  DrawerCloseButton,
+  DrawerHeader,
+  DrawerFooter,
+  useToast,
 } from "@chakra-ui/react";
+
+import { EditIcon } from "@chakra-ui/icons";
+
+import EventForm from "components/EventForm";
 
 const EventPage = ({
   eventDetails,
@@ -38,10 +50,19 @@ const EventPage = ({
   handleDelete,
   addImagesToEvent,
 }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const { data: session } = useSession();
+  const { isOpen: isAlertOpen, onOpen: onAlertOpen, onClose: onAlertClose } = useDisclosure();
+
+  const { isOpen: isDrawerOpen, onOpen: onDrawerOpen, onClose: onDrawerClose } = useDisclosure();
   const cancelRef = React.useRef();
+  const firstField = React.useRef();
 
   const { isOpen: isZoomOpen, onToggle } = useDisclosure();
+
+  const [submitting, setIsSubmitting] = useState(false);
+
+  const [event, setEvent] = useState(eventDetails);
 
   const startDate = new Date(eventDetails.startDate).toLocaleDateString(
     "en-US",
@@ -52,6 +73,32 @@ const EventPage = ({
     }
   );
 
+  const fetchEventDetails = async () => {
+    const response = await fetch(`/api/event/${eventDetails._id}`);
+    const data = await response.json();
+    console.log(data);
+
+    setEvent({
+      eventName: data.eventName,
+      eventDescription: data.eventDescription,
+      location: data.location,
+      zoomLink: data.zoomLink,
+      isPublic: data.isPublic,
+      isVirtual: data.isVirtual,
+      startDate: data.startDate,
+      startTime: data.startTime,
+      timeZone: data.timeZone,
+      closestCity: data.closestCity,
+    });
+  };
+
+  useEffect(() => {
+    if (session?.user.id) {
+       fetchEventDetails();
+    }
+  }, [session?.user.id]);
+
+
   const [show, setShow] = React.useState(false);
   const handleToggle = () => setShow(!show);
 
@@ -59,7 +106,7 @@ const EventPage = ({
 
   const fetchEventImage = async () => {
     try {
-      const keysArray = [eventDetails.eventImage];
+      const keysArray = [event.eventImage];
       const response = await fetch(
         `/api/media?keys=${encodeURIComponent(JSON.stringify(keysArray))}`
       );
@@ -67,7 +114,7 @@ const EventPage = ({
       console.log(data);
 
       if (response.ok) {
-        setEventImage(data.urls[0]); 
+        setEventImage(data.urls[0]);
       } else {
         console.error("Error fetching profile picture");
       }
@@ -77,29 +124,138 @@ const EventPage = ({
   };
 
   useEffect(() => {
-    if (eventDetails?.eventImage) {
+    if (event?.eventImage) {
       fetchEventImage();
     }
-  }, [eventDetails?.eventImage]);
+  }, [event?.eventImage]);
 
   const [isLoading, setIsLoading] = useState(true);
-  const { data: session } = useSession();
+  
   const [userEventDateTime, setUserEventDateTime] = useState(null);
 
   // UseEffect to set isLoading to false once data is fetched
   useEffect(() => {
-    if (eventDetails && creatorInfo && attendeesInfo) {
+    if (event && creatorInfo && attendeesInfo) {
       setIsLoading(false);
 
       if (session?.user.id) {
-        const dateTimeObject = DateTime.fromISO(eventDetails.UTCEventTime);
+        const dateTimeObject = DateTime.fromISO(event.UTCEventTime);
         const userTimezone = DateTime.local().zoneName;
         const userEventDateTime = dateTimeObject.setZone(userTimezone);
         setUserEventDateTime(userEventDateTime);
         console.log("This is the user event date time", userEventDateTime);
       }
     }
-  }, [eventDetails, creatorInfo, attendeesInfo, session?.user.id]);
+  }, [event, creatorInfo, attendeesInfo, session?.user.id]);
+
+  const validateFields = () => {
+    if (
+      !newEvent.eventName ||
+      !newEvent.eventDescription ||
+      !newEvent.startDate ||
+      !newEvent.startTime ||
+      !newEvent.timeZone ||
+      !newEvent.closestCity
+    ) {
+      // Return false if any required field is missing
+      return false;
+    }
+    if (!newEvent.isVirtual && !newEvent.location) {
+      // Return false if location is required for in-person events and is missing
+      return false;
+    }
+    if (newEvent.isVirtual && !newEvent.zoomLink) {
+      // Return false if virtual link is required for virtual events and is missing
+      return false;
+    }
+    return true;
+  };
+
+  const toast = useToast();
+
+  const updateEvent = async (newEvent) => {
+    setIsSubmitting(true);
+
+    console.log("this is the updated event stuff: ", event);
+    if (!eventDetails._id) return alert("Missing Event Id!");
+
+    if (!validateFields()) {
+      toast({
+        title: "Please fill out all required fields before submitting",
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+      });
+      setIsSubmitting(false);
+      return;
+    }
+
+    try {
+      console.log("This is new event", newEvent)
+      const response = await fetch(`/api/event/${eventDetails._id}`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          eventName: newEvent.eventName,
+          eventDescription: newEvent.eventDescription,
+          location: newEvent.location,
+          zoomLink: newEvent.zoomLink,
+          isPublic: newEvent.isPublic,
+          isVirtual: newEvent.isVirtual,
+          startDate: newEvent.startDate,
+          startTime: newEvent.startTime,
+          timeZone: newEvent.timeZone,
+          closestCity: newEvent.closestCity,
+        }),
+      });
+      if (response.ok) {
+        fetchEventDetails();
+        toast({
+          title: "Event successfully updated",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
+        onDrawerClose();
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      
+      setIsSubmitting(false);
+    }
+  };
+
+  const updateEventImage = async (newEventImage) => {
+    setIsSubmitting(true);
+
+    if (!eventDetails._id) return alert("Missing Event Id!");
+
+    console.log(newEventImage);
+    try {
+      const response = await fetch(`/api/event/${eventDetails._id}?type=eventImage`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          eventImage: newEventImage,
+        }),
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      toast({
+        title: "Event picture successfully updated",
+        status: "success",
+        duration: 6000,
+        isClosable: true,
+      });
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleKeysArray = async (keysArray) => {
+    updateEventImage(keysArray[0]);
+  };
+
+  const [newEvent, setNewEvent] = useState(null);
 
   return (
     <div className="h-full w-full bg-red-500 flex">
@@ -116,12 +272,12 @@ const EventPage = ({
           </div>
         </div>
       </div>
-      
-        <Divider orientation="vertical" />
-      
+
+      <Divider orientation="vertical" />
+
       <div className="w-3/5 bg-green-700 flex-grow pl-4 pr-4">
         <div className="w-full h-1/10 bg-green-500 font-satoshi">
-          {eventDetails?.eventImage ? (
+          {event?.eventImage ? (
             <Image
               borderRadius="lg"
               src={eventImage}
@@ -141,7 +297,7 @@ const EventPage = ({
           )}
 
           <Heading as="h1" size="xl" className="pt-4 pb-4">
-            {eventDetails.eventName}
+            {event.eventName}
           </Heading>
         </div>
 
@@ -162,30 +318,85 @@ const EventPage = ({
               <div className="pb-3">
                 {session?.user.id === eventDetails.creator && (
                   <div>
-                    <Button
-                      type="button"
-                      onClick={() => {
-                        handleEdit(eventDetails._id);
-                      }}
-                      colorScheme="facebook"
-                      isActive={true}
-                      className="hover:opacity-80 mr-4"
-                    >
-                      Update Event
-                    </Button>
+                    <>
+                      <Button
+                        rightIcon={<EditIcon />}
+                        colorScheme="facebook"
+                        isActive="true"
+                        className="hover:opacity-80 mx-auto"
+                        onClick={onDrawerOpen}
+                      >
+                        Edit Event
+                      </Button>
+                      <Drawer
+                        isOpen={isDrawerOpen}
+                        placement="right"
+                        size="xl"
+                        initialFocusRef={firstField}
+                        onClose={onDrawerClose}
+                      >
+                        <DrawerOverlay />
+                        <DrawerContent>
+                          <DrawerCloseButton />
+                          <DrawerHeader borderBottomWidth="1px">
+                            Edit Event
+                          </DrawerHeader>
+                          <DrawerBody>
+                            <EventForm
+                              type="Edit"
+                              event={event}
+                              setEvent={setEvent}
+                              submitting={submitting}
+                              handleSubmit={updateEvent}
+                              handleKeysArray={handleKeysArray}
+                              newEvent={newEvent}
+                              setNewEvent={setNewEvent}
+                              firstField={firstField}
+                            />
+                          </DrawerBody>
+                          {/* You can customize the footer buttons as needed */}
+                          <DrawerFooter borderTopWidth="1px">
+                            <Button variant="outline" mr={3} onClick={onDrawerClose}>
+                              Cancel
+                            </Button>
+                            {submitting ? (
+                              <Button
+                                colorScheme="facebook"
+                                isLoading
+                                loadingText="Submitting..."
+                                isActive={true}
+                              >
+                                Submit
+                              </Button>
+                            ) : (
+                              <Button
+                                colorScheme="facebook"
+                                isActive={true}
+                                className="hover:opacity-80"
+                                onClick={() => {
+                                  updateEvent(newEvent);
+                                }}
+                              >
+                                Submit
+                              </Button>
+                            )}
+                          </DrawerFooter>
+                        </DrawerContent>
+                      </Drawer>
+                    </>
                     <Button
                       colorScheme="red"
                       isActive={true}
                       className="hover:opacity-80"
-                      onClick={onOpen}
+                      onClick={onAlertOpen}
                     >
                       Delete Event
                     </Button>
                     <AlertDialog
                       motionPreset="slideInBottom"
                       leastDestructiveRef={cancelRef}
-                      onClose={onClose}
-                      isOpen={isOpen}
+                      onClose={onAlertClose}
+                      isOpen={isAlertOpen}
                       isCentered
                     >
                       <AlertDialogOverlay />
@@ -201,7 +412,7 @@ const EventPage = ({
                           </em>
                         </AlertDialogBody>
                         <AlertDialogFooter>
-                          <Button ref={cancelRef} onClick={onClose}>
+                          <Button ref={cancelRef} onClick={onAlertClose}>
                             No
                           </Button>
                           <Button
@@ -210,7 +421,7 @@ const EventPage = ({
                             isActive={true}
                             className="hover:opacity-80"
                             ml={3}
-                            onClick={() => handleDelete(eventDetails._id)}
+                            onClick={() => handleDelete(event._id)}
                           >
                             Yes
                           </Button>
@@ -260,7 +471,7 @@ const EventPage = ({
                       in={show}
                       className="mx-auto text-justify"
                     >
-                      {eventDetails.eventDescription}
+                      {event.eventDescription}
                     </Collapse>
                     <Button
                       size="sm"
@@ -273,7 +484,7 @@ const EventPage = ({
                     </Button>
                   </div>
                   <div>
-                    {eventDetails?.zoomLink && (
+                    {event?.zoomLink && (
                       <div className="pt-4 pb-2">
                         <Button
                           size="sm"
@@ -293,7 +504,7 @@ const EventPage = ({
                             rounded="md"
                             shadow="md"
                           >
-                            {eventDetails.zoomLink}
+                            {event.zoomLink}
                           </Box>
                         </Collapse>
                       </div>
@@ -309,22 +520,23 @@ const EventPage = ({
                       <FiClock />
                     </span>
                     <div className="ml-4">
-                      {startDate} at {eventDetails.startTime}{" "}
-                      {eventDetails.timeZone}
+                      {startDate} at {event.startTime}{" "}
+                      {event.timeZone}
                     </div>
                   </div>
                   <div className="flex-row flex items-center pb-2">
                     <span className="bannerIcon">
-                      <InfoOutlineIcon/>
+                      <InfoOutlineIcon />
                     </span>
                     <div className="ml-4">
-                    <p>
-                      Event Date:{" "}
-                      {userEventDateTime?.toFormat("cccc, LLLL d, yyyy")}
-                    </p>
-                    <p>Start Time: {userEventDateTime?.toFormat("hh:mm a")}</p>
+                      <p>
+                        Event Date:{" "}
+                        {userEventDateTime?.toFormat("cccc, LLLL d, yyyy")}
+                      </p>
+                      <p>
+                        Start Time: {userEventDateTime?.toFormat("hh:mm a")}
+                      </p>
                     </div>
-                    
                   </div>
 
                   <div className="flex-row flex items-center pb-2">
@@ -332,7 +544,7 @@ const EventPage = ({
                       <TbLocation />
                     </span>
                     <div className="ml-4">
-                      <div>{eventDetails.location || "Virtual Event"}</div>
+                      <div>{event.location || "Virtual Event"}</div>
                     </div>
                   </div>
                 </div>
@@ -341,16 +553,16 @@ const EventPage = ({
             <Divider />
             <div className="pt-4 mr-20 bg-slate-400">
               <MessageBoard
-                eventDetails={eventDetails}
+                eventDetails={event}
                 addImagesToEvent={addImagesToEvent}
               />
             </div>
           </div>
         </div>
       </div>
-      
-        <Divider orientation="vertical" />
-      
+
+      <Divider orientation="vertical" />
+
       <div className="w-1/5 bg-purple-700 hidden md:block p-4">
         <div className="pb-4">
           <Heading as="h3" size="md">
@@ -358,7 +570,7 @@ const EventPage = ({
           </Heading>{" "}
         </div>
 
-        <PhotoTimeline event={eventDetails} />
+        <PhotoTimeline event={event} />
       </div>
     </div>
   );

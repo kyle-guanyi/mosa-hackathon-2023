@@ -38,8 +38,8 @@ const EventFeed = ({ selectedDate }) => {
     const results = Object.values(events).filter((event) => {
       const isDateMatching =
         !selectedDate || event.startDate.substring(0, 10) === selectedDate;
-      console.log("This is the event date:", event.startDate.substring(0, 10));
-      console.log("This is my selected date:", selectedDate);
+      // console.log("This is the event date:", event.startDate.substring(0, 10));
+      // console.log("This is my selected date:", selectedDate);
 
       if (
         event.closestCity.includes(filterCity) &&

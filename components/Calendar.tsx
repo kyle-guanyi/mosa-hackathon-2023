@@ -6,15 +6,8 @@ import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import ReactCalendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import { Button } from "@chakra-ui/react";
-
-import Event from "../models/Event";
-
-type EventDocument = {
-  startDate: Date;
-  name: string;
-  description?: string;
-};
+import { Center, Button } from "@chakra-ui/react";
+import { RepeatClockIcon } from "@chakra-ui/icons"
 
 const Calendar = ( { handleDate }) => {
   // constant containing JSONs of events
@@ -95,18 +88,18 @@ const Calendar = ( { handleDate }) => {
   }, [userAttendingEvents, events]);
 
   return (
-    <div>
+    <Center className="flex-col gap-2 pb-2 pt-2">
       <ReactCalendar onChange={(nextValue) => {
         onChange(nextValue);
         handleDate(nextValue);
       }}
         value={value} 
         tileContent={({ date }) => renderEventDot(date)}/>
-      <Button onClick={resetCalendar} className="hover:opacity-80" colorScheme="facebook"
+      <Button onClick={resetCalendar} className="hover:opacity-80" colorScheme="facebook" rightIcon={<RepeatClockIcon/>}
                           isActive="true" >
         Reset Calendar
       </Button>
-    </div>
+    </Center>
   );
 };
 

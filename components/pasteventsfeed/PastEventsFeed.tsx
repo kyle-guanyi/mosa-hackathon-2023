@@ -22,7 +22,7 @@ const PastEventsFeed = () => {
     // to obtain session ID
     const { data: session } = useSession();
 
-    console.log(session?.user.id);
+    // console.log(session?.user.id);
 
     const [filteredEvents, setFilteredEvents] = useState([]);
 
