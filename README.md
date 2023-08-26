@@ -16,7 +16,7 @@ Include the link to your Devpost project page here: [Devpost](https://devpost.co
 
 * Kyle Li - Devpost ID – Penn email – [GitHub](https://github.com/kyle-guanyi)
 * Kevin Nguyen - Devpost ID – Penn email – [GitHub](https://github.com/kebinjpeg)
-* Bonnie Tse - bonniet – Penn email – [GitHub](https://github.com/bonniewt
+* Bonnie Tse - bonniet – Penn email – [GitHub](https://github.com/bonniewt)
 
 ## Usage
 
@@ -44,16 +44,59 @@ Step 2: Download Node.js (version > 16.10)
 
 https://nodejs.org/en/download/
 
-
 Step 3: Download required packages
 
-```npm i react select```
+Check the version of npm you have
+``` npm -v ```
 
-```npm i react-calendar```
+If you don't have npm installed, you can install the lastest version of npm using the following command
 
-```npm install luxon```
+```npm install -g npm```
 
-```npm i @chakra-ui/react @chakra-ui/next-js @emotion/react @emotion/styled framer-motion```
+Install the icons from React.js 
+```npm install react-icons@latest --save```
+
+```npm install react-calendar@latest``` 
+
+Install AWS Software Development Kit
+
+```npm install aws-sdk@lastest @aws-sdk/s3-request-presigner@latest @aws-sdk/client-s3@latest --save```
+
+Install Chakra UI packages
+
+```npm install chakra-ui@latest @chakra-ui/react@latest @chakra-ui/icons@latest @chakra-ui/next-js@latest```
+
+Install emotion/react for styling in React
+```npm install @emotion/react @emotion/styledn```
+
+Install React.js package
+
+```npm install react-dropzone@latest``` 
+```npm install react-select@latest```
+
+Install Framer package
+```npm install framer-motion@latest``` 
+
+Install Tailwind CSS package
+```npm install tailwindcss@latest```
+
+Install Axios package for HTTp client
+```npm install axios@latest```
+
+Install MongoDB
+```npm install mongodb@latest```
+
+Install Mongoose pacakge for MongoDB
+```npm install mongoose@latest``` 
+
+Install Next-Auth for login authentication
+```npm install next-auth@latest```
+
+Install Next.js
+```npm install next@latest```
+
+Install Luxon library for dates and time for JavaScript
+```npm install luxon@latest```
 
 ### Deployment
 
