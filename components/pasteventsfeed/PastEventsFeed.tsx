@@ -6,7 +6,7 @@ import Card from "../eventfeed/EventCard";
 
 const EventCardList = ({ data }) => {
     return (
-        <div className="flex-col">
+        <div className="grid grid-cols-1 pt-8 gap-y-5">
             {data.map((event) => (
                 <Card key={event._id} event={event} />
             ))}
@@ -84,7 +84,7 @@ const PastEventsFeed = () => {
 
     return (
         <section id="eventfeed" className="w-full border-l-1 border-r-1 border-t-1 border-gray-600">
-            <div className="p-4 flex space-x-4 justify-center text-center">
+            <div className="p-4 pt-6 flex space-x-4 justify-center text-center">
                 <select
                     value={pastEventType}
                     onChange={(e) => setPastEventType(e.target.value)}
