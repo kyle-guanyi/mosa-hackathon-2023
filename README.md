@@ -47,6 +47,7 @@ https://nodejs.org/en/download/
 Step 3: Download required packages
 
 Check the version of npm you have
+
 ``` npm -v ```
 
 If you don't have npm installed, you can install the lastest version of npm using the following command
@@ -54,6 +55,7 @@ If you don't have npm installed, you can install the lastest version of npm usin
 ```npm install -g npm```
 
 Install the icons from React.js 
+
 ```npm install react-icons@latest --save```
 
 ```npm install react-calendar@latest``` 
@@ -67,35 +69,45 @@ Install Chakra UI packages
 ```npm install chakra-ui@latest @chakra-ui/react@latest @chakra-ui/icons@latest @chakra-ui/next-js@latest```
 
 Install emotion/react for styling in React
+
 ```npm install @emotion/react @emotion/styledn```
 
 Install React.js package
 
 ```npm install react-dropzone@latest``` 
+
 ```npm install react-select@latest```
 
 Install Framer package
+
 ```npm install framer-motion@latest``` 
 
 Install Tailwind CSS package
+
 ```npm install tailwindcss@latest```
 
 Install Axios package for HTTp client
+
 ```npm install axios@latest```
 
 Install MongoDB
+
 ```npm install mongodb@latest```
 
 Install Mongoose pacakge for MongoDB
+
 ```npm install mongoose@latest``` 
 
 Install Next-Auth for login authentication
+
 ```npm install next-auth@latest```
 
 Install Next.js
+
 ```npm install next@latest```
 
 Install Luxon library for dates and time for JavaScript
+
 ```npm install luxon@latest```
 
 ### Deployment
