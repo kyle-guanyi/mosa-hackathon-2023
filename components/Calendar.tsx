@@ -15,6 +15,8 @@ const Calendar = ( { handleDate }) => {
 
   const [value, setValue] = useState(null);
 
+  
+
   // eventDot
   const renderEventDot = (date) => {
     const dateString = date.toISOString().split("T")[0];

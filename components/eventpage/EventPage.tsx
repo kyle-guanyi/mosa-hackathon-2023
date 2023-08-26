@@ -49,6 +49,7 @@ const EventPage = ({
   handleEdit,
   handleDelete,
   addImagesToEvent,
+  fetchEventDetails
 }) => {
 
   const { data: session } = useSession();
@@ -63,8 +64,15 @@ const EventPage = ({
   const [submitting, setIsSubmitting] = useState(false);
 
   const [event, setEvent] = useState(eventDetails);
+  console.log(eventDetails)
+  console.log("this is the event details that i passe dthrough to this page:", event)
 
-  const startDate = new Date(eventDetails.startDate).toLocaleDateString(
+  useEffect(() => {
+    console.log("Setting event state to eventDetails:", eventDetails);
+    setEvent(eventDetails);
+  }, [eventDetails]);
+
+  const startDate = new Date(event.startDate).toLocaleDateString(
     "en-US",
     {
       year: "numeric",
@@ -72,32 +80,6 @@ const EventPage = ({
       day: "numeric",
     }
   );
-
-  const fetchEventDetails = async () => {
-    const response = await fetch(`/api/event/${eventDetails._id}`);
-    const data = await response.json();
-    console.log(data);
-
-    setEvent({
-      eventName: data.eventName,
-      eventDescription: data.eventDescription,
-      location: data.location,
-      zoomLink: data.zoomLink,
-      isPublic: data.isPublic,
-      isVirtual: data.isVirtual,
-      startDate: data.startDate,
-      startTime: data.startTime,
-      timeZone: data.timeZone,
-      closestCity: data.closestCity,
-    });
-  };
-
-  useEffect(() => {
-    if (session?.user.id) {
-       fetchEventDetails();
-    }
-  }, [session?.user.id]);
-
 
   const [show, setShow] = React.useState(false);
   const handleToggle = () => setShow(!show);
@@ -177,7 +159,7 @@ const EventPage = ({
     setIsSubmitting(true);
 
     console.log("this is the updated event stuff: ", event);
-    if (!eventDetails._id) return alert("Missing Event Id!");
+    if (!event._id) return alert("Missing Event Id!");
 
     if (!validateFields()) {
       toast({
@@ -192,7 +174,7 @@ const EventPage = ({
 
     try {
       console.log("This is new event", newEvent)
-      const response = await fetch(`/api/event/${eventDetails._id}`, {
+      const response = await fetch(`/api/event/${event._id}`, {
         method: "PATCH",
         body: JSON.stringify({
           eventName: newEvent.eventName,
@@ -228,11 +210,11 @@ const EventPage = ({
   const updateEventImage = async (newEventImage) => {
     setIsSubmitting(true);
 
-    if (!eventDetails._id) return alert("Missing Event Id!");
+    if (!event._id) return alert("Missing Event Id!");
 
     console.log(newEventImage);
     try {
-      const response = await fetch(`/api/event/${eventDetails._id}?type=eventImage`, {
+      const response = await fetch(`/api/event/${event._id}?type=eventImage`, {
         method: "PATCH",
         body: JSON.stringify({
           eventImage: newEventImage,
@@ -437,17 +419,17 @@ const EventPage = ({
                   isActive={true}
                   className="hover:opacity-80 mr-4"
                   onClick={(e) =>
-                    !user.attendingEvents.includes(eventDetails._id)
-                      ? handleAdd(eventDetails._id)
-                      : handleRemove(eventDetails._id)
+                    !user.attendingEvents.includes(event._id)
+                      ? handleAdd(event._id)
+                      : handleRemove(event._id)
                   }
                   colorScheme={
-                    !user.attendingEvents.includes(eventDetails._id)
+                    !user.attendingEvents.includes(event._id)
                       ? "facebook"
                       : "red"
                   }
                 >
-                  {!user.attendingEvents.includes(eventDetails._id)
+                  {!user.attendingEvents.includes(event._id)
                     ? "Add Event"
                     : "Remove Event"}
                 </Button>
@@ -553,7 +535,7 @@ const EventPage = ({
             <Divider />
             <div className="pt-4 mr-20 bg-slate-400">
               <MessageBoard
-                eventDetails={eventDetails}
+                eventDetails={event}
                 addImagesToEvent={addImagesToEvent}
               />
             </div>

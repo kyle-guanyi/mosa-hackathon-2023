@@ -227,6 +227,7 @@ const Event = ({ params }) => {
       handleEdit={handleEdit}
       handleDelete={handleDelete}
       addImagesToEvent={addImagesToEvent}
+      fetchEventDetails={fetchEventDetails}
     />
   );
 };
