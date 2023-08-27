@@ -1,9 +1,9 @@
 "use client";
-import React, {useCallback, useEffect, useState} from "react";
+import React, { useCallback, useEffect, useState } from "react";
 // import Image from "next/image";
-import {useSession} from "next-auth/react";
-import {useRouter} from "next/navigation";
-import {DateTime} from "luxon";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { DateTime } from "luxon";
 import {
   Avatar,
   AvatarGroup,
@@ -152,10 +152,48 @@ const EventCard = ({ event }) => {
 
   useEffect(() => {
     if (session?.user.id) {
-      const dateTimeObject = DateTime.fromISO(event.UTCEventTime);
-      const userTimezone = DateTime.local().zoneName;
-      const userEventDateTime = dateTimeObject.setZone(userTimezone);
-      setUserEventDateTime(userEventDateTime);
+      // const dateTimeObject = DateTime.fromISO(event.UTCEventTime);
+      // const userTimezone = DateTime.local().zoneName;
+      // const userEventDateTime = dateTimeObject.setZone(userTimezone);
+
+      // const timezoneOffsetMinutes = userEventDateTime.offset;
+
+      // // Subtract the time difference from the user's timezone
+      // const adjustedEventDateTime = userEventDateTime.minus({
+      //   minutes: timezoneOffsetMinutes,
+      // });
+
+      // console.log("event time", dateTimeObject);
+      // console.log("user event time:", userEventDateTime);
+      // console.log("adjusted user event time:", adjustedEventDateTime);
+
+      const year = parseInt(event.startDate.substring(0, 4), 10);
+      const month = parseInt(event.startDate.substring(5, 7), 10);
+      const day = parseInt(event.startDate.substring(8, 10), 10);
+
+      // Extract hours and minutes from the startTime string
+      const hours = parseInt(event.startTime.substring(0, 2), 10);
+      const minutes = parseInt(event.startTime.substring(3, 5), 10);
+      console.log(event.timeZone);
+      // Create a DateTime object for the start date
+      const eventStartDate = DateTime.fromObject(
+        {
+          year: year,
+          month: month,
+          day: day,
+          hour: hours,
+          minute: minutes,
+          second: 0,
+          millisecond: 0,
+        },
+        { zone: event.timeZone }
+      );
+
+      const userAdjustedStartDate = eventStartDate.toLocal();
+
+
+
+      setUserEventDateTime(userAdjustedStartDate);
     }
   }, [session?.user.id]);
 
@@ -265,7 +303,7 @@ const EventCard = ({ event }) => {
               <Text color="blue.600">
                 Time in {DateTime.local().zoneName}
                 <br />
-                {userEventDateTime?.toFormat("cccc, LLLL d, yyyy")},{" "}
+                {userEventDateTime?.toFormat("EEEE, MMMM d, yyyy")},{" "}
                 {userEventDateTime?.toFormat("h:mm a")}
               </Text>
             </>

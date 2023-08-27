@@ -105,16 +105,21 @@ const eventSchema = new Schema({
  */
 eventSchema.pre<IEvent>('save', async function (next) {
   const eventDateTime = DateTime.fromJSDate(this.startDate, {
-    zone: this.timeZone,
+    zone: 'UTC', // Always use UTC for initial calculations
   });
 
   const [hours, minutes] = this.startTime.split(':').map(Number);
-  const eventStartTime = eventDateTime.set({
+
+  // Parse startTime with the specified timeZone
+  const startTimeInTimeZone = eventDateTime.setZone(this.timeZone).set({
     hour: hours,
     minute: minutes,
   });
 
-  this.UTCEventTime = eventStartTime.toUTC().toJSDate(); // Convert to UTC and save as JavaScript Date
+  // Convert startTime to UTC
+  const eventStartTime = startTimeInTimeZone.toUTC();
+
+  this.UTCEventTime = eventStartTime.toJSDate();
 
   next();
 });
