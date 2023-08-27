@@ -2,7 +2,14 @@ import { connectToDB } from "utils/database";
 import Message from "models/message";
 import Comment from "models/comment";
 
-//GET (read)
+/**
+ * This function fetches all messages for a given event.
+ *
+ * @param request - The incoming request object
+ * @param params - The route parameters
+ * @constructor - The function that is called when the route is visited
+ * @returns - A response object
+ */
 export const GET = async (request, { params }) => {
   try {
     await connectToDB();
@@ -18,7 +25,14 @@ export const GET = async (request, { params }) => {
   }
 }
 
-//PATCH (update)
+/**
+ * This function update a message's contents.
+ *
+ * @param request - The incoming request object
+ * @param params - The route parameters
+ * @constructor - The function that is called when the route is visited
+ * @returns - A response object
+ */
 export const PATCH = async (request, { params }) => {
   const { content, uploadedMessagePictures } = await request.json();
 
@@ -49,6 +63,14 @@ export const PATCH = async (request, { params }) => {
   }
 };
 
+/**
+ * This function update a message's uploaded pictures.
+ *
+ * @param request - The incoming request object
+ * @param params - The route parameters
+ * @constructor - The function that is called when the route is visited
+ * @returns - A response object
+ */
 export const PATCH_MESSAGE_PICTURES = async (request, { params }) => {
   const { uploadedMessagePictures } = await request.json();
 
@@ -72,15 +94,20 @@ export const PATCH_MESSAGE_PICTURES = async (request, { params }) => {
   }
 };
 
-//DELETE (delete)
-
+/**
+ * This function deletes a message and its associated comments.
+ *
+ * @param request - The incoming request object
+ * @param params - The route parameters
+ * @constructor - The function that is called when the route is visited
+ * @returns - A response object
+ */
 export const DELETE = async (request, { params }) => {
   try {
     await connectToDB;
 
-    
+    // Find the existing message by ID
     const messageId = params?.id;
-
     const message = await Message.findById(messageId);
 
     if (!message) {

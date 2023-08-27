@@ -2,7 +2,14 @@ import { connectToDB } from "utils/database";
 import User from "models/user";
 
 
-//GET (read)
+/**
+ * This function fetches a user by ID.
+ *
+ * @param request - The incoming request object
+ * @param params - The route parameters
+ * @constructor - The function that is called when the route is visited
+ * @returns - A response object
+ */
 export const GET = async (request, { params }) => {
   try {
     // connects to DB
@@ -18,16 +25,22 @@ export const GET = async (request, { params }) => {
   }
 }
 
-//PATCH (update)
-
+/**
+ * This function updates a user.
+ *
+ * @param request - The incoming request object
+ * @param params - The route parameters
+ * @constructor - The function that is called when the route is visited
+ * @returns - A response object
+ */
 export const PATCH = async (request, { params }) => {
-
+  // Get the new user's contents from the body of the request
   if (request.nextUrl.searchParams.get("type") === "attending") {
     return PATCH_ATTENDING(request, {params});
+
   } else if (request.nextUrl.searchParams.get("type") === "pic") {
     return PATCH_PROFILE_PIC(request, {params});
   }
-
   const { firstName, lastName, closestMainCity, timeZone, gender, bio, classesTaken, fieldOfInterest } = await request.json();
 
   try {
@@ -58,6 +71,14 @@ export const PATCH = async (request, { params }) => {
   }
 };
 
+/**
+ * This function updates a user's attending events.
+ *
+ * @param request - The incoming request object
+ * @param params - The route parameters
+ * @constructor - The function that is called when the route is visited
+ * @returns - A response object
+ */
 export const PATCH_ATTENDING = async (request, { params }) => {
   const { attendingEvents } = await request.json();
 
@@ -83,6 +104,14 @@ export const PATCH_ATTENDING = async (request, { params }) => {
   }
 };
 
+/**
+ * This function updates a user's profile pic.
+ *
+ * @param request - The incoming request object
+ * @param params - The route parameters
+ * @constructor - The function that is called when the route is visited
+ * @returns - A response object
+ */
 export const PATCH_PROFILE_PIC = async (request, { params }) => {
   const { userUpdatedProfileImage } = await request.json();
 

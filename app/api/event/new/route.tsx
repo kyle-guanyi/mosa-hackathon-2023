@@ -1,6 +1,13 @@
 import { connectToDB } from 'utils/database';
 import Event from 'models/event';
 
+/**
+ * This function fetches all events.
+ *
+ * @param request - The incoming request object
+ * @constructor - The function that is called when the route is visited
+ * @returns - A response object
+ */
 export const POST = async (request) => {
     const { eventName,
         eventDescription,
@@ -39,7 +46,6 @@ export const POST = async (request) => {
         })
 
         await newEvent.save();
-
         return new Response(JSON.stringify(newEvent), { status: 201 })
     } catch (error) {
         console.log(error);

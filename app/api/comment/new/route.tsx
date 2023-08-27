@@ -1,6 +1,13 @@
 import { connectToDB } from "utils/database";
 import Comment from "models/comment";
 
+/**
+ * This function fetches all comments for a given post.
+ *
+ * @param request - The incoming request object
+ * @constructor - The function that is called when the route is visited
+ * @returns - A response object
+ */
 export const POST = async (request) => {
   const { post, author, content, createdAt } = await request.json();
 

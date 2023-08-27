@@ -1,6 +1,13 @@
 import { connectToDB } from "utils/database";
 import Message from "models/message";
 
+/**
+ * This function fetches all messages for a given event.
+ *
+ * @param request - The incoming request object
+ * @constructor - The function that is called when the route is visited
+ * @returns - A response object
+ */
 export const POST = async (request) => {
   const { event, author, content, createdAt, uploadedMessagePictures } = await request.json();
 

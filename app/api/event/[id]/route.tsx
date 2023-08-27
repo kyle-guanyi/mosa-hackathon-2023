@@ -3,7 +3,14 @@ import Event from "models/event";
 import Message from "models/message";
 import Comment from "models/comment";
 
-//GET (read)
+/**
+ * This function fetches all events.
+ *
+ * @param request - The incoming request object
+ * @param params - The route parameters
+ * @constructor - The function that is called when the route is visited
+ * @returns - A response object
+ */
 export const GET = async (request, { params }) => {
   try {
     await connectToDB();
@@ -18,8 +25,13 @@ export const GET = async (request, { params }) => {
   }
 }
 
-//PATCH (update)
-
+/**
+ * This function updates an event.
+ *
+ * @param request - The incoming request object
+ * @param params - The route parameters
+ * @constructor - The function that is called when the route is visited
+ */
 export const PATCH = async (request, { params }) => {
 
   if (request.nextUrl.searchParams.get("type") === "attending") {
@@ -38,7 +50,6 @@ export const PATCH = async (request, { params }) => {
 
   try {
     await connectToDB();
-
 
     // Find the existing event by ID
     const existingEvent = await Event.findById(params?.id);
@@ -70,6 +81,13 @@ export const PATCH = async (request, { params }) => {
   }
 };
 
+/**
+ * This function updates an event's attendees.
+ *
+ * @param request - The incoming request object
+ * @param params - The route parameters
+ * @constructor - The function that is called when the route is visited
+ */
 export const PATCH_ATTENDEES = async (request, { params }) => {
   const { attendees } = await request.json();
 
@@ -98,6 +116,13 @@ export const PATCH_ATTENDEES = async (request, { params }) => {
   }
 };
 
+/**
+ * This function updates an event's interested users.
+ *
+ * @param request - The incoming request object
+ * @param params - The route parameters
+ * @constructor - The function that is called when the route is visited
+ */
 export const PATCH_INTERESTED = async (request, { params }) => {
   const { interested } = await request.json();
 
@@ -125,6 +150,13 @@ export const PATCH_INTERESTED = async (request, { params }) => {
   }
 };
 
+/**
+ * This function updates an event's image.
+ *
+ * @param request - The incoming request object
+ * @param params - The route parameters
+ * @constructor - The function that is called when the route is visited
+ */
 export const PATCH_EVENT_IMAGE = async (request, { params }) => {
   const { eventImage } = await request.json();
 
@@ -150,6 +182,13 @@ export const PATCH_EVENT_IMAGE = async (request, { params }) => {
   }
 };
 
+/**
+ * This function updates an event's uploaded pictures.
+ *
+ * @param request - The incoming request object
+ * @param params - The route parameters
+ * @constructor - The function that is called when the route is visited
+ */
 export const PATCH_UPLOADED_PICTURES = async (request, { params }) => {
   const { uploadedPictures, originalPictures } = await request.json();
 
@@ -181,8 +220,13 @@ export const PATCH_UPLOADED_PICTURES = async (request, { params }) => {
   }
 };
 
-
-//DELETE (delete)
+/**
+ * This function deletes an event.
+ *
+ * @param request - The incoming request object
+ * @param params - The route parameters
+ * @constructor - The function that is called when the route is visited
+ */
 export const DELETE = async (request, { params }) => {
   try {
     await connectToDB();

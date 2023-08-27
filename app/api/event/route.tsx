@@ -1,7 +1,13 @@
 import { connectToDB } from 'utils/database';
 import Event from 'models/event';
 
-export const GET = async (request) => {
+/**
+ * This function fetches all events.
+ *
+ * @constructor - The function that is called when the route is visited
+ * @returns - A response object
+ */
+export const GET = async () => {
     try {
         await connectToDB();
 
