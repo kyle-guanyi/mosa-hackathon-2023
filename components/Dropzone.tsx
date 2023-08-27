@@ -159,12 +159,12 @@ export default function FileUpload({
     e.preventDefault();
 
     // Check if there are any files
-    if (!files?.length) {
+    if (files?.length === 0) {
       toast({
-        title: "Please upload at least one valid file before submitting",
-        description: "Supported file types are .png, .jpg, and .jpeg",
+        title: "Please upload at least one valid image before submitting",
+        description: "Supported image types are .png, .jpg, and .jpeg",
         status: "error",
-        duration: 4000,
+        duration: 3500,
         isClosable: true,
       });
       onReplaceClose();
