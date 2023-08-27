@@ -1,5 +1,8 @@
 import { Schema, model, models } from "mongoose";
 
+/**
+ * Message Schema
+ */
 const messageSchema = new Schema({
   event: {
     type: Schema.Types.ObjectId,
@@ -25,6 +28,7 @@ const messageSchema = new Schema({
   },
 });
 
+// Export the model and return your IUser interface
 const Message = models.Message || model("Message", messageSchema);
 
 export default Message;
