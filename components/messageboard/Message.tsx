@@ -2,11 +2,8 @@
 
 import { useEffect, useState } from "react";
 import React from "react";
-import Comment from "./Comment";
-import CommentForm from "./CommentForm";
 import { useSession } from "next-auth/react";
 import CreateMessage from "./MessageForm";
-import NextImage from "next/image";
 import {
   Card,
   CardHeader,
@@ -14,10 +11,8 @@ import {
   Avatar,
   Box,
   Heading,
-  Text,
   IconButton,
   CardBody,
-  CardFooter,
   Image,
   Collapse,
   Button,
@@ -41,6 +36,16 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { FiTrash2 } from "react-icons/Fi";
 import { EditIcon } from "@chakra-ui/icons";
 
+/**
+ * This component is used to render a message.
+ *
+ * @param message - A message JSON
+ * @param onDeleteItem - A function to delete a message
+ * @param onPatchMessage - A function to edit a message
+ * @param handlePatchEventPictures - A function to edit a message's pictures
+ * @constructor - Renders a message
+ * @returns A message
+ */
 const Message = ({ message, onDeleteItem, onPatchMessage, handlePatchEventPictures }) => {
   const [userInfo, setUserInfo] = useState({
     firstName: "",
@@ -80,7 +85,9 @@ const Message = ({ message, onDeleteItem, onPatchMessage, handlePatchEventPictur
     setMessageEditing(false);
   };
 
-
+  /**
+   * This function is used to fetch the user's information.
+   */
   const fetchUserInfo = async () => {
     const response = await fetch(`/api/user/${message.author}`);
     const data = await response.json();
@@ -91,6 +98,7 @@ const Message = ({ message, onDeleteItem, onPatchMessage, handlePatchEventPictur
       userUpdatedProfileImage: data.userUpdatedProfileImage,
     });
 
+    // Fetch the user's updated profile image
     if (data.userUpdatedProfileImage) {
       const userUpdatedProfileImageResponse = await fetch(
         `/api/media?keys=${encodeURIComponent(
@@ -100,6 +108,7 @@ const Message = ({ message, onDeleteItem, onPatchMessage, handlePatchEventPictur
       const userUpdatedProfileImageData =
         await userUpdatedProfileImageResponse.json();
 
+      // If the response is ok, set the user's updated profile image
       if (userUpdatedProfileImageResponse.ok) {
         setUserInfo((prevUserInfo) => ({
           ...prevUserInfo,
@@ -123,12 +132,12 @@ const Message = ({ message, onDeleteItem, onPatchMessage, handlePatchEventPictur
     content: "",
   });
 
+  /**
+   * This function is used to fetch the message's comments.
+   */
   const fetchMessageComments = async () => {
-    console.log("This is my message id");
-    console.log(message.id);
     const response = await fetch(`/api/comment/${message._id}`);
     if (response.status === 404) {
-      console.log("Message comments not found");
       setMessageComments([]);
       return;
     }
@@ -144,6 +153,9 @@ const Message = ({ message, onDeleteItem, onPatchMessage, handlePatchEventPictur
 
   const [uploadedMessagePictures, setUploadedMessagePictures] = useState([]);
 
+  /**
+   * This function is used to fetch the message's pictures.
+   */
   const fetchUploadedMessagePictures = async () => {
     try {
       const keysArray = message.uploadedMessagePictures;
@@ -151,7 +163,6 @@ const Message = ({ message, onDeleteItem, onPatchMessage, handlePatchEventPictur
         `/api/media?keys=${encodeURIComponent(JSON.stringify(keysArray))}`
       );
       const data = await response.json();
-      console.log(data);
 
       if (response.ok) {
         setUploadedMessagePictures(data.urls);
@@ -169,6 +180,11 @@ const Message = ({ message, onDeleteItem, onPatchMessage, handlePatchEventPictur
     }
   }, [message.uploadedMessagePictures]);
 
+  /**
+   * This function is used to create a comment.
+   *
+   * @param e - The event
+   */
   const createComment = async (e) => {
     e.preventDefault();
     setSubmitting(true);
@@ -183,6 +199,7 @@ const Message = ({ message, onDeleteItem, onPatchMessage, handlePatchEventPictur
         }),
       });
 
+      // If the response is ok, reset the comment
       if (response.ok) {
         setComment({ content: "" });
         fetchMessageComments();
@@ -194,10 +211,15 @@ const Message = ({ message, onDeleteItem, onPatchMessage, handlePatchEventPictur
     }
   };
 
+  /**
+   * This function is used to edit a comment.
+   *
+   * @param editedComment - The edited comment
+   * @returns The edited comment
+   */
   const editComment = async (editedComment) => {
     setSubmitting(true);
     try {
-      console.log("Reached edited comment", editedComment);
       const response = await fetch(`/api/comment/${editedComment._id}`, {
         method: "PATCH",
         body: JSON.stringify({
@@ -216,6 +238,12 @@ const Message = ({ message, onDeleteItem, onPatchMessage, handlePatchEventPictur
     }
   };
 
+  /**
+   * This function is used to delete a comment.
+   *
+   * @param commentId - The comment ID
+   * @returns The deleted comment
+   */
   const handleDeleteComment = async (commentId) => {
     try {
       const response = await fetch(`/api/comment/${commentId}`, {
@@ -231,8 +259,13 @@ const Message = ({ message, onDeleteItem, onPatchMessage, handlePatchEventPictur
     }
   };
 
+  /**
+   * This function is used to delete a message.
+   *
+   * @param keysArray - The keys array
+   * @returns The deleted message
+   */
   const handlePatchMessagePictures = async (keysArray) => {
-    console.log("These are the new pictures", keysArray)
     setEditedMessage({ ...editedMessage, uploadedMessagePictures: keysArray });
     toast({
       title: "Your newly uploaded image(s) have been attached to your message.",

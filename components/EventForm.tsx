@@ -1,7 +1,5 @@
-import Link from "next/link";
 import Select from "react-select";
 import Dropzone from "components/Dropzone";
-
 import React, { useState, useEffect } from "react";
 
 import {
@@ -10,10 +8,12 @@ import {
   FormLabel,
   Input,
   Textarea,
-  Checkbox,
   FormControl,
 } from "@chakra-ui/react";
 
+/**
+ * This component is used to render the timezone options in the dropdown menu in event form.
+ */
 const Timezones = [
   {
     value: "Etc/GMT+12",
@@ -108,6 +108,9 @@ const Timezones = [
   { value: "Pacific/Kiritimati", label: "UTC+14:00 - Line Island Time (LINT)" },
 ];
 
+/**
+ * This component is used to render the closest city options in the dropdown menu in event form.
+ */
 const ClosestCity = [
   { value: "Africa", label: "Africa" },
   { value: "Alberta", label: "Alberta" },
@@ -152,15 +155,24 @@ const ClosestCity = [
   { value: "Vietnam", label: "Vietnam" },
 ];
 
+
+/**
+ * This component is used to render the event form.
+ *
+ * @param type - A string
+ * @param event - An event JSON
+ * @param setEvent - A function to set an event
+ * @param handleKeysArray - A function to handle an array of keys
+ * @param setNewEvent - A function to set an event
+ * @param firstField - A string
+ * @constructor - Renders an event form
+ * @returns An event form
+ */
 // @ts-ignore
 const EventForm = ({
-  type,
   event,
   setEvent,
-  submitting,
-  handleSubmit,
   handleKeysArray,
-  newEvent,
   setNewEvent,
   firstField,
 }) => {
@@ -170,6 +182,12 @@ const EventForm = ({
 
   const [initialFiles, setInitialFiles] = useState([event.eventImage]);
 
+  /**
+   * This function is used to update the initial files.
+   *
+   * @param newFiles - An array of files
+   * @returns An array of files
+   */
   const updateInitialFiles = (newFiles) => {
     setInitialFiles(newFiles);
   };

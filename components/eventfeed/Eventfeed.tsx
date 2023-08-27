@@ -3,6 +3,14 @@ import React, { useState, useEffect } from "react";
 import EventCard from "./EventCard";
 import { Heading } from "@chakra-ui/react";
 
+/**
+ * This component is used to render a list of event cards.
+ * It takes in a list of event JSONs and renders an event card for each event.
+ *
+ * @param data - A list of event JSONs
+ * @constructor - Renders a list of event cards
+ * @returns A list of event cards
+ */
 const EventCardList = ({ data }) => {
   return (
     <div className="mt-8 gap-y-5 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
@@ -13,6 +21,14 @@ const EventCardList = ({ data }) => {
   );
 };
 
+/**
+ * This component is used to render a list of events.
+ * It takes in a list of event JSONs and renders an event card for each event.
+ *
+ * @param selectedDate - The selected date
+ * @constructor - Renders a list of event cards
+ * @returns A list of event cards
+ */
 const EventFeed = ({ selectedDate }) => {
   const [events, setEvents] = useState([]);
   const [filteredEvents, setFilteredEvents] = useState([]);
@@ -20,6 +36,7 @@ const EventFeed = ({ selectedDate }) => {
   const [filterVirtual, setFilterVirtual] = useState("");
   const [sortOption, setSortOption] = useState(true);
 
+  // obtains all the event JSONs
   const fetchEvents = async () => {
     const response = await fetch("/api/event");
     const data = await response.json();
@@ -35,13 +52,14 @@ const EventFeed = ({ selectedDate }) => {
     fetchEvents();
   }, []);
 
+
   useEffect(() => {
     const results = Object.values(events).filter((event) => {
+      // Filter by date
       const isDateMatching =
         !selectedDate || event.startDate.substring(0, 10) === selectedDate;
-      // console.log("This is the event date:", event.startDate.substring(0, 10));
-      // console.log("This is my selected date:", selectedDate);
 
+      // Filter by city, date, and virtual
       if (
         event.closestCity.includes(filterCity) &&
         isDateMatching &&
@@ -51,6 +69,7 @@ const EventFeed = ({ selectedDate }) => {
       }
     });
 
+    // Sort by date
     if (sortOption) {
       const sortedEvents = [...results].sort((a, b) => {
         const dateA = new Date(a.startDate);

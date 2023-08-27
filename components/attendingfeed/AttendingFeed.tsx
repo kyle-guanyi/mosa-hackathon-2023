@@ -4,7 +4,14 @@ import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import EventCard from "../eventfeed/EventCard";
 
-
+/**
+ * This component is used to render a list of event cards.
+ * It takes in a list of event JSONs and renders an event card for each event.
+ *
+ * @param data - A list of event JSONs
+ * @constructor - Renders a list of event cards
+ * @returns A list of event cards
+ */
 const EventCardList = ({ data }) => {
   return (
     <div className="grid grid-cols-1 pt-8 gap-y-5">
@@ -15,6 +22,13 @@ const EventCardList = ({ data }) => {
   );
 };
 
+/**
+ * This component is used to render a list of events that the user is attending.
+ * It takes in a list of event JSONs and renders an event card for each event.
+ *
+ * @constructor - Renders a list of event cards
+ * @returns A list of event cards
+ */
 const AttendingFeed = () => {
   // constant containing JSONs of events
   const [events, setEvents] = useState([]);

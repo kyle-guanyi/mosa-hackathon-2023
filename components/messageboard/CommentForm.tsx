@@ -1,6 +1,19 @@
+/**
+ * Comment form component
+ *
+ * @param comment - A comment JSON
+ * @param setComment - A function to set the comment
+ * @param handleCommentSubmit - A function to submit the comment
+ * @constructor - Renders a comment form
+ * @returns A comment form
+ */
 const CreateComment = ({ comment, setComment, handleCommentSubmit }) => {
 
-  const handleSubmit = (e) => {
+    /**
+     * Handles the submit event
+     * @param e - The submit event
+     */
+    const handleSubmit = (e) => {
     e.preventDefault();
     handleCommentSubmit(e);
   };

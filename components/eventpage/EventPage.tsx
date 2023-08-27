@@ -7,7 +7,7 @@ import { InfoOutlineIcon } from "@chakra-ui/icons";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import NextImage from "next/image";
-import { DateTime, IANAZone } from "luxon";
+import { DateTime } from "luxon";
 import PhotoTimeline from "/components/phototimeline/PhotoTimeline";
 import {
   useDisclosure,
@@ -22,7 +22,6 @@ import {
   Heading,
   Image,
   Divider,
-  Center,
   Collapse,
   Box,
   Drawer,
@@ -36,7 +35,6 @@ import {
 } from "@chakra-ui/react";
 
 import { EditIcon } from "@chakra-ui/icons";
-
 import EventForm from "components/EventForm";
 
 const EventPage = ({
@@ -46,8 +44,7 @@ const EventPage = ({
   user,
   handleAdd,
   handleRemove,
-  handleEdit,
-  handleDelete,
+                     handleDelete,
   addImagesToEvent,
   fetchEventDetails
 }) => {
@@ -62,16 +59,13 @@ const EventPage = ({
   const { isOpen: isZoomOpen, onToggle } = useDisclosure();
 
   const [submitting, setIsSubmitting] = useState(false);
-
   const [event, setEvent] = useState(eventDetails);
-  console.log(eventDetails)
-  console.log("this is the event details that i passe dthrough to this page:", event)
 
   useEffect(() => {
-    console.log("Setting event state to eventDetails:", eventDetails);
     setEvent(eventDetails);
   }, [eventDetails]);
 
+  // Convert start date to a readable format
   const startDate = new Date(event.startDate).toLocaleDateString(
     "en-US",
     {
@@ -83,9 +77,11 @@ const EventPage = ({
 
   const [show, setShow] = React.useState(false);
   const handleToggle = () => setShow(!show);
-
   const [eventImage, setEventImage] = useState("");
 
+  /**
+   * Fetches the event image from the database
+   */
   const fetchEventImage = async () => {
     try {
       const keysArray = [event.eventImage];
@@ -105,6 +101,7 @@ const EventPage = ({
     }
   };
 
+  // Fetch event image when event image changes
   useEffect(() => {
     if (event?.eventImage) {
       fetchEventImage();
@@ -112,14 +109,15 @@ const EventPage = ({
   }, [event?.eventImage]);
 
   const [isLoading, setIsLoading] = useState(true);
-  
   const [userEventDateTime, setUserEventDateTime] = useState(null);
 
   // UseEffect to set isLoading to false once data is fetched
   useEffect(() => {
+    // Check if all data is fetched
     if (event && creatorInfo && attendeesInfo) {
       setIsLoading(false);
 
+      // Convert event time to user's timezone
       if (session?.user.id) {
         const dateTimeObject = DateTime.fromISO(event.UTCEventTime);
         const userTimezone = DateTime.local().zoneName;
@@ -130,6 +128,9 @@ const EventPage = ({
     }
   }, [event, creatorInfo, attendeesInfo, session?.user.id]);
 
+  /**
+   * Validates all required fields in the event form
+   */
   const validateFields = () => {
     if (
       !newEvent.eventName ||
@@ -146,21 +147,26 @@ const EventPage = ({
       // Return false if location is required for in-person events and is missing
       return false;
     }
-    if (newEvent.isVirtual && !newEvent.zoomLink) {
-      // Return false if virtual link is required for virtual events and is missing
-      return false;
-    }
-    return true;
+    return !(newEvent.isVirtual && !newEvent.zoomLink);
+
   };
 
+  // Use toast to display error message if any required fields are missing
   const toast = useToast();
 
+  /**
+   * Updates the event in the database
+   *
+   * @param newEvent - The updated event
+   * @returns A toast message indicating whether the event was successfully updated
+   */
   const updateEvent = async (newEvent) => {
     setIsSubmitting(true);
 
-    console.log("this is the updated event stuff: ", event);
+    // Validate event id
     if (!event._id) return alert("Missing Event Id!");
 
+    // Validate all required fields
     if (!validateFields()) {
       toast({
         title: "Please fill out all required fields before submitting",
@@ -172,8 +178,8 @@ const EventPage = ({
       return;
     }
 
+    // Update event in database
     try {
-      console.log("This is new event", newEvent)
       const response = await fetch(`/api/event/${event._id}`, {
         method: "PATCH",
         body: JSON.stringify({
@@ -207,14 +213,21 @@ const EventPage = ({
     }
   };
 
+  /**
+   * Updates the event image in the database
+   *
+   * @param newEventImage - The updated event image
+   * @returns A toast message indicating whether the event image was successfully updated
+   */
   const updateEventImage = async (newEventImage) => {
     setIsSubmitting(true);
 
+    // Validate event id
     if (!event._id) return alert("Missing Event Id!");
 
-    console.log(newEventImage);
+    // Update event image in database
     try {
-      const response = await fetch(`/api/event/${event._id}?type=eventImage`, {
+      await fetch(`/api/event/${event._id}?type=eventImage`, {
         method: "PATCH",
         body: JSON.stringify({
           eventImage: newEventImage,
@@ -233,12 +246,20 @@ const EventPage = ({
     }
   };
 
+  /**
+   * Updates the event image in the database
+   *
+   * @param keysArray - The updated event image
+   * @returns A toast message indicating whether the event image was successfully updated
+   */
   const handleKeysArray = async (keysArray) => {
     updateEventImage(keysArray[0]);
   };
 
+  // Initialize newEvent state
   const [newEvent, setNewEvent] = useState(null);
 
+  // Update newEvent state when event changes
   return (
     <div className="h-full w-full bg-red-500 flex">
       <div className="w-1/6 bg-blue-500 p-4">
@@ -418,7 +439,7 @@ const EventPage = ({
                   type="button"
                   isActive={true}
                   className="hover:opacity-80 mr-4"
-                  onClick={(e) =>
+                  onClick={() =>
                     !user.attendingEvents.includes(event._id)
                       ? handleAdd(event._id)
                       : handleRemove(event._id)

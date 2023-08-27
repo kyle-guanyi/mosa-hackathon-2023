@@ -1,25 +1,19 @@
 "use client";
 import axios from "axios";
 import Image from "next/image";
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-  FormEvent,
-} from "react";
-import { useDropzone } from "react-dropzone";
-import { BsUpload, BsXCircleFill } from "react-icons/bs";
+import React, {useCallback, useEffect, useMemo, useState,} from "react";
+import {useDropzone} from "react-dropzone";
+import {BsUpload, BsXCircleFill} from "react-icons/bs";
 import {
-  useDisclosure,
   AlertDialog,
-  AlertDialogOverlay,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogCloseButton,
-  AlertDialogFooter,
   AlertDialogBody,
+  AlertDialogCloseButton,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
   Button,
+  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 
@@ -53,6 +47,16 @@ const rejectStyle = {
   borderColor: "#ff1744",
 };
 
+/**
+ * This component is used to render a file upload.
+ *
+ * @param handleKeysArray - A function to handle an array of keys
+ * @param maxUploads - A number
+ * @param initialFiles - An array of initial files
+ * @param updateInitialFiles - A function to update the initial files
+ * @constructor - Renders a file upload
+ * @returns A file upload
+ */
 export default function FileUpload({
   handleKeysArray,
   maxUploads,
@@ -96,8 +100,6 @@ export default function FileUpload({
   );
 
   const {
-    acceptedFiles,
-    fileRejections,
     getRootProps,
     getInputProps,
     isFocused,
@@ -118,24 +120,45 @@ export default function FileUpload({
     return () => files.forEach((file) => URL.revokeObjectURL(file.preview));
   }, [files]);
 
+  /**
+   * This function is used to remove a file.
+   *
+   * @param name - A string
+   * @returns A file
+   */
   const removeFile = (name) => {
     setFiles((files) => files.filter((file) => file.name !== name));
   };
 
+  /**
+   * This function is used to remove all files.
+   */
   const removeAll = () => {
     setFiles([]);
     setRejected([]);
   };
 
+  /**
+   * This function is used to remove a rejected file.
+   *
+   * @param name - A string
+   * @returns A file
+   */
   const removeRejected = (name) => {
     setRejected((files) => files.filter(({ file }) => file.name !== name));
   };
 
   const toast = useToast();
 
+  /**
+   * This function is used to handle a submit.
+   *
+   * @param e - An event
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Check if there are any files
     if (!files?.length) {
       toast({
         title: "Please upload at least one valid file before submitting",
@@ -148,6 +171,7 @@ export default function FileUpload({
       return;
     }
 
+    // Check if there are any rejected files
     try {
       setIsSubmitting(true);
       const formData = new FormData();
@@ -156,6 +180,7 @@ export default function FileUpload({
         formData.append("type", file.type);
       });
 
+      // Send files to backend
       let { data } = await axios.post("/api/media", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -163,12 +188,15 @@ export default function FileUpload({
         },
       });
 
-      console.log(data.keysArray);
+      // Handle keys array
       handleKeysArray(data.keysArray);
+
+      // Update initial files
       if (updateInitialFiles) {
         updateInitialFiles(data.keysArray);
       }
 
+      // Reset files
       setFiles([]);
       onReplaceClose();
     } catch (err) {
@@ -184,6 +212,7 @@ export default function FileUpload({
     }
   };
 
+  // Styling
   const style = useMemo(
     () => ({
       ...baseStyle,
@@ -196,14 +225,15 @@ export default function FileUpload({
 
   const [initialPictures, setInitialPictures] = useState([]);
 
+  /**
+   * This function is used to fetch initial pictures.
+   */
   const fetchInitialPictures = async () => {
     try {
-      const keysArray = initialFiles;
       const response = await fetch(
-        `/api/media?keys=${encodeURIComponent(JSON.stringify(keysArray))}`
+        `/api/media?keys=${encodeURIComponent(JSON.stringify(initialFiles))}`
       );
       const data = await response.json();
-      console.log(data);
 
       if (response.ok) {
         setInitialPictures(data.urls);

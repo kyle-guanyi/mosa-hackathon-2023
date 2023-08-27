@@ -1,15 +1,9 @@
 import Dropzone from "components/Dropzone";
 import { useState, useEffect } from "react";
 import {
-  Collapse,
-  Image,
-  Text,
   Card,
-  CardHeader,
   CardBody,
   Button,
-  Divider,
-  Heading,
   useToast,
   Textarea,
   CardFooter,
@@ -23,6 +17,18 @@ import {
   ModalFooter
 } from "@chakra-ui/react";
 
+/**
+ * This component is used to create a message.
+ *
+ * @param message - A message JSON
+ * @param setMessage - A function to set a message
+ * @param handleMessageSubmit - A function to submit a message
+ * @param handleKeysArray - A function to handle an array of keys
+ * @param existingFiles - An array of existing files
+ * @param type - A string
+ * @constructor - Renders a message
+ * @returns A message
+ */
 const CreateMessage = ({
   message,
   setMessage,
@@ -34,6 +40,12 @@ const CreateMessage = ({
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure()
 
+  /**
+   * This function is used to submit a message.
+   *
+   * @param e - An event
+   * @returns A message
+   */
   const handleSubmit = (e) => {
     e.preventDefault();
     if (message.content === "") {
@@ -49,8 +61,6 @@ const CreateMessage = ({
     }
   };
 
-
-
   const [initialFiles, setInitialFiles] = useState(message.uploadedMessagePictures);
 
   useEffect(() => {
@@ -59,6 +69,12 @@ const CreateMessage = ({
     }
   }, [existingFiles]);
 
+  /**
+   * This function is used to update the initial files.
+   *
+   * @param newFiles - An array of files
+   * @returns An array of files
+   */
   const updateInitialFiles = (newFiles) => {
     setInitialFiles(newFiles);
   };

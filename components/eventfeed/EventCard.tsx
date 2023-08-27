@@ -1,25 +1,32 @@
 "use client";
-import { useState, useEffect, useCallback } from "react";
+import React, {useCallback, useEffect, useState} from "react";
 // import Image from "next/image";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import React from "react";
-import { DateTime } from "luxon";
+import {useSession} from "next-auth/react";
+import {useRouter} from "next/navigation";
+import {DateTime} from "luxon";
 import {
-  Stack,
+  Avatar,
+  AvatarGroup,
   Card,
-  Heading,
-  Text,
   CardBody,
   CardFooter,
-  Image,
   Divider,
-  AvatarGroup,
+  Heading,
+  Image,
   Skeleton,
   SkeletonCircle,
-  Avatar,
+  Stack,
+  Text,
 } from "@chakra-ui/react";
 
+/**
+ * This component is used to render an event card.
+ * It takes in an event JSON and renders an event card.
+ *
+ * @param event - An event JSON
+ * @constructor - Renders an event card
+ * @returns An event card
+ */
 const EventCard = ({ event }) => {
   const router = useRouter();
 
@@ -54,6 +61,7 @@ const EventCard = ({ event }) => {
     }
   }, [event?.eventImage]);
 
+  // fetch profilepic for user
   const [eventAttendeesPictures, setEventAttendeesPictures] = useState([
     {
       firstName: "",
@@ -62,6 +70,7 @@ const EventCard = ({ event }) => {
       userUpdatedProfileImage: "",
     },
   ]);
+
   const fetchEventAttendeesPicture = useCallback(async () => {
     try {
       setIsLoading(true);
@@ -71,8 +80,7 @@ const EventCard = ({ event }) => {
       const attendeesResponses = await Promise.all(
         attendeeInfoData.attendees.map(async (attendeeId) => {
           const response = await fetch(`/api/user/${attendeeId}`);
-          const data = await response.json();
-          return data;
+          return await response.json();
         })
       );
 

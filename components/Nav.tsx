@@ -10,7 +10,6 @@ import { useRouter, usePathname } from "next/navigation";
 import {
   Box,
   Flex,
-  Avatar,
   HStack,
   Text,
   IconButton,
@@ -23,10 +22,8 @@ import {
   useDisclosure,
   useColorModeValue,
   Stack,
-  Input,
   Card,
   CardBody,
-  CardFooter,
   Heading,
   Image,
   Modal,
@@ -37,12 +34,10 @@ import {
   ModalBody,
   ModalCloseButton,
   useToast,
-  Spinner,
 } from "@chakra-ui/react";
 import {
   Drawer,
   DrawerBody,
-  DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
   DrawerContent,
@@ -50,35 +45,13 @@ import {
 } from "@chakra-ui/react";
 import { EditIcon, HamburgerIcon } from "@chakra-ui/icons";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
-import { IoHomeOutline } from "react-icons/io5"; 
-
-interface Props {
-  children: React.ReactNode;
-}
-
-const Nav = (props: Props) => {
-  const { children } = props;
-  return (
-    <Box
-      as="a"
-      px={2}
-      py={1}
-      rounded={"md"}
-      top={0}
-      left={0}
-      right={0}
-      zIndex={1000}
-      _hover={{
-        textDecoration: "none",
-        bg: useColorModeValue("gray.200", "gray.700"),
-      }}
-      href={"#"}
-    >
-      {children}
-    </Box>
-  );
-};
-
+import { IoHomeOutline } from "react-icons/io5";
+/**
+ * This component is used to render a navigation bar with actions.
+ *
+ * @constructor - Renders a navigation bar with actions
+ * @returns A navigation bar with actions
+ */
 export default function WithAction() {
   const { data: session } = useSession();
   const { isOpen: isCreateEventOpen, onOpen: onCreateEventOpen, onClose: onCreateEventClose } = useDisclosure();
@@ -93,52 +66,7 @@ export default function WithAction() {
       setHome(true);
     }
   }, []);
-  // const [user, setUser] = useState({
-  //   googleProfileImage: "",
-  //   userUpdatedProfileImage: "",
-  // });
 
-  // useEffect(() => {
-  //   const getUserDetails = async () => {
-  //     const response = await fetch(`/api/user/${session?.user.id}`);
-  //     const data = await response.json();
-  //     console.log(data);
-
-  //     setUser({
-  //       googleProfileImage: data.googleProfileImage,
-  //       userUpdatedProfileImage: data.userUpdatedProfileImage,
-  //     });
-  //   };
-
-  //   if (session?.user.id) getUserDetails();
-  // }, [session?.user.id]);
-
-  // const [profilePicture, setProfilePicture] = useState("");
-
-  // const fetchProfilePicture = async () => {
-  //   try {
-  //     const keysArray = [user.userUpdatedProfileImage];
-  //     const response = await fetch(
-  //       `/api/media?keys=${encodeURIComponent(JSON.stringify(keysArray))}`
-  //     );
-  //     const data = await response.json();
-  //     console.log(data);
-
-  //     if (response.ok) {
-  //       setProfilePicture(data.urls[0]);
-  //     } else {
-  //       console.error("Error fetching profile picture");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching profile picture:", error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (user?.userUpdatedProfileImage) {
-  //     fetchProfilePicture();
-  //   }
-  // }, [user?.userUpdatedProfileImage]);
 
   const [submitting, setSubmitting] = useState(false);
   const [event, setEvent] = useState({
@@ -156,11 +84,9 @@ export default function WithAction() {
     closestCity: "",
     eventImage: null,
   });
-
-  const [user, setUser] = useState({
-    attendingEvents: [],
-  });
-
+  /**
+   * This function is used to validate fields.
+   */
   const validateFields = () => {
     if (
       !event.eventName ||
@@ -177,20 +103,22 @@ export default function WithAction() {
       // Return false if location is required for in-person events and is missing
       return false;
     }
-    if (event.isVirtual && !event.zoomLink) {
-      // Return false if virtual link is required for virtual events and is missing
-      return false;
-    }
-    return true;
+    return !(event.isVirtual && !event.zoomLink);
+
   };
 
   const toast = useToast();
 
+  /**
+   * This function is used to create an event.
+   *
+   * @param newEvent - An event JSON
+   * @returns An event
+   */
   const createEvent = async (newEvent) => {
     setSubmitting(true);
 
-    console.log(event);
-
+    // Validate fields
     if (!validateFields()) {
       toast({
         title: "Please fill out all required fields before submitting",
@@ -202,6 +130,7 @@ export default function WithAction() {
       return;
     }
 
+    // Create event
     try {
       const response = await fetch("/api/event/new", {
         method: "POST",
@@ -264,6 +193,12 @@ export default function WithAction() {
     }
   };
 
+  /**
+   * This function is used to handle an array of keys.
+   *
+   * @param keysArray - An array of keys
+   * @returns An array of keys
+   */
   const handleKeysArray = async (keysArray) => {
     setNewEvent({ ...event, eventImage: keysArray[0] });
   };

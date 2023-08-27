@@ -1,13 +1,14 @@
 'use client';
 
-import {useState, useEffect} from 'react'
 
-import Card from '../eventfeed/Card';
-
+/**
+ * Feed component
+ *
+ * @returns {JSX.Element} - Feed component
+ * @constructor - Feed
+ */
 const Feed = () => {
-    const [seaerchText, setSearchText] = useState('');
-
-    const handleSearchChange = (e) => {
+    const handleSearchChange = () => {
 
     }
     return (

@@ -2,29 +2,41 @@ import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import CreateComment from "./CommentForm";
 
+/**
+ * This component is used to render a comment.
+ *
+ * @param comment - A comment JSON
+ * @param onDeleteComment - A function to delete a comment
+ * @param onPatchComment - A function to edit a comment
+ * @constructor - Renders a comment
+ * @returns A comment
+ */
 const Comment = ({ comment, onDeleteComment, onPatchComment }) => {
   const [userName, setUserName] = useState("");
   const { data: session } = useSession();
   //if in editing mode
   const [editing, setEditing] = useState(false);
   // content to populate the commentform
-  
 
+  // set the editedComment to the comment that is passed in
   const [editedComment, setEditedComment] = useState({
     _id: comment._id,
     content: comment.content,
   });
 
+  // fetch the user's name using the author id
   const fetchUserName = async () => {
     const response = await fetch(`/api/user/${comment.author}`);
     const data = await response.json();
     setUserName(data.firstName + " " + data.lastName);
   };
 
+  // when edit button is clicked, setEditing to true
   const onEditComment = async () => {
     setEditing(true);
   };
 
+  // when the comment.author changes, fetch the user's name
   useEffect(() => {
     if (comment.author) {
       fetchUserName();

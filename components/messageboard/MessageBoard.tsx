@@ -6,16 +6,27 @@ import MessageForm from "./MessageForm";
 import { useSession } from "next-auth/react";
 import { Heading } from "@chakra-ui/react";
 
+/**
+ * This component is used to render a message board.
+ *
+ * @param eventDetails - An event JSON
+ * @param addImagesToEvent - A function to add images to an event
+ * @constructor - Renders a message board
+ * @returns A message board
+ */
 const MessageBoard = ({ eventDetails, addImagesToEvent }) => {
   const [eventMessages, setEventMessages] = useState([]);
   const [message, setMessage] = useState({
     content: "",
     uploadedMessagePictures: [],
   });
-  const [submitting, setSubmitting] = useState(false);
+  const [setSubmitting] = useState(false);
 
   const { data: session } = useSession();
 
+  /**
+   * This function is used to fetch the messages for an event.
+   */
   const fetchEventMessages = async () => {
     const response = await fetch(`/api/message/${eventDetails._id}`);
     if (response.status === 404) {
@@ -33,6 +44,12 @@ const MessageBoard = ({ eventDetails, addImagesToEvent }) => {
     }
   }, [eventDetails._id]);
 
+  /**
+   * This function is used to create a message.
+   *
+   * @param e - An event
+   * @returns A message
+   */
   const createMessage = async (e) => {
     e.preventDefault();
     setSubmitting(true);
@@ -48,6 +65,7 @@ const MessageBoard = ({ eventDetails, addImagesToEvent }) => {
         }),
       });
 
+      // If the message is empty, do not submit
       if (response.ok) {
         setMessage({ content: "" });
         if (message.uploadedMessagePictures) {
@@ -62,6 +80,12 @@ const MessageBoard = ({ eventDetails, addImagesToEvent }) => {
     }
   };
 
+  /**
+   * This function is used to edit a message.
+   *
+   * @param editedMessage - A message JSON
+   * @returns An edited message
+   */
   const editMessage = async (editedMessage) => {
     setSubmitting(true);
     try {
@@ -84,6 +108,12 @@ const MessageBoard = ({ eventDetails, addImagesToEvent }) => {
     }
   };
 
+  /**
+   * This function is used to delete a message.
+   *
+   * @param messageId - A message ID
+   * @returns A deleted message
+   */
   const handleDeleteMessage = async (messageId) => {
     try {
       const response = await fetch(`/api/message/${messageId}`, {
@@ -99,15 +129,27 @@ const MessageBoard = ({ eventDetails, addImagesToEvent }) => {
     }
   };
 
+  /**
+   * This function is used to handle the keys array.
+   *
+   * @param keysArray - An array of keys
+   * @returns An array of keys
+   */
   const handleKeysArray = async (keysArray) => {
     setMessage({ ...message, uploadedMessagePictures: keysArray });
   };
-  
+
+  /**
+   * This function is used to patch the event pictures.
+   *
+   * @param editedMessage - A message JSON
+   * @returns An edited message
+   */
   const handlePatchEventPictures = async (editedMessage) => {
     setSubmitting(true);
     try {
       console.log("Reached edited message", editedMessage);
-      const response = await fetch(`/api/event/${eventDetails._id}?type=uploadedPictures`, {
+      await fetch(`/api/event/${eventDetails._id}?type=uploadedPictures`, {
         method: "PATCH",
         body: JSON.stringify({
           uploadedPictures: editedMessage.uploadedMessagePictures,

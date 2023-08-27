@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import {
   Collapse,
   Image,
-  Text,
   Card,
   CardHeader,
   Flex,
@@ -26,28 +25,34 @@ import {
   Table,
   Thead,
   Tbody,
-  Tfoot,
   Tr,
   Th,
   Td,
-  TableCaption,
   TableContainer,
   useDisclosure,
 } from "@chakra-ui/react";
 
 import { EditIcon } from "@chakra-ui/icons";
-
 import ProfileForm from "/components/ProfileForm";
 
+/**
+ * This component is used to render a profile page.
+ *
+ * @param profileDetails -  A user JSON
+ * @param handleEdit - A function to handle editing
+ * @constructor - Renders a profile page
+ * @returns A profile page
+ */
 const ProfilePage = ({ profileDetails, handleEdit }) => {
   const [profilePicture, setProfilePicture] = useState("");
-
   const { isOpen, onOpen, onClose } = useDisclosure();
   const firstField = React.useRef();
-
   const [show, setShow] = React.useState(false);
   const handleToggle = () => setShow(!show);
 
+  /**
+   * This function is used to fetch a profile picture.
+   */
   const fetchProfilePicture = async () => {
     try {
       const keysArray = [profileDetails.userUpdatedProfileImage];
@@ -55,7 +60,6 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
         `/api/media?keys=${encodeURIComponent(JSON.stringify(keysArray))}`
       );
       const data = await response.json();
-      console.log(data);
 
       if (response.ok) {
         setProfilePicture(data.urls[0]);
@@ -72,8 +76,7 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
       fetchProfilePicture();
     }
   }, [profileDetails?.userUpdatedProfileImage]);
-
-  const router = useRouter();
+  useRouter();
   const { data: session } = useSession();
 
   const [user, setUser] = useState({
@@ -90,6 +93,7 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
 
   const [submitting, setIsSubmitting] = useState(false);
 
+  // Fetch user details
   useEffect(() => {
     const getUserDetails = async () => {
       const response = await fetch(`/api/user/${session?.user.id}`);
@@ -114,18 +118,27 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
 
   const toast = useToast();
 
+  /**
+   * This function is used to validate first and last name fields.
+   */
   const validateFields = () => {
-    if (!user.firstName || !user.lastName) {
-      return false;
-    }
-    return true;
+    return !(!user.firstName || !user.lastName);
+
   };
 
+  /**
+   * This function is used to update a user.
+   *
+   * @param updatedUser - A user JSON
+   * @returns A user
+   */
   const updateUser = async (updatedUser) => {
     setIsSubmitting(true);
 
+    // Validate user id
     if (!session?.user.id) return alert("Missing User Id!");
 
+    // Validate fields
     if (!validateFields()) {
       toast({
         title: "Please fill out all required fields before submitting",
@@ -137,6 +150,7 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
       return;
     }
 
+    // Update user
     try {
       const response = await fetch(`/api/user/${session?.user.id}`, {
         method: "PATCH",
@@ -169,11 +183,19 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
     }
   };
 
+  /**
+   * This function is used to update a user profile picture.
+   *
+   * @param newProfileImage - A string
+   * @returns A user profile picture
+   */
   const updateUserProfilePic = async (newProfileImage) => {
     setIsSubmitting(true);
 
+    // Validate user id
     if (!session?.user.id) return alert("Missing User Id!");
-    console.log(newProfileImage);
+
+    // Update user profile picture
     try {
       const response = await fetch(`/api/user/${session?.user.id}?type=pic`, {
         method: "PATCH",
@@ -181,6 +203,7 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
           userUpdatedProfileImage: newProfileImage,
         }),
       });
+
       if (response.ok) {
         handleEdit();
         toast({
@@ -198,6 +221,12 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
     }
   };
 
+  /**
+   * This function is used to handle an array of keys.
+   *
+   * @param keysArray - An array of keys
+   * @returns An array of keys
+   */
   const handleKeysArray = async (keysArray) => {
     updateUserProfilePic(keysArray[0]);
   };

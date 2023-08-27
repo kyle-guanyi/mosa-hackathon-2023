@@ -1,23 +1,32 @@
 "use client";
 
-// components/Calendar.tsx
 import React, { useEffect, useState } from "react";
-// (session?.user.id)
 import { useSession } from "next-auth/react";
 import ReactCalendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { Center, Button } from "@chakra-ui/react";
 import { RepeatClockIcon } from "@chakra-ui/icons"
 
+/**
+ * This component is used to render a calendar.
+ *
+ * @param handleDate - A function to handle the date
+ * @constructor - Renders a calendar
+ * @returns A calendar
+ */
 const Calendar = ( { handleDate }) => {
   // constant containing JSONs of events
   const [events, setEvents] = useState([]);
 
+  // to obtain session ID
   const [value, setValue] = useState(null);
 
-  
-
-  // eventDot
+  /**
+   * This function is used to render an event dot.
+   *
+   * @param date - A date
+   * @returns An event dot
+   */
   const renderEventDot = (date) => {
     const dateString = date.toISOString().split("T")[0];
 
@@ -25,16 +34,24 @@ const Calendar = ( { handleDate }) => {
       return <div className="relative justify-center items-center ">
           <div className="event-dot"> </div>
         </div>
-       // CSS class for blue dot
     }
     
     return null;
   };
 
+  /**
+   * This function is used to change the value of the calendar.
+   *
+   * @param nextValue - A date
+   * @returns A calendar
+   */
   function onChange(nextValue) {
     setValue(nextValue);
   }
 
+  /**
+   * This function is used to reset the calendar.
+   */
   function resetCalendar() {
     setValue(null);
     handleDate(null);
@@ -45,7 +62,9 @@ const Calendar = ( { handleDate }) => {
 
   const [filteredEvents, setFilteredEvents] = useState([]);
 
-  // obtains all the event JSONs
+  /**
+   * This function is used to fetch events.
+   */
   const fetchEvents = async () => {
     const response = await fetch("/api/event");
     const data = await response.json();
@@ -55,11 +74,17 @@ const Calendar = ( { handleDate }) => {
     fetchEvents();
   }, []);
 
+  /**
+   * This function is used to fetch user attending events.
+   */
   const [userAttendingEvents, setUserAttendingEvents] = useState({
     attendingEvents: [],
   });
 
   useEffect(() => {
+    /**
+     * This function is used to get user attending events.
+     */
     const getUserAttendingEvents = async () => {
       const response = await fetch(`/api/user/${session?.user.id}`);
       const data = await response.json();
@@ -68,7 +93,7 @@ const Calendar = ( { handleDate }) => {
         attendingEvents: data.attendingEvents,
       });
     };
-
+    // If user is logged in, get their attending events
     if (session?.user.id) getUserAttendingEvents();
   }, [session?.user.id]);
 

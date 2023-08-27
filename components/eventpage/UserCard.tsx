@@ -6,12 +6,21 @@ import { useSession } from "next-auth/react";
 import { Avatar } from "@chakra-ui/react";
 import { Card, CardHeader, Flex, Box, Heading, Text } from "@chakra-ui/react";
 
+/**
+ * This component is used to render a user card.
+ * It takes in a user JSON and renders a user card.
+ *
+ * @param user - A user JSON
+ * @constructor - Renders a user card
+ * @returns A user card
+ */
 const UserCard = ({ user }) => {
   const { data: session } = useSession();
 
   const router = useRouter();
   // fetch profilepic for user
   const [profilePicture, setProfilePicture] = useState("");
+
   const fetchProfilePicture = async () => {
     try {
       const keysArray = [user.userUpdatedProfileImage]; // Convert to an array
@@ -19,7 +28,6 @@ const UserCard = ({ user }) => {
         `/api/media?keys=${encodeURIComponent(JSON.stringify(keysArray))}`
       );
       const data = await response.json();
-      console.log(data);
 
       if (response.ok) {
         setProfilePicture(data.urls[0]); // Assuming the data structure is { success: true, urls: [profilePictureUrl] }
@@ -37,7 +45,9 @@ const UserCard = ({ user }) => {
     }
   }, [user?.userUpdatedProfileImage]);
 
-  // routes to profile page
+  /**
+   * This function is used to route to the profile page.
+   */
   const handleProfileClick = () => {
     if (user?._id === session?.user.id) return router.push("/profile");
 

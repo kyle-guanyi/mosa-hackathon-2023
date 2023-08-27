@@ -1,20 +1,27 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import NextImage from "next/image";
 import { useDisclosure, Modal, Grid, GridItem, Image, ModalOverlay, ModalContent, ModalCloseButton } from "@chakra-ui/react";
 
+/**
+ * This component is used to render a photo timeline.
+ *
+ * @param event - An event JSON
+ * @constructor - Renders a photo timeline
+ * @returns A photo timeline
+ */
 const PhotoTimeline = ({ event }) => {
   const [uploadedEventPictures, setUploadedEventPictures] = useState([]);
 
+  /**
+   * This function is used to fetch uploaded event pictures.
+   */
   const fetchUploadedEventPictures = async () => {
     try {
-      console.log("Entered fetch pictures")
       const keysArray = event.uploadedPictures;
       const response = await fetch(
         `/api/media?keys=${encodeURIComponent(JSON.stringify(keysArray))}`
       );
       const data = await response.json();
-      console.log(data);
 
       if (response.ok) {
         setUploadedEventPictures(data.urls);

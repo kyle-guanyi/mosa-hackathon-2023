@@ -4,6 +4,13 @@ import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import Card from "../eventfeed/EventCard";
 
+/**
+ * This component is used to render a list of event cards.
+ *
+ * @param data - A list of event JSONs
+ * @constructor - Renders a list of event cards
+ * @returns A list of event cards
+ */
 const EventCardList = ({ data }) => {
     return (
         <div className="grid grid-cols-1 pt-8 gap-y-5">
@@ -14,6 +21,12 @@ const EventCardList = ({ data }) => {
     );
 };
 
+/**
+ * This component is used to render a list of past events.
+ *
+ * @constructor - Renders a list of past events
+ * @returns A list of past events
+ */
 const PastEventsFeed = () => {
     // constant containing JSONs of events
     const [events, setEvents] = useState([]);
@@ -21,8 +34,6 @@ const PastEventsFeed = () => {
 
     // to obtain session ID
     const { data: session } = useSession();
-
-    // console.log(session?.user.id);
 
     const [filteredEvents, setFilteredEvents] = useState([]);
 
@@ -40,6 +51,7 @@ const PastEventsFeed = () => {
         attendingEvents: [],
     });
 
+    // obtains all the event IDs that the user is attending
     useEffect(() => {
         const getUserAttendingEvents = async () => {
             const response = await fetch(`/api/user/${session?.user.id}`);
@@ -50,6 +62,7 @@ const PastEventsFeed = () => {
             });
         };
 
+        // only fetches the user's attending events if the user is logged in
         if (session?.user.id) getUserAttendingEvents();
     }, [session?.user.id]);
 

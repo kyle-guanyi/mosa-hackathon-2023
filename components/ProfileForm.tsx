@@ -1,4 +1,3 @@
-import Link from "next/link";
 import Select from "react-select";
 import Dropzone from "components/Dropzone";
 import React, { useState, useEffect } from "react";
@@ -12,6 +11,9 @@ import {
   FormControl
 } from "@chakra-ui/react";
 
+/**
+ * This component is used to render the closest city options for the dropdown menu on profile form.
+ */
 const ClosestCity = [
   { value: "Africa", label: "Africa" },
   { value: "Alberta", label: "Alberta" },
@@ -56,6 +58,9 @@ const ClosestCity = [
   { value: "Vietnam", label: "Vietnam" },
 ];
 
+/**
+ * This component is used to render the gender options for the dropdown menu on profile form.
+ */
 const Gender = [
   { value: "He/Him/His", label: "He/Him/His" },
   { value: "She/Her/Hers", label: "She/Her/Hers" },
@@ -63,6 +68,9 @@ const Gender = [
   { value: "Decline to Answer", label: "Decline to Answer" },
 ];
 
+/**
+ * This component is used to render the classes taken options for the dropdown menu on profile form.
+ */
 const classesTaken = [
   {
     value: "CIT 5910 Introduction to Software Development",
@@ -146,6 +154,9 @@ const classesTaken = [
   },
 ];
 
+/**
+ * This component is used to render the interest fields options for the dropdown menu on profile form.
+ */
 const InterestFields = [
   { value: "Cybersecurity", label: "Cybersecurity" },
   { value: "Data Science", label: "Data Science" },
@@ -184,6 +195,9 @@ const InterestFields = [
   },
 ];
 
+/**
+ * This component is used to render the timezone options for the dropdown menu on profile form.
+ */
 const Timezones = [
   {
     value: "Etc/GMT+12",
@@ -278,16 +292,24 @@ const Timezones = [
   { value: "Pacific/Kiritimati", label: "UTC+14:00 - Line Island Time (LINT)" },
 ];
 
+/**
+ * This component is used to render the profile form.
+ *
+ * @param type - A string
+ * @param user - A user JSON
+ * @param setUser - A function to set a user
+ * @param handleKeysArray - A function to handle an array of keys
+ * @param firstField - A string
+ * @param setUpdatedUser - A function to set an updated user
+ * @constructor - Renders the profile form
+ * @returns The profile form
+ */
 // @ts-ignore
 const ProfileForm = ({
-  type,
   user,
   setUser,
-  submitting,
-  handleSubmit,
   handleKeysArray,
   firstField,
-  updatedUser,
   setUpdatedUser,
 }) => {
   useEffect(() => {
@@ -296,6 +318,12 @@ const ProfileForm = ({
 
   const [initialFiles, setInitialFiles] = useState([user.userUpdatedProfileImage]);
 
+  /**
+   * This function is used to update the initial files.
+   *
+   * @param newFiles - An array of files
+   * @returns An array of files
+   */
   const updateInitialFiles = (newFiles) => {
     setInitialFiles(newFiles);
   };
