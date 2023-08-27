@@ -5,7 +5,7 @@ import Calendar from "../../components/Calendar";
 import AttendingFeed from "../../components/attendingfeed/AttendingFeed";
 import PastEventsFeed from "@/components/pasteventsfeed/PastEventsFeed";
 import { Divider, Center } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Heading } from "@chakra-ui/react";
 
 /**
@@ -15,8 +15,17 @@ import { Heading } from "@chakra-ui/react";
  * @constructor - The home page
  * @returns - The home page
  */
-const Home = () => {
+const Home = ( {fetchAllEvents, allEvents}) => {
   const [selectedDate, setSelectedDate] = useState(null);
+
+  useEffect(() => {
+    // Check if allEvents is undefined before refetching
+    if (allEvents === undefined) {
+      fetchAllEvents();
+    }
+  }, [allEvents, fetchAllEvents]);
+
+  console.log("Passed to home", allEvents)
 
   // Handles the date selected by the user
   const handleDate = (nextValue) => {
@@ -66,7 +75,7 @@ const Home = () => {
       </Center>
       <div className="w-3/5">
         <div className=" w-full v-full ">
-          <EventFeed selectedDate={selectedDate} />
+          <EventFeed selectedDate={selectedDate} allEvents={allEvents}/>
         </div>
       </div>
       <Center className="v-full">

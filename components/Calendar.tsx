@@ -15,7 +15,6 @@ const Calendar = ( { handleDate }) => {
 
   const [value, setValue] = useState(null);
 
-  
 
   // eventDot
   const renderEventDot = (date) => {

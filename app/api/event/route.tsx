@@ -14,7 +14,7 @@ export const GET = async () => {
         // populate used for filtering events => use for location?
         const events = await Event.find({}).populate
         ('creator');
-
+        
         return new Response(JSON.stringify(events), {
             status: 200 })
     }   catch (error) {

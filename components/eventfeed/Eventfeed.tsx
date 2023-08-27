@@ -13,56 +13,83 @@ const EventCardList = ({ data }) => {
   );
 };
 
-const EventFeed = ({ selectedDate }) => {
-  const [events, setEvents] = useState([]);
+const EventFeed = ({ selectedDate, allEvents }) => {
+  const [fetchedAllEvents, setFetchedAllEvents] = useState(allEvents);
+  const [currentEvents, setCurrentEvents] = useState([]);
   const [filteredEvents, setFilteredEvents] = useState([]);
   const [filterCity, setFilterCity] = useState("");
   const [filterVirtual, setFilterVirtual] = useState("");
   const [sortOption, setSortOption] = useState(true);
 
-  const fetchEvents = async () => {
-    const response = await fetch("/api/event");
-    const data = await response.json();
+  useEffect(() => {
+    setFetchedAllEvents(allEvents);
+  }, [allEvents])
+
+  useEffect(() => {
+    console.log("All the events:", allEvents);
+  }, [allEvents]); // Add allEvents as a dependency
+
+  useEffect(() => {
+    console.log("All the pass into events:", allEvents);
+  }, [fetchedAllEvents]); // Add allEvents as a dependency
+
+  // const fetchEvents = async () => {
+  //   const response = await fetch("/api/event");
+  //   const data = await response.json();
+  //   const currentDate = new Date();
+  //   const currentEvents = data.filter((event) => {
+  //     const eventDate = new Date(event.startDate);
+  //     return eventDate >= currentDate;
+  //   });
+  //   setEvents(currentEvents);
+  // };
+
+  // useEffect(() => {
+  //   fetchEvents();
+  // }, []);
+
+
+  const filterCurrentEvents = async () => {
     const currentDate = new Date();
-    const currentEvents = data.filter((event) => {
+    const currentEvents = fetchedAllEvents.filter((event) => {
       const eventDate = new Date(event.startDate);
       return eventDate >= currentDate;
     });
-    setEvents(currentEvents);
-  };
+    setCurrentEvents(currentEvents);
+  }
 
   useEffect(() => {
-    fetchEvents();
-  }, []);
+    filterCurrentEvents();
+  }, [fetchedAllEvents]);
 
-  useEffect(() => {
-    const results = Object.values(events).filter((event) => {
-      const isDateMatching =
-        !selectedDate || event.startDate.substring(0, 10) === selectedDate;
-      // console.log("This is the event date:", event.startDate.substring(0, 10));
-      // console.log("This is my selected date:", selectedDate);
+  // useEffect(() => {
+  //   const results = Object.values(currentEvents).filter((event) => {
+  //     const isDateMatching =
+  //       !selectedDate || event.startDate.substring(0, 10) === selectedDate;
+  //     // console.log("This is the event date:", event.startDate.substring(0, 10));
+  //     // console.log("This is my selected date:", selectedDate);
 
-      if (
-        event.closestCity.includes(filterCity) &&
-        isDateMatching &&
-        (filterVirtual === "" || event.isVirtual.toString() === filterVirtual)
-      ) {
-        return true;
-      }
-    });
+  //     if (
+  //       event.closestCity.includes(filterCity) &&
+  //       isDateMatching &&
+  //       (filterVirtual === "" || event.isVirtual.toString() === filterVirtual)
+  //     ) {
+  //       return true;
+  //     }
+  //   });
 
-    if (sortOption) {
-      const sortedEvents = [...results].sort((a, b) => {
-        const dateA = new Date(a.startDate);
-        const dateB = new Date(b.startDate);
-        return dateA - dateB;
-      });
-      setFilteredEvents(sortedEvents);
-    } else {
-      const sortedEvents = [...results].reverse();
-      setFilteredEvents(sortedEvents);
-    }
-  }, [events, filterCity, selectedDate, filterVirtual, sortOption]);
+  //   if (sortOption) {
+  //     const sortedEvents = [...results].sort((a, b) => {
+  //       const dateA = new Date(a.startDate);
+  //       const dateB = new Date(b.startDate);
+  //       return dateA - dateB;
+  //     });
+  //     setFilteredEvents(sortedEvents);
+  //   } else {
+  //     const sortedEvents = [...results].reverse();
+  //     setFilteredEvents(sortedEvents);
+  //   }
+  // }, [currentEvents, filterCity, selectedDate, filterVirtual, sortOption]);
 
   return (
     <section

@@ -323,7 +323,7 @@ const Message = ({ message, onDeleteItem, onPatchMessage, handlePatchEventPictur
           >
             {message.content}
           </Collapse>
-          {message.content.length > 300 && ( // Show button only if text is longer than 100 characters
+          {message.content.length > 300 && ( // Show button only if text is longer than 300 characters
             <Button
               size="sm"
               isActive="true"

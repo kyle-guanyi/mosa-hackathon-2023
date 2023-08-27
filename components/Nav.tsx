@@ -79,7 +79,7 @@ const Nav = (props: Props) => {
   );
 };
 
-export default function WithAction() {
+export default function WithAction( { fetchAllEvents }) {
   const { data: session } = useSession();
   const { isOpen: isCreateEventOpen, onOpen: onCreateEventOpen, onClose: onCreateEventClose } = useDisclosure();
   const { isOpen: isAboutOpen, onOpen: onAboutOpen, onClose: onAboutClose } = useDisclosure();
@@ -92,7 +92,12 @@ export default function WithAction() {
     if (pathname === "/home") {
       setHome(true);
     }
-  }, []);
+  }, [pathname]);
+
+  const [user, setUser] = useState({
+    attendingEvents: [],
+  });
+
   // const [user, setUser] = useState({
   //   googleProfileImage: "",
   //   userUpdatedProfileImage: "",
@@ -157,9 +162,6 @@ export default function WithAction() {
     eventImage: null,
   });
 
-  const [user, setUser] = useState({
-    attendingEvents: [],
-  });
 
   const validateFields = () => {
     if (
@@ -253,7 +255,7 @@ export default function WithAction() {
 
           onCreateEventClose();
           if (home) {
-            location.reload();
+            fetchAllEvents();
           }
         }
       }
