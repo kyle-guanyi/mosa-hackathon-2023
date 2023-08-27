@@ -85,10 +85,27 @@ export default function FileUpload({
         }
 
         setFiles((previousFiles) => [
-          ...acceptedFiles.map((file) => ({
-            name: file.name,
-            preview: URL.createObjectURL(file),
-          })),
+          ...previousFiles,
+          ...filesToAdd.map((file) => {
+            let count = 1;
+            let originalName = file.name;
+            let baseName = originalName.replace(/\.[^/.]+$/, ""); // Remove file extension
+            let extension = originalName.split(".").pop(); // Get file extension
+            while (
+              [...previousFiles].some(
+                (existingFile) => existingFile.name === file.name
+              )
+            ) {
+              const newName = `${baseName} (${count}).${extension}`;
+              count++;
+              file = new File([file], newName, { type: file.type });
+            }
+            return Object.assign(file, { preview: URL.createObjectURL(file) });
+          }),
+          // ...acceptedFiles.map((file) => ({
+          //   name: file.name,
+          //   preview: URL.createObjectURL(file),
+          // })),
         ]);
       }
 
@@ -350,7 +367,9 @@ export default function FileUpload({
                 </AlertDialogContent>
               </AlertDialog>
             </>
-            {initialFiles && initialFiles.length > 0 && initialFiles[0] !== null ? (
+            {initialFiles &&
+            initialFiles.length > 0 &&
+            initialFiles[0] !== null ? (
               <>
                 <Button
                   colorScheme="facebook"
@@ -359,7 +378,7 @@ export default function FileUpload({
                   className="hover:opacity-80"
                   ml={3}
                   onClick={() => {
-                    console.log(initialFiles)
+                    console.log(initialFiles);
                     onReplaceOpen();
                   }}
                 >
