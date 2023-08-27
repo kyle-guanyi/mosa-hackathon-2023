@@ -12,11 +12,18 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 
+/**
+ * This is the login page.
+ *
+ * @constructor - The login page
+ * @returns - The login page
+ */
 const LogIn = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [providers, setProviders] = useState(null);
 
+  // Fetches the providers
   useEffect(() => {
     const setUpProviders = async () => {
       const response = await getProviders();
@@ -27,12 +34,14 @@ const LogIn = () => {
     setUpProviders();
   }, []);
 
+  // Redirects to the home page if the user is logged in
   useEffect(() => {
     if (session?.user) {
       router.push(`/home`)
     }
   }, [session]);
 
+  // Displays a loading spinner if the session is loading
   if (status === "loading") {
     return (
       <div className="fixed inset-0 flex-center">
@@ -40,7 +49,7 @@ const LogIn = () => {
       </div>
     );
   }
-
+  // Displays the login page
   return (
     <div className="fixed inset-0 flex-center flex-col">
         <div>

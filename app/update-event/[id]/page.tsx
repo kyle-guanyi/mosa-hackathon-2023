@@ -6,10 +6,18 @@ import { useRouter } from "next/navigation";
 
 import EventForm from "components/EventForm";
 
+/**
+ * This is the page for updating an event.
+ *
+ * @param params - The event id
+ * @constructor - The update event page
+ * @returns - The update event page
+ */
 const UpdateEvent = ({ params }) => {
   const router = useRouter();
   const { data: session } = useSession();
 
+  // The event details
   const [event, setEvent] = useState({
     eventName: "",
     eventDescription: "",
@@ -24,14 +32,16 @@ const UpdateEvent = ({ params }) => {
   });
 
   const [submitting, setIsSubmitting] = useState(false);
-
   const [isCreator, setIsCreator] = useState(false);
 
+  /**
+   * This function fetches the event details from the database and displays them.
+   */
   const getEventDetails = async () => {
     const response = await fetch(`/api/event/${params.id}`);
     const data = await response.json();
-    console.log(data);
 
+    // Set the event details
     setEvent({
       eventName: data.eventName,
       eventDescription: data.eventDescription,
@@ -45,6 +55,7 @@ const UpdateEvent = ({ params }) => {
       closestCity: data.closestCity,
     });
 
+    // Check if the user is the creator of the event
     if (data.creator === session?.user?.id) {
       setIsCreator(true);
     }
@@ -60,13 +71,20 @@ const UpdateEvent = ({ params }) => {
     return <div>You are not the creator of this event.</div>;
   }
 
+  /**
+   * This function updates the event details in the database.
+   *
+   * @param e - The event
+   * @returns - The updated event page
+   */
   const updateEvent = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    console.log("this is the updated event stuff: ", event)
+    // Check if the event name is empty
     if (!params.id) return alert("Missing Event Id!");
 
+    // Update the event details in the database
     try {
       const response = await fetch(`/api/event/${params.id}`, {
         method: "PATCH",
@@ -94,20 +112,26 @@ const UpdateEvent = ({ params }) => {
     }
   }
 
+  /**
+   * This function updates the event image in the database.
+   *
+   * @param newEventImage - The new event image
+   * @returns - The updated event page
+   */
   const updateEventImage = async (newEventImage) => {
     setIsSubmitting(true);
 
+    // Check if the event name is empty
     if (!params.id) return alert("Missing Event Id!");
 
-    console.log(newEventImage)
+    // Update the event image in the database
     try {
-      const response = await fetch(`/api/event/${params.id}?type=eventImage`, {
+      await fetch(`/api/event/${params.id}?type=eventImage`, {
         method: "PATCH",
         body: JSON.stringify({
           eventImage: newEventImage,
         }),
       });
-
     } catch (error) {
       console.log(error);
     } finally {
@@ -115,10 +139,17 @@ const UpdateEvent = ({ params }) => {
     }
   };
 
+  /**
+   * This function handles the keys array.
+   *
+   * @param keysArray - The keys array
+   * @returns - The updated event page
+   */
   const handleKeysArray = async (keysArray) => {
     updateEventImage(keysArray[0]);
   }
 
+  // Display the event form
   return (
     <EventForm
       type="Update"

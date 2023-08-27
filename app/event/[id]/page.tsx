@@ -5,11 +5,23 @@ import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
+/**
+ * This is the page for a specific event.
+ * It fetches the event details from the database, creator and attendees' details and displays them.
+ * It also allows the user to add or remove the event from their attending events.
+ * It also allows the user to edit or delete the event if they are the creator.
+ * It also allows the user to add images to the event.
+ *
+ * @param params - The event id
+ * @constructor - The event page
+ * @returns - The event page
+ */
 const Event = ({ params }) => {
   const [eventDetails, setEventDetails] = useState([]);
   const [creatorInfo, setCreatorInfo] = useState();
   const [attendeesInfo, setAttendeesInfo] = useState<any[]>([]);
 
+  // Fetches the event details from the database, creator and attendees' details
   const fetchEventDetails = async () => {
     try {
       const response = await fetch(`/api/event/${params?.id}`);
@@ -35,6 +47,7 @@ const Event = ({ params }) => {
     }
   };
 
+  // Fetches the event details from the database, creator and attendees' details
   useEffect(() => {
     if (params?.id) {
       fetchEventDetails();
@@ -48,6 +61,7 @@ const Event = ({ params }) => {
     attendingEvents: [],
   });
 
+  // Fetches the user's attending events
   useEffect(() => {
     const getUserAttendingEvents = async () => {
       const response = await fetch(`/api/user/${session?.user.id}`);
@@ -58,10 +72,16 @@ const Event = ({ params }) => {
       });
 
     };
-
+    // If the user is logged in, fetch their attending events
     if (session?.user.id) getUserAttendingEvents();
   }, [session?.user.id]);
 
+  /**
+   * Adds the event to the user's attending events
+   *
+   * @param eventId - The event id
+   * @returns - The updated user's attending events
+   */
   const handleAdd = async (eventId) => {
     if (!session?.user.id)
       return alert("User is not logged in and does not have a current session");
@@ -74,32 +94,24 @@ const Event = ({ params }) => {
     try {
       const updatedAttendingEvents = [...user.attendingEvents, eventId];
       const updatedAttendees = [...eventDetails.attendees, session?.user.id];
-
-      console.log("This is the updated (added) attending events");
-      console.log(updatedAttendingEvents);
-
-      const userResponse = await fetch(
-        `/api/user/${session?.user.id}?type=attending`,
-        {
-          method: "PATCH",
-          body: JSON.stringify({
-            attendingEvents: updatedAttendingEvents,
-          }),
-        }
+      await fetch(
+          `/api/user/${session?.user.id}?type=attending`,
+          {
+            method: "PATCH",
+            body: JSON.stringify({
+              attendingEvents: updatedAttendingEvents,
+            }),
+          }
       );
-
-      console.log(eventDetails)
-
-      const eventResponse = await fetch(
-        `/api/event/${eventDetails._id}?type=attending`,
-        {
-          method: "PATCH",
-          body: JSON.stringify({
-            attendees: updatedAttendees,
-          }),
-        }
+      await fetch(
+          `/api/event/${eventDetails._id}?type=attending`,
+          {
+            method: "PATCH",
+            body: JSON.stringify({
+              attendees: updatedAttendees,
+            }),
+          }
       );
-
       setUser({
         attendingEvents: updatedAttendingEvents,
       });
@@ -116,6 +128,12 @@ const Event = ({ params }) => {
     }
   };
 
+  /**
+   * Removes the event from the user's attending events
+   *
+   * @param eventId - The event id
+   * @returns - The updated user's attending events
+   */
   const handleRemove = async (eventId) => {
     if (!session?.user.id)
       return alert("User is not logged in and does not have a current session");
@@ -134,29 +152,25 @@ const Event = ({ params }) => {
         (id) => id !== session?.user.id
       );
 
-      console.log("This is the updated (removed) attending events");
-      console.log(updatedAttendingEvents);
-
-      const userResponse = await fetch(
-        `/api/user/${session?.user.id}?type=attending`,
-        {
-          method: "PATCH",
-          body: JSON.stringify({
-            attendingEvents: updatedAttendingEvents,
-          }),
-        }
+      // Update the user's attending events and the event's attendees
+      await fetch(
+          `/api/user/${session?.user.id}?type=attending`,
+          {
+            method: "PATCH",
+            body: JSON.stringify({
+              attendingEvents: updatedAttendingEvents,
+            }),
+          }
       );
-
-      const eventResponse = await fetch(
-        `/api/event/${eventDetails._id}?type=attending`,
-        {
-          method: "PATCH",
-          body: JSON.stringify({
-            attendees: updatedAttendees,
-          }),
-        }
+      await fetch(
+          `/api/event/${eventDetails._id}?type=attending`,
+          {
+            method: "PATCH",
+            body: JSON.stringify({
+              attendees: updatedAttendees,
+            }),
+          }
       );
-
       setUser({
         attendingEvents: updatedAttendingEvents,
       });
@@ -172,10 +186,17 @@ const Event = ({ params }) => {
     }
   };
 
+  /**
+   * Redirects the user to the edit event page
+   *
+   * @param eventId - The event id
+   * @returns - The edit event page
+   */
   const handleEdit = (eventId) => {
     router.push(`/update-event/${eventId}`);
   };
 
+  // Deletes the event
   const handleDelete = async (eventId) => {
     try {
       const response = await fetch(`/api/event/${eventId}`, {
@@ -191,6 +212,12 @@ const Event = ({ params }) => {
     }
   }
 
+  /**
+   * Adds the images to the event
+   *
+   * @param keysArray - The array of image keys
+   * @returns - The updated event details
+   */
   const addImagesToEvent = async (keysArray) => {
     if (eventDetails.uploadedPictures) {
       const updatedPictures = [...eventDetails.uploadedPictures, ...keysArray];
@@ -200,16 +227,19 @@ const Event = ({ params }) => {
     }
   }
 
+  /**
+   * Updates the event uploaded images
+   */
   const updateEventUploadedImages = async () => {
-    const response = await fetch(`/api/event/${eventDetails._id}?type=uploadedPictures`, {
+    await fetch(`/api/event/${eventDetails._id}?type=uploadedPictures`, {
       method: "PATCH",
       body: JSON.stringify({
         uploadedPictures: eventDetails.uploadedPictures,
       }),
     });
-    
   };
 
+  // Updates the event uploaded images
   useEffect(() => {
     if (eventDetails?.uploadedPictures) {
       updateEventUploadedImages();

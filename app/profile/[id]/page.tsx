@@ -3,9 +3,16 @@
 import ProfilePage from "components/profilepage/ProfilePage";
 import { useState, useEffect } from "react";
 
+/**
+ * This is the page for a specific user. It fetches the user details from the database and displays them.
+ *
+ * @param params - The user id
+ * @constructor - The user page
+ * @returns - The user page
+ */
 const Profile = ({ params }) => {
     const [userDetails, setUserDetails] = useState([]);
-
+    // Fetches the user details from the database
     useEffect(() => {
         const fetchUserDetails = async () => {
             try {

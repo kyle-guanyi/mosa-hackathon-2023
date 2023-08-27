@@ -3,11 +3,16 @@
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-
 import ProfilePage from "components/profilepage/ProfilePage";
 
+/**
+ * This function fetches the user details from the database and displays them.
+ *
+ * @constructor - The user page
+ * @returns - The user page
+ */
 const MyProfile = () => {
-  const router = useRouter();
+  useRouter();
   const { data: session } = useSession();
   const [myUserProfile, setMyUserProfile] = useState();
 
@@ -21,7 +26,7 @@ const MyProfile = () => {
     if (session?.user.id) fetchMyDetails();
   }, [session?.user.id]);
 
-  const handleEdit = (e) => {
+  const handleEdit = () => {
     fetchMyDetails();
   };
 

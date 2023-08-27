@@ -3,15 +3,22 @@
 import EventFeed from "../../components/eventfeed/EventFeed";
 import Calendar from "../../components/Calendar";
 import AttendingFeed from "../../components/attendingfeed/AttendingFeed";
-import Feed from "../../components/search/Feed";
 import PastEventsFeed from "@/components/pasteventsfeed/PastEventsFeed";
 import { Divider, Center } from "@chakra-ui/react";
 import { useState } from "react";
 import { Heading } from "@chakra-ui/react";
 
+/**
+ * This is the home page. It is displayed when the user is logged in.
+ * It displays the events the user is attending and the events the user can attend.
+ *
+ * @constructor - The home page
+ * @returns - The home page
+ */
 const Home = () => {
   const [selectedDate, setSelectedDate] = useState(null);
 
+  // Handles the date selected by the user
   const handleDate = (nextValue) => {
     if (nextValue == null) {
       setSelectedDate(null);
@@ -20,9 +27,8 @@ const Home = () => {
       const year = date.getFullYear();
       const month = String(date.getMonth() + 1).padStart(2, "0");
       const day = String(date.getDate()).padStart(2, "0");
-
+      // Output: "2023-08-09"
       const formattedDate = `${year}-${month}-${day}`;
-      console.log(formattedDate); // Output: "2023-08-09"
       setSelectedDate(formattedDate);
     }
   };

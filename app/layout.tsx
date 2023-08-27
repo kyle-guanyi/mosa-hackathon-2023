@@ -1,15 +1,16 @@
-// "use client"
-
 import "/styles/globals.css";
-
 import Nav from "components/Nav";
 import Provider from "components/Provider";
 
+/**
+ * This is the root layout for the entire application.
+ */
 export const metadata = {
   title: "Founding Friends",
   description: "Meetup web application for MCIT Online students",
 };
 
+// This is the root layout for the entire application.
 const RootLayout = ({ children }) => {
   return (
     <html lang="en">
