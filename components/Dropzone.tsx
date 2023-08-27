@@ -1,9 +1,9 @@
 "use client";
 import axios from "axios";
 import Image from "next/image";
-import React, {useCallback, useEffect, useMemo, useState,} from "react";
-import {useDropzone} from "react-dropzone";
-import {BsUpload, BsXCircleFill} from "react-icons/bs";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useDropzone } from "react-dropzone";
+import { BsUpload, BsXCircleFill } from "react-icons/bs";
 import {
   AlertDialog,
   AlertDialogBody,
@@ -71,24 +71,24 @@ export default function FileUpload({
     (acceptedFiles, rejectedFiles) => {
       if (acceptedFiles?.length) {
         const filesToAdd = acceptedFiles.slice(0, maxUploads - files.length); // Limit based on remaining slots
+        const remainingSlots = maxUploads - files.length;
+
+        if (acceptedFiles.length > remainingSlots) {
+          toast({
+            title: "Too many files!",
+            description: `You can only upload up to ${remainingSlots} more file(s).`,
+            status: "error",
+            duration: 4000,
+            isClosable: true,
+          });
+          return;
+        }
+
         setFiles((previousFiles) => [
-          ...previousFiles,
-          ...filesToAdd.map((file) => {
-            let count = 1;
-            let originalName = file.name;
-            let baseName = originalName.replace(/\.[^/.]+$/, ""); // Remove file extension
-            let extension = originalName.split(".").pop(); // Get file extension
-            while (
-              [...previousFiles].some(
-                (existingFile) => existingFile.name === file.name
-              )
-            ) {
-              const newName = `${baseName} (${count}).${extension}`;
-              count++;
-              file = new File([file], newName, { type: file.type });
-            }
-            return Object.assign(file, { preview: URL.createObjectURL(file) });
-          }),
+          ...acceptedFiles.map((file) => ({
+            name: file.name,
+            preview: URL.createObjectURL(file),
+          })),
         ]);
       }
 
@@ -291,6 +291,7 @@ export default function FileUpload({
                 isActive={true}
                 className="hover:opacity-80"
                 onClick={onDeleteOpen}
+                ml={3}
               >
                 Delete all accepted image(s)
               </Button>
@@ -308,8 +309,8 @@ export default function FileUpload({
                   </AlertDialogHeader>
                   <AlertDialogCloseButton className="hover:opacity-50" />
                   <AlertDialogBody>
-                    Are you sure you want to delete all accepted files? <br />{" "}
-                    <br />
+                    Are you sure you want to delete all accepted image(s)?{" "}
+                    <br /> <br />
                     <em>This cannot be undone.</em>
                   </AlertDialogBody>
                   <AlertDialogFooter>
@@ -323,7 +324,7 @@ export default function FileUpload({
                       className="hover:opacity-80"
                       ml={3}
                       onClick={() => {
-                        if(files.length == 0) {
+                        if (files.length == 0) {
                           toast({
                             title: "No file(s) had been uploaded for deletion",
                             status: "error",
@@ -334,14 +335,13 @@ export default function FileUpload({
                         } else {
                           removeAll();
                           toast({
-                            title: "All accepted files have been deleted",
+                            title: "All accepted images have been deleted",
                             status: "success",
                             duration: 4000,
                             isClosable: true,
                           });
                           onDeleteClose();
                         }
-                        
                       }}
                     >
                       Yes
@@ -350,28 +350,7 @@ export default function FileUpload({
                 </AlertDialogContent>
               </AlertDialog>
             </>
-            {initialFiles?.length === 0 ? (
-              isSubmitting ? (
-                <Button
-                  colorScheme="facebook"
-                  isLoading
-                  loadingText="Uploading Image(s)..."
-                  className="ml-3"
-                  isActive={true}
-                >
-                  Upload your selected image(s)
-                </Button>
-              ) : (
-                <Button
-                  colorScheme="facebook"
-                  isActive={true}
-                  className="hover:opacity-80 ml-3"
-                  type="submit"
-                >
-                  Upload your selected image(s)
-                </Button>
-              )
-            ) : (
+            {initialFiles && initialFiles.length > 0 && initialFiles[0] !== null ? (
               <>
                 <Button
                   colorScheme="facebook"
@@ -379,9 +358,14 @@ export default function FileUpload({
                   isActive={true}
                   className="hover:opacity-80"
                   ml={3}
-                  onClick={onReplaceOpen}
+                  onClick={() => {
+                    console.log(initialFiles)
+                    onReplaceOpen();
+                  }}
                 >
-                  Overwrite uploaded image(s)
+                  {maxUploads !== 1
+                    ? "Overwrite your selected image(s)"
+                    : "Overwrite your selected image"}
                 </Button>
                 <AlertDialog
                   motionPreset="slideInBottom"
@@ -397,8 +381,9 @@ export default function FileUpload({
                     </AlertDialogHeader>
                     <AlertDialogCloseButton className="hover:opacity-50" />
                     <AlertDialogBody>
-                      Are you sure you want to overwrite your current uploaded
-                      file(s) with your new file(s)?
+                      {maxUploads !== 1
+                        ? "Are you sure you want to overwrite your current uploaded image(s) with your new image(s)?"
+                        : "Are you sure you want to overwrite your current uploaded image with your new image?"}
                       <br /> <br />
                       <em>This cannot be undone.</em>
                     </AlertDialogBody>
@@ -429,6 +414,33 @@ export default function FileUpload({
                   </AlertDialogContent>
                 </AlertDialog>
               </>
+            ) : isSubmitting ? (
+              <Button
+                colorScheme="facebook"
+                isLoading
+                loadingText={
+                  maxUploads !== 1
+                    ? "Uploading your selected image(s)"
+                    : "Uploading your selected image"
+                }
+                className="ml-3"
+                isActive={true}
+              >
+                {maxUploads !== 1
+                  ? "Upload your selected image(s)"
+                  : "Upload your selected image"}
+              </Button>
+            ) : (
+              <Button
+                colorScheme="facebook"
+                isActive={true}
+                className="hover:opacity-80 ml-3"
+                type="submit"
+              >
+                {maxUploads !== 1
+                  ? "Upload your selected image(s)"
+                  : "Upload your selected image"}
+              </Button>
             )}
           </div>
         </div>
@@ -438,7 +450,7 @@ export default function FileUpload({
           {initialPictures?.length > 0 && (
             <div>
               <h3 className="title text-lg font-semibold text-neutral-600 mb-3">
-                Currently Uploaded File(s)
+                Currently Uploaded Image(s)
               </h3>
               <ul className="grid grid-cols-1 gap-4">
                 {initialPictures?.map((file, index) => (
@@ -465,7 +477,7 @@ export default function FileUpload({
           {/* Accepted Files */}
           <div>
             <h3 className="title text-lg font-semibold text-neutral-600 mb-3">
-              Accepted Files
+              Accepted Image(s)
             </h3>
             <ul className="grid grid-cols-1 gap-4">
               {files.map((file) => (

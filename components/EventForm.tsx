@@ -330,7 +330,7 @@ const EventForm = ({
         <Dropzone
           handleKeysArray={handleKeysArray}
           maxUploads={1}
-          initialFiles={initialFiles}
+          initialFiles={initialFiles || []}
           updateInitialFiles={updateInitialFiles}
         />
       </Box>

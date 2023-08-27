@@ -444,7 +444,7 @@ const ProfileForm = ({
 
       <Box>
         <FormLabel htmlFor="dropzone">
-          Upload your profile picture here
+          Upload your profile picture below
         </FormLabel>
         <Dropzone
           handleKeysArray={handleKeysArray}
