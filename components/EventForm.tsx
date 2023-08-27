@@ -325,7 +325,7 @@ const EventForm = ({
 
       <Box>
         <FormLabel htmlFor="dropzone">
-          Upload your event cover image here
+          Upload your event cover image here <em>(optional)</em>
         </FormLabel>
         <Dropzone
           handleKeysArray={handleKeysArray}

@@ -318,7 +318,9 @@ const EventFeed = ({ selectedDate }) => {
    * @returns An array of keys
    */
   const handleKeysArray = async (keysArray) => {
-    setNewEvent({ ...event, eventImage: keysArray[0] });
+    if (keysArray) {
+      setNewEvent({ ...event, eventImage: keysArray[0] });
+    }
   };
 
   const [newEvent, setNewEvent] = useState(null);
@@ -351,7 +353,7 @@ const EventFeed = ({ selectedDate }) => {
           <ModalOverlay />
           <ModalContent>
             <ModalHeader>Create New Event</ModalHeader>
-            <ModalCloseButton />
+            <ModalCloseButton onClick={resetEventState}/>
             <ModalBody>
               <EventForm
                 type="Create"
@@ -404,6 +406,7 @@ const EventFeed = ({ selectedDate }) => {
 
       <div className="flex space-x-8 justify-center text-center">
         <Select
+          isSearchable={false}
           options={sortByEventType}
           value={sortByEventType.find(
             (virtual) => virtual.value === filterVirtual
@@ -428,6 +431,7 @@ const EventFeed = ({ selectedDate }) => {
           isMulti
         />
         <Select
+          isSearchable={false}
           options={sortByUpcomingRecent}
           value={sortByUpcomingRecent.find((choice) => choice.value === sortOption.toString())}
           onChange={(e) => setSortOption(e.value)}
