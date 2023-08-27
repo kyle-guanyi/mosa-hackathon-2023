@@ -259,11 +259,11 @@ const EventPage = ({
   // Initialize newEvent state
   const [newEvent, setNewEvent] = useState(null);
 
-  // Update newEvent state when event changes
+  // Update newEvent state when event changesnpm r
   return (
-    <div className="h-full w-full bg-red-500 flex">
-      <div className="w-1/6 bg-blue-500 p-4">
-        <div className="w-full h-full bg-yellow-500">
+    <div className="h-full w-full flex">
+      <div className="w-1/6 p-4">
+        <div className="w-full h-full">
           <Heading as="h2" size="md" className="pb-4">
             Attending:
           </Heading>
@@ -278,8 +278,8 @@ const EventPage = ({
 
       <Divider orientation="vertical" />
 
-      <div className="w-3/5 bg-green-700 flex-grow pl-4 pr-4">
-        <div className="w-full h-1/10 bg-green-500 font-satoshi">
+      <div className="w-3/5 flex-grow pl-4 pr-4">
+        <div className="w-full h-1/10 font-satoshi">
           {event?.eventImage ? (
             <Image
               borderRadius="lg"
@@ -304,7 +304,7 @@ const EventPage = ({
           </Heading>
         </div>
 
-        <div className=" w-full h-5/6 bg-blue-500 flex-col">
+        <div className=" w-full h-5/6 flex-col">
           <div className="flex flex-row justify-between">
             <div>
               <div className="pb-2">
@@ -461,7 +461,7 @@ const EventPage = ({
 
           <div>
             <div className="flex-row flex">
-              <div className="w-3/5 bg-red-500">
+              <div className="w-3/5">
                 <div className="flex-col ">
                   <div className="pt-2">
                     <Heading as="h3" size="md">
@@ -566,7 +566,7 @@ const EventPage = ({
 
       <Divider orientation="vertical" />
 
-      <div className="w-1/5 bg-purple-700 hidden md:block p-4">
+      <div className="w-1/5 hidden md:block p-4">
         <div className="pb-4">
           <Heading as="h3" size="md">
             Photo Timeline
