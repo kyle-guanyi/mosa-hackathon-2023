@@ -1,5 +1,4 @@
 import { Schema, model, models, Document, Types } from 'mongoose';
-
 import { DateTime } from "luxon";
 
 type IEvent = Document & {
@@ -23,6 +22,9 @@ type IEvent = Document & {
   UTCEventTime: Date;
 };
 
+/**
+ * Event Schema
+ */
 const eventSchema = new Schema({
   creator: {
     type: Schema.Types.ObjectId,
@@ -98,6 +100,9 @@ const eventSchema = new Schema({
   }
 });
 
+/**
+ * Pre-save hook
+ */
 eventSchema.pre<IEvent>('save', async function (next) {
   const eventDateTime = DateTime.fromJSDate(this.startDate, {
     zone: this.timeZone,
@@ -114,6 +119,7 @@ eventSchema.pre<IEvent>('save', async function (next) {
   next();
 });
 
+// Export the model and return your IUser interface
 const Event = models.Event || model('Event', eventSchema);
 
 export default Event;

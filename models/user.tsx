@@ -1,5 +1,8 @@
 import { Schema, model, models, Document, Types } from "mongoose";
 
+/**
+ * User Schema
+ */
 const UserSchema = new Schema({
   email: {
     type: String,
@@ -58,6 +61,7 @@ const UserSchema = new Schema({
   },
 });
 
+// Export the model and return your IUser interface
 const User = models.User || model("User", UserSchema);
 
 export default User;

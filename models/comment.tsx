@@ -1,5 +1,8 @@
 import { Schema, model, models, Document, Types } from "mongoose";
 
+/**
+ * Comment Schema
+ */
 const commentSchema = new Schema({
   post: {
     type: Schema.Types.ObjectId,
@@ -25,6 +28,7 @@ const commentSchema = new Schema({
   },
 });
 
+// Export the model and return your IUser interface
 const Comment = models.Comment || model("Comment", commentSchema);
 
 export default Comment;
