@@ -18,6 +18,7 @@ import {
   SkeletonCircle,
   Stack,
   Text,
+  Tooltip,
 } from "@chakra-ui/react";
 
 /**
@@ -154,21 +155,6 @@ const EventCard = ({ event }) => {
 
   useEffect(() => {
     if (session?.user.id) {
-      // const dateTimeObject = DateTime.fromISO(event.UTCEventTime);
-      // const userTimezone = DateTime.local().zoneName;
-      // const userEventDateTime = dateTimeObject.setZone(userTimezone);
-
-      // const timezoneOffsetMinutes = userEventDateTime.offset;
-
-      // // Subtract the time difference from the user's timezone
-      // const adjustedEventDateTime = userEventDateTime.minus({
-      //   minutes: timezoneOffsetMinutes,
-      // });
-
-      // console.log("event time", dateTimeObject);
-      // console.log("user event time:", userEventDateTime);
-      // console.log("adjusted user event time:", adjustedEventDateTime);
-
       const year = parseInt(event.startDate.substring(0, 4), 10);
       const month = parseInt(event.startDate.substring(5, 7), 10);
       const day = parseInt(event.startDate.substring(8, 10), 10);
@@ -252,10 +238,12 @@ const EventCard = ({ event }) => {
     <Link href={`/event/${event._id}`}>
       <Card
         maxW="90%"
+        maxH="100%"
         className="m-auto cursor-pointer hover:-translate-y-2 hover:opacity-80 transition-all event-card"
         onClick={handleEventClick}
         minWidth="300px"
         minHeight="400px"
+        height="100%"
       >
         <CardBody>
           {isLoading ? (
@@ -290,11 +278,18 @@ const EventCard = ({ event }) => {
               </>
             ) : (
               <>
-                <Heading size="md">{event.eventName}</Heading>
+                <Tooltip label={event.eventName} aria-label="Event Name">
+                  <Heading size="md" className="event-name">{event.eventName}</Heading>
+                </Tooltip>
                 <Heading size="sm">
                   <em>Major City/Region: {event.closestCity}</em>
                 </Heading>
-                <Text>{event.location || "Virtual Event"}</Text>
+                <Tooltip
+                  label={event.location || "Virtual Event"}
+                  aria-label="Event Location"
+                >
+                  <Text className="event-location">{event.location || "Virtual Event"}</Text>
+                </Tooltip>
                 <Text>
                   Event's Local Time:
                   <br />

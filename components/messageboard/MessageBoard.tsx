@@ -20,7 +20,7 @@ const MessageBoard = ({ eventDetails, addImagesToEvent }) => {
     content: "",
     uploadedMessagePictures: [],
   });
-  const [submitting ,setSubmitting] = useState(false);
+  const [setSubmitting] = useState(false);
 
   const { data: session } = useSession();
 

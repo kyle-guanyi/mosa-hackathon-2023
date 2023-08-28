@@ -39,12 +39,35 @@
 }
 
 .extra-info {
-  display: none;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
 }
 /* CSS for showing the extra-info div on card hover */
 .event-card:hover .extra-info {
-  display: block;
+  opacity: 1;
+  max-height: 500px; /* Adjust this value as needed */
+  transition: max-height 0.5s ease, opacity 0.3s ease;
 }
+
+.event-name,
+.event-location {
+  max-height: 2.4em; /* Equivalent to roughly two lines */
+  line-height: 1.2em; /* Adjust as needed to control line spacing */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  @supports (-webkit-line-clamp: 2) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: initial;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+}
+
 
 /* Tailwind Styles */
 
