@@ -14,7 +14,11 @@ import { Heading, useToast } from "@chakra-ui/react";
  * @constructor - Renders a message board
  * @returns A message board
  */
-const MessageBoard = ({ eventDetails, addImagesToEvent }) => {
+const MessageBoard = ({
+  eventDetails,
+  addImagesToEvent,
+  handleDeletedImagesFromEvent,
+}) => {
   const [eventMessages, setEventMessages] = useState([]);
   const [message, setMessage] = useState({
     content: "",
@@ -50,8 +54,7 @@ const MessageBoard = ({ eventDetails, addImagesToEvent }) => {
    * @param e - An event
    * @returns A message
    */
-  const createMessage = async (e) => {
-    e.preventDefault();
+  const createMessage = async () => {
     setSubmitting(true);
 
     try {
@@ -65,7 +68,7 @@ const MessageBoard = ({ eventDetails, addImagesToEvent }) => {
         }),
       });
 
-      // Reset message to empty
+      // Add images to event and reset message to empty
       if (response.ok) {
         if (message.uploadedMessagePictures) {
           addImagesToEvent(message.uploadedMessagePictures);
@@ -73,6 +76,12 @@ const MessageBoard = ({ eventDetails, addImagesToEvent }) => {
 
         setMessage({ content: "", uploadedMessagePictures: [] });
         fetchEventMessages();
+        toast({
+          title: "Your message has been created successfully",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
       }
     } catch (error) {
       console.log(error);
@@ -115,15 +124,28 @@ const MessageBoard = ({ eventDetails, addImagesToEvent }) => {
    * @param messageId - A message ID
    * @returns A deleted message
    */
-  const handleDeleteMessage = async (messageId) => {
+  const handleDeleteMessage = async (message) => {
     try {
-      const response = await fetch(`/api/message/${messageId}`, {
+      console.log("this is the message being passed to handleDeleteMessage", message)
+      if (message.uploadedMessagePictures && message.uploadedMessagePictures.length > 0) {
+        console.log("this is the message being passed to if statement", message)
+        handleDeleteEventPictures(message);
+      }
+
+      const response = await fetch(`/api/message/${message._id}`, {
         method: "DELETE",
       });
 
       if (response.ok) {
         // Refresh comments after deletion
         fetchEventMessages();
+
+        toast({
+          title: "Your message has been deleted successfully.",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
       }
     } catch (error) {
       console.log(error);
@@ -174,6 +196,38 @@ const MessageBoard = ({ eventDetails, addImagesToEvent }) => {
     }
   };
 
+  const [deletedMessage, setDeletedMessage] = useState(message);
+
+  /**
+   * This function is used to patch the event pictures.
+   *
+   * @param editedMessage - A message JSON
+   * @returns An edited message
+   */
+  const handleDeleteEventPictures = async (message) => {
+    setSubmitting(true);
+    console.log("This is the mssage in handleDeleteEventPictures", message)
+    setDeletedMessage(message.uploadedMessagePictures)
+    console.log("This is the deleted message", deletedMessage)
+    try {
+      console.log("Reached deleted message", message);
+      await fetch(`/api/event/${eventDetails._id}?type=deletedPictures`, {
+        method: "DELETE",
+        body: JSON.stringify({
+          uploadedPictures: message.uploadedMessagePictures,
+        }),
+      });
+
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setSubmitting(false);
+      handleDeletedImagesFromEvent(deletedMessage);
+    }
+  };
+
+  const [existingFiles, setExistingFiles] = useState([]);
+
   return (
     <div>
       <div>
@@ -183,11 +237,13 @@ const MessageBoard = ({ eventDetails, addImagesToEvent }) => {
         </Heading>{" "}
       </div>
       <MessageForm
+        submitting={submitting}
         message={message}
         setMessage={setMessage}
         handleMessageSubmit={createMessage}
         handleKeysArray={handleKeysArray}
-        existingFiles={[]}
+        existingFiles={existingFiles}
+        setExistingFiles={setExistingFiles}
         type="Submit"
       />
       {eventMessages
@@ -198,7 +254,7 @@ const MessageBoard = ({ eventDetails, addImagesToEvent }) => {
             <Message
               key={eventMessage._id}
               message={eventMessage}
-              onDeleteItem={() => handleDeleteMessage(eventMessage._id)}
+              onDeleteItem={() => handleDeleteMessage(eventMessage)}
               // added for edit
               onPatchMessage={editMessage}
               handlePatchEventPictures={handlePatchEventPictures}

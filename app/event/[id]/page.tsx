@@ -26,7 +26,6 @@ const Event = ({ params }) => {
     try {
       const response = await fetch(`/api/event/${params?.id}`);
       const eventData = await response.json();
-      console.log("This is the eventData", eventData)
       const [creatorResponse, ...attendeesResponses] = await Promise.all([
         fetch(`/api/user/${eventData.creator}`),
         ...eventData.attendees.map((attendeeId) =>
@@ -231,7 +230,6 @@ const Event = ({ params }) => {
    * Updates the event uploaded images
    */
   const updateEventUploadedImages = async () => {
-    console.log(eventDetails.uploadedPictures)
     await fetch(`/api/event/${eventDetails._id}?type=uploadedPictures`, {
       method: "PATCH",
       body: JSON.stringify({

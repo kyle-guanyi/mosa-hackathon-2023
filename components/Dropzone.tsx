@@ -500,7 +500,7 @@ export default function FileUpload({
             <h3 className="title text-lg font-semibold text-neutral-600 mb-3">
               Accepted Image(s)
             </h3>
-            <ul className="grid grid-cols-1 gap-4">
+            <ul className="grid grid-cols-1 gap-8">
               {files.map((file) => (
                 <li
                   key={file.name}
