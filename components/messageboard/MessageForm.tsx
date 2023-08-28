@@ -127,7 +127,7 @@ const CreateMessage = ({
   }, [session?.user.id]);
 
   return (
-    <Card align="center">
+    <Card align="center" variant="outline">
       <CardBody style={{ display: "flex", alignItems: "start", width: "100%" }}>
         <Avatar size='md' src={userInfo.userUpdatedProfileImage || userInfo.googleProfileImage} mr={3}/>
         

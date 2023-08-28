@@ -20,7 +20,7 @@ const MessageBoard = ({ eventDetails, addImagesToEvent }) => {
     content: "",
     uploadedMessagePictures: [],
   });
-  const [setSubmitting] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const { data: session } = useSession();
 
@@ -168,7 +168,7 @@ const MessageBoard = ({ eventDetails, addImagesToEvent }) => {
       <div>
         {" "}
         <Heading as="h3" size="md">
-          MessageBoard
+          Discussion Board
         </Heading>{" "}
       </div>
       <MessageForm

@@ -19,6 +19,7 @@ import {
   AlertDialogFooter,
   AlertDialogBody,
   Button,
+  Center,
   Heading,
   Image,
   Divider,
@@ -32,8 +33,6 @@ import {
   DrawerHeader,
   DrawerFooter,
   useToast,
-  LinkBox,
-  LinkOverlay,
 } from "@chakra-ui/react";
 
 import { EditIcon } from "@chakra-ui/icons";
@@ -357,8 +356,9 @@ const EventPage = ({
         </div>
       </div>
 
-      <Divider orientation="vertical" />
-
+      <Center className="v-full">
+        <Divider orientation="vertical" borderWidth="2px" />
+      </Center>
       <div className="w-3/5 flex-grow pl-4 pr-4">
         <div className="w-full h-1/10 font-satoshi">
           {event?.eventImage ? (
@@ -648,7 +648,7 @@ const EventPage = ({
               </div>
             </div>
             <Divider />
-            <div className="pt-4 mr-20 bg-slate-400">
+            <div className="pt-4 mr-20">
               <MessageBoard 
                 eventDetails={event}
                 addImagesToEvent={addImagesToEvent}
@@ -658,7 +658,9 @@ const EventPage = ({
         </div>
       </div>
 
-      <Divider orientation="vertical" />
+      <Center className="v-full">
+        <Divider orientation="vertical" borderWidth="2px" />
+      </Center>
 
       <div className="w-1/5 hidden md:block p-4">
         <div className="pb-4">

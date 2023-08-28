@@ -285,7 +285,7 @@ const Message = ({
   const toast = useToast();
 
   return (
-    <Card maxW="md">
+    <Card maxW="none" style={{ width: "100%" }} variant="outline" mt="4" padding={2}>
       <CardHeader>
         <Flex>
           <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
@@ -377,7 +377,7 @@ const Message = ({
           )}
         </CardBody>
       </CardHeader>
-      <Grid templateColumns="repeat(5, 1fr)" gap={3}>
+      <Grid templateColumns="repeat(5, 1fr)" gap={3} pb='2'>
         {uploadedMessagePictures?.map((file, index) => (
           <GridItem pl="2" key={index} className="cursor-pointer">
             <Image
