@@ -177,10 +177,8 @@ Which frameworks, libraries, or other tools did you use to create your project?
 * [MongoDB](https://www.mongodb.com/) - NoSQL Database
 * [Next.js](https://nextjs.org/) - Web Development Framework w/ Server-side Rendering
 * [React.js](https://reactjs.org/) - Web Development Library
-* [Vue.js](https://vuejs.org/) - JavaScript Framework
 * [Tailwind CSS](https://tailwindcss.com/) - CSS Framework
 * [NextAuth.js](https://next-auth.js.org/) - Authentication for Next.js
-* [bcrypt.js](https://www.npmjs.com/package/bcrypt) - Hash Passwords library for cybersecurity
 * [react-dropzone](https://react-dropzone.js.org/) - React hook to create a HTML5-compliant drag and drop zone for files
 * [Mongoose](https://www.npmjs.com/package/mongoose) - Database MongoDB Object Modeling Tool
 * [Luxon Library](https://www.npmjs.com/package/luxon) - Library for working with dates and times in JavaScript
