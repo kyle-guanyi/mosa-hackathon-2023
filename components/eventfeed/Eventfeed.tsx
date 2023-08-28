@@ -74,8 +74,8 @@ const sortByUpcomingRecent = [
 
 const sortByEventType = [
   { value: "", label: "All Events" },
-  { value: "true", label: "Virtual Event" },
-  { value: "false", label: "In-Person Event" },
+  { value: "true", label: "Virtual Events" },
+  { value: "false", label: "In-Person Events" },
 ];
 
 /**
@@ -342,7 +342,7 @@ const EventFeed = ({ selectedDate, fetchAllEvents, allEvents, onCreateEvent }) =
       className="w-full border-l-1 border-r-1 border-t-1 border-gray-600"
     >
       <div className="flex items-center justify-between pb-4 pt-4">
-        <Heading className=""> Event Feed test </Heading>
+        <Heading className="ml-4"> Event Feed </Heading>
         <Button
           variant={"solid"}
           colorScheme="facebook"

@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from "react";
 // import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { DateTime } from "luxon";
 import {
   Avatar,
@@ -248,85 +249,93 @@ const EventCard = ({ event }) => {
   }, []);
 
   return (
-    <Card
-      maxW="90%"
-      className="m-auto cursor-pointer hover:-translate-y-2 hover:opacity-80 transition-all"
-      onClick={handleEventClick}
-      minWidth="300px"
-      minHeight="400px"
-    >
-      <CardBody>
-        {isLoading ? (
-          <Skeleton height="300px" width="100%" borderRadius="lg" />
-        ) : event?.eventImage ? (
-          <Image
-            borderRadius="lg"
-            src={eventPicture}
-            alt="Cover Picture"
-            height="300px"
-            width="100%"
-            objectFit="cover"
-          />
-        ) : (
-          <Image
-            borderRadius="lg"
-            src="/assets/images/ben.png"
-            alt="Default Cover Picture"
-            height="300px"
-            width="100%"
-            objectFit="cover"
-          />
-        )}
-        <Stack mt="6" spacing="3">
+    <Link href={`/event/${event._id}`}>
+      <Card
+        maxW="90%"
+        className="m-auto cursor-pointer hover:-translate-y-2 hover:opacity-80 transition-all event-card"
+        onClick={handleEventClick}
+        minWidth="300px"
+        minHeight="400px"
+      >
+        <CardBody>
           {isLoading ? (
-            <>
-              <Skeleton height="20px" width="100%" />
-              <Skeleton height="15px" width="100%" />
-              <Skeleton height="15px" width="100%" />
-              <Skeleton height="15px" width="100%" />
-              <Skeleton height="20px" width="100%" />
-            </>
+            <Skeleton height="300px" width="100%" borderRadius="lg" />
+          ) : event?.eventImage ? (
+            <Image
+              borderRadius="lg"
+              src={eventPicture}
+              alt="Cover Picture"
+              height="300px"
+              width="100%"
+              objectFit="cover"
+            />
           ) : (
-            <>
-              <Heading size="md">{event.eventName}</Heading>
-              <Heading size="sm">{event.closestCity}</Heading>
-              <Text>{event.location || "Virtual Event"}</Text>
-              <Text>
-                Event's Local Time:
-                <br />
-                {eventDateTime?.toFormat("EEEE, MMMM d, yyyy")},{" "}
-                {eventDateTime?.toFormat("h:mm a")} {" "} {convertIANAToTimezoneAcronym(eventDateTime?.zoneName)}
-              </Text>
-              <Text color="blue.600">
-                Time in {DateTime.local().zoneName}
-                <br />
-                {userEventDateTime?.toFormat("EEEE, MMMM d, yyyy")},{" "}
-                {userEventDateTime?.toFormat("h:mm a")} {" "} {convertIANAToTimezoneAcronym(userEventDateTime?.zoneName)}
-              </Text>
-            </>
+            <Image
+              borderRadius="lg"
+              src="/assets/images/ben.png"
+              alt="Default Cover Picture"
+              height="300px"
+              width="100%"
+              objectFit="cover"
+            />
           )}
-        </Stack>
-      </CardBody>
-      <Divider />
-      <CardFooter>
-        {isLoading ? (
-          <SkeletonCircle size="10" mr="2" />
-        ) : (
-          <AvatarGroup size="md" max={3}>
-            {eventAttendeesPictures.map((attendee, index) => (
-              <Avatar
-                key={index}
-                name={`${attendee.firstName} ${attendee.lastName}`}
-                src={
-                  attendee.userUpdatedProfileImage ||
-                  attendee.googleProfileImage
-                }
-              />
-            ))}
-          </AvatarGroup>
-        )}
-      </CardFooter>
-    </Card>
+          <Stack mt="6" spacing="3">
+            {isLoading ? (
+              <>
+                <Skeleton height="20px" width="100%" />
+                <Skeleton height="15px" width="100%" />
+                <Skeleton height="15px" width="100%" />
+                <Skeleton height="15px" width="100%" />
+                <Skeleton height="20px" width="100%" />
+              </>
+            ) : (
+              <>
+                <Heading size="md">{event.eventName}</Heading>
+                <Heading size="sm">
+                  <em>Major City/Region: {event.closestCity}</em>
+                </Heading>
+                <Text>{event.location || "Virtual Event"}</Text>
+                <Text>
+                  Event's Local Time:
+                  <br />
+                  {eventDateTime?.toFormat("EEEE, MMMM d, yyyy")},{" "}
+                  {eventDateTime?.toFormat("h:mm a")}{" "}
+                  {convertIANAToTimezoneAcronym(eventDateTime?.zoneName)}
+                </Text>
+                <div className="extra-info">
+                  <Text color="blue.600">
+                    Time in {DateTime.local().zoneName}
+                    <br />
+                    {userEventDateTime?.toFormat("EEEE, MMMM d, yyyy")},{" "}
+                    {userEventDateTime?.toFormat("h:mm a")}{" "}
+                    {convertIANAToTimezoneAcronym(userEventDateTime?.zoneName)}
+                  </Text>
+                </div>
+              </>
+            )}
+          </Stack>
+        </CardBody>
+        <Divider />
+        <CardFooter>
+          {isLoading ? (
+            <SkeletonCircle size="10" mr="2" />
+          ) : (
+            <AvatarGroup size="md" max={3}>
+              {eventAttendeesPictures.map((attendee, index) => (
+                <Avatar
+                  key={index}
+                  name={`${attendee.firstName} ${attendee.lastName}`}
+                  src={
+                    attendee.userUpdatedProfileImage ||
+                    attendee.googleProfileImage
+                  }
+                />
+              ))}
+            </AvatarGroup>
+          )}
+        </CardFooter>
+      </Card>
+    </Link>
   );
 };
 

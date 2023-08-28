@@ -38,6 +38,14 @@
   }
 }
 
+.extra-info {
+  display: none;
+}
+/* CSS for showing the extra-info div on card hover */
+.event-card:hover .extra-info {
+  display: block;
+}
+
 /* Tailwind Styles */
 
 .app {
