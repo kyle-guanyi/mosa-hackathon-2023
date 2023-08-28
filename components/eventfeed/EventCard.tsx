@@ -147,6 +147,7 @@ const EventCard = ({ event }) => {
   };
 
   const [userEventDateTime, setUserEventDateTime] = useState(null);
+  const [eventDateTime, setEventDateTime] = useState(null);
 
   const { data: session } = useSession();
 
@@ -188,9 +189,9 @@ const EventCard = ({ event }) => {
         { zone: event.timeZone }
       );
 
+      setEventDateTime(eventStartDate);
+
       const userAdjustedStartDate = eventStartDate.toLocal();
-
-
 
       setUserEventDateTime(userAdjustedStartDate);
     }
@@ -293,17 +294,14 @@ const EventCard = ({ event }) => {
               <Text>
                 Event's Local Time:
                 <br />
-                {DateTime.fromISO(event.startDate.substring(0, 10)).toFormat(
-                  "EEEE, MMMM d, yyyy"
-                )}
-                , {event.startTime}{" "}
-                {convertIANAToTimezoneAcronym(event.timeZone)}
+                {eventDateTime?.toFormat("EEEE, MMMM d, yyyy")},{" "}
+                {eventDateTime?.toFormat("h:mm a")} {" "} {convertIANAToTimezoneAcronym(eventDateTime?.zoneName)}
               </Text>
               <Text color="blue.600">
                 Time in {DateTime.local().zoneName}
                 <br />
                 {userEventDateTime?.toFormat("EEEE, MMMM d, yyyy")},{" "}
-                {userEventDateTime?.toFormat("h:mm a")}
+                {userEventDateTime?.toFormat("h:mm a")} {" "} {convertIANAToTimezoneAcronym(userEventDateTime?.zoneName)}
               </Text>
             </>
           )}
