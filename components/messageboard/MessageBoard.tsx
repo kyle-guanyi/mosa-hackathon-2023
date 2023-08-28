@@ -20,7 +20,7 @@ const MessageBoard = ({ eventDetails, addImagesToEvent }) => {
     content: "",
     uploadedMessagePictures: [],
   });
-  const [setSubmitting] = useState(false);
+  const [submitting ,setSubmitting] = useState(false);
 
   const { data: session } = useSession();
 
@@ -179,12 +179,12 @@ const MessageBoard = ({ eventDetails, addImagesToEvent }) => {
         existingFiles={[]}
         type="Submit"
       />
-      {eventMessages
+      {eventMessages 
         .slice()
         .reverse()
         .map((eventMessage) => {
           return (
-            <Message
+            <Message 
               key={eventMessage._id}
               message={eventMessage}
               onDeleteItem={() => handleDeleteMessage(eventMessage._id)}

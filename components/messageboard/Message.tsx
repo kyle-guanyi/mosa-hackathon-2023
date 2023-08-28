@@ -46,7 +46,12 @@ import { EditIcon } from "@chakra-ui/icons";
  * @constructor - Renders a message
  * @returns A message
  */
-const Message = ({ message, onDeleteItem, onPatchMessage, handlePatchEventPictures }) => {
+const Message = ({
+  message,
+  onDeleteItem,
+  onPatchMessage,
+  handlePatchEventPictures,
+}) => {
   const [userInfo, setUserInfo] = useState({
     firstName: "",
     lastName: "",
@@ -69,7 +74,7 @@ const Message = ({ message, onDeleteItem, onPatchMessage, handlePatchEventPictur
     _id: message._id,
     content: message.content,
     uploadedMessagePictures: message.uploadedMessagePictures,
-    originalPictures: message.uploadedMessagePictures
+    originalPictures: message.uploadedMessagePictures,
   });
 
   //switch between form vs display
@@ -269,7 +274,8 @@ const Message = ({ message, onDeleteItem, onPatchMessage, handlePatchEventPictur
     setEditedMessage({ ...editedMessage, uploadedMessagePictures: keysArray });
     toast({
       title: "Your newly uploaded image(s) have been attached to your message.",
-      description: "Be sure to submit your edits to replace your previously uploaded image(s).",
+      description:
+        "Be sure to submit your edits to replace your previously uploaded image(s).",
       status: "info",
       duration: 5000,
       isClosable: true,
@@ -277,7 +283,6 @@ const Message = ({ message, onDeleteItem, onPatchMessage, handlePatchEventPictur
   };
 
   const toast = useToast();
-
 
   return (
     <Card maxW="md">
@@ -294,6 +299,9 @@ const Message = ({ message, onDeleteItem, onPatchMessage, handlePatchEventPictur
               <Heading size="sm">
                 {userInfo.firstName} {userInfo.lastName}
               </Heading>
+              <Box fontSize="sm" color="gray.500">
+                {new Date(message.createdAt).toLocaleString()}
+              </Box>
             </Box>
           </Flex>
           {session?.user.id === message.author && (

@@ -1,5 +1,6 @@
 import Dropzone from "components/Dropzone";
 import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
 import {
   Card,
   CardBody,
@@ -14,7 +15,8 @@ import {
   ModalHeader,
   ModalCloseButton,
   ModalBody,
-  ModalFooter
+  ModalFooter,
+  Avatar,
 } from "@chakra-ui/react";
 
 /**
@@ -79,18 +81,67 @@ const CreateMessage = ({
     setInitialFiles(newFiles);
   };
 
+  const { data: session } = useSession();
+
+  const [userInfo, setUserInfo] = useState({
+    firstName: "",
+    lastName: "",
+    googleProfileImage: "",
+    userUpdatedProfileImage: "",
+  });
+
+  const fetchUserInfo = async () => {
+    const response = await fetch(`/api/user/${session?.user.id}`);
+    const data = await response.json();
+    setUserInfo({
+      firstName: data.firstName,
+      lastName: data.lastName,
+      googleProfileImage: data.googleProfileImage,
+      userUpdatedProfileImage: data.userUpdatedProfileImage,
+    });
+
+    // Fetch the user's updated profile image
+    if (data.userUpdatedProfileImage) {
+      const userUpdatedProfileImageResponse = await fetch(
+        `/api/media?keys=${encodeURIComponent(
+          JSON.stringify([data.userUpdatedProfileImage])
+        )}`
+      );
+      const userUpdatedProfileImageData =
+        await userUpdatedProfileImageResponse.json();
+
+      // If the response is ok, set the user's updated profile image
+      if (userUpdatedProfileImageResponse.ok) {
+        setUserInfo((prevUserInfo) => ({
+          ...prevUserInfo,
+          userUpdatedProfileImage: userUpdatedProfileImageData.urls[0],
+        }));
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (session?.user.id) {
+      fetchUserInfo();
+    }
+  }, [session?.user.id]);
+
   return (
     <Card align="center">
-      <CardBody>
+      <CardBody style={{ display: "flex", alignItems: "start", width: "100%" }}>
+        <Avatar size='md' src={userInfo.userUpdatedProfileImage || userInfo.googleProfileImage} mr={3}/>
+        
         <Textarea
           id="bio"
           value={message.content}
           onChange={(e) => setMessage({ ...message, content: e.target.value })}
           placeholder="Write your post here"
           required
+          style={{ width: '100%' }}
         />
       </CardBody>
-      <CardFooter>
+      <CardFooter style={{ display: "flex", justifyContent: "right", alignItems: "center", width: "100%" }}>
+      <div style={{ display: "flex", alignItems: "center" }}>
       <>
       <Button onClick={onOpen}>Attach Images</Button>
 
@@ -120,6 +171,7 @@ const CreateMessage = ({
         >
           {type === "Submit" ? ("Submit Post") : ("Confirm Edits") }
         </Button>
+        </div>
       </CardFooter>
     </Card>
   );
