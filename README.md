@@ -15,7 +15,7 @@ Include the link to your Devpost project page here: [Devpost](https://devpost.co
 ### Authors
 
 * Kyle Li - kyle-guanyi – kyleli@seas.upenn.edu – [GitHub](https://github.com/kyle-guanyi)
-* Kevin Nguyen - Devpost ID – Penn email – [GitHub](https://github.com/kebinjpeg)
+* Kevin Nguyen - kevinocca – kebin@seas.upenn.edu – [GitHub](https://github.com/kebinjpeg)
 * Bonnie Tse - bonniet – Penn email – [GitHub](https://github.com/bonniewt)
 
 ## Usage
