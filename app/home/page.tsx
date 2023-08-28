@@ -72,7 +72,7 @@ const Home = () => {
       />
       <div className="w-1/5">
         <Center className="w-full h-flex flex items-center justify-center">
-          <Calendar handleDate={handleDate} />
+          <Calendar handleDate={handleDate} allEvents={allEvents} />
         </Center>
         <div className=" w-full h-1/2">
           <Divider />

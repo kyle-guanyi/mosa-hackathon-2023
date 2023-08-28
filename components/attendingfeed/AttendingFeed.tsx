@@ -29,7 +29,7 @@ const EventCardList = ({ data }) => {
  * @constructor - Renders a list of event cards
  * @returns A list of event cards
  */
-const AttendingFeed = ( { allEvents }) => {
+const AttendingFeed = ({ allEvents }) => {
   // constant containing JSONs of events
   const [events, setEvents] = useState([]);
 
@@ -41,7 +41,7 @@ const AttendingFeed = ( { allEvents }) => {
   const [filteredEvents, setFilteredEvents] = useState([]);
 
   // obtains all the current event JSONs
-  
+
   useEffect(() => {
     const fetchCurrentEvents = async () => {
       const currentDate = new Date();
@@ -49,10 +49,10 @@ const AttendingFeed = ( { allEvents }) => {
         const eventDate = new Date(event.startDate);
         return eventDate >= currentDate;
       });
-  
+
       setEvents([...currentEvents]);
     };
-  
+
     fetchCurrentEvents();
   }, [allEvents]);
 
@@ -85,7 +85,7 @@ const AttendingFeed = ( { allEvents }) => {
         // console.log(filtered);
       } else {
         // If user is not attending any events, set filteredEvents to the same as events
-         console.log("No attending events");
+        console.log("No attending events");
       }
     };
 

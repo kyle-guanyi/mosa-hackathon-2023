@@ -53,7 +53,6 @@ const PastEventsFeed = ({ allEvents }) => {
   useEffect(() => {
     setEvents([...allEvents]);
   }, [allEvents]);
- 
 
   const [userAttendingEventIDs, setUserAttendingEvents] = useState({
     attendingEvents: [],
