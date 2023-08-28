@@ -145,6 +145,7 @@ const Event = ({ params }) => {
         duration: 4000,
         isClosable: true,
       });
+      return;
     }
 
     try {
