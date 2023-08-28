@@ -2,7 +2,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 // import Image from "next/image";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { DateTime } from "luxon";
 import {
@@ -30,7 +29,6 @@ import {
  * @returns An event card
  */
 const EventCard = ({ event }) => {
-  const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -144,10 +142,6 @@ const EventCard = ({ event }) => {
     }
   }, [event?.attendees]);
 
-  const handleEventClick = () => {
-    router.push(`/event/${event._id}`);
-  };
-
   const [userEventDateTime, setUserEventDateTime] = useState(null);
   const [eventDateTime, setEventDateTime] = useState(null);
 
@@ -240,7 +234,6 @@ const EventCard = ({ event }) => {
         maxW="90%"
         maxH="100%"
         className="m-auto cursor-pointer hover:-translate-y-2 hover:opacity-80 transition-all event-card"
-        onClick={handleEventClick}
         minWidth="300px"
         minHeight="400px"
         height="100%"

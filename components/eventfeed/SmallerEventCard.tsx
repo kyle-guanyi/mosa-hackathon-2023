@@ -228,7 +228,6 @@ const SmallerEventCard = ({ event }) => {
       <Card
         maxW="450px"
         className="m-auto cursor-pointer hover:-translate-y-2 hover:opacity-80 transition-all event-card"
-        onClick={handleEventClick}
       >
         <CardBody>
           <div className="horizontal-card-content">
