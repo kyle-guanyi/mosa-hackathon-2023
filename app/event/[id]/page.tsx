@@ -4,6 +4,7 @@ import EventPage from "components/eventpage/EventPage";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useToast } from "@chakra-ui/react";
 
 /**
  * This is the page for a specific event.
@@ -69,7 +70,6 @@ const Event = ({ params }) => {
       setUser({
         attendingEvents: data.attendingEvents,
       });
-
     };
     // If the user is logged in, fetch their attending events
     if (session?.user.id) getUserAttendingEvents();
@@ -93,39 +93,34 @@ const Event = ({ params }) => {
     try {
       const updatedAttendingEvents = [...user.attendingEvents, eventId];
       const updatedAttendees = [...eventDetails.attendees, session?.user.id];
-      await fetch(
-          `/api/user/${session?.user.id}?type=attending`,
-          {
-            method: "PATCH",
-            body: JSON.stringify({
-              attendingEvents: updatedAttendingEvents,
-            }),
-          }
-      );
-      await fetch(
-          `/api/event/${eventDetails._id}?type=attending`,
-          {
-            method: "PATCH",
-            body: JSON.stringify({
-              attendees: updatedAttendees,
-            }),
-          }
-      );
+      await fetch(`/api/user/${session?.user.id}?type=attending`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          attendingEvents: updatedAttendingEvents,
+        }),
+      });
+      await fetch(`/api/event/${eventDetails._id}?type=attending`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          attendees: updatedAttendees,
+        }),
+      });
       setUser({
         attendingEvents: updatedAttendingEvents,
       });
 
-      setEventDetails(prevEventDetails => ({
+      setEventDetails((prevEventDetails) => ({
         ...prevEventDetails,
         attendees: updatedAttendees,
       }));
-
     } catch (error) {
       console.log(error);
     } finally {
       fetchEventDetails();
     }
   };
+
+  const toast = useToast();
 
   /**
    * Removes the event from the user's attending events
@@ -142,6 +137,16 @@ const Event = ({ params }) => {
       return;
     }
 
+    if (session?.user.id === creatorInfo._id) {
+      toast({
+        title: "Unable to remove yourself (the host) from the event",
+        description: "To proceed, you need to delete the event",
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+      });
+    }
+
     try {
       const updatedAttendingEvents = user.attendingEvents.filter(
         (id) => id !== eventId
@@ -152,29 +157,23 @@ const Event = ({ params }) => {
       );
 
       // Update the user's attending events and the event's attendees
-      await fetch(
-          `/api/user/${session?.user.id}?type=attending`,
-          {
-            method: "PATCH",
-            body: JSON.stringify({
-              attendingEvents: updatedAttendingEvents,
-            }),
-          }
-      );
-      await fetch(
-          `/api/event/${eventDetails._id}?type=attending`,
-          {
-            method: "PATCH",
-            body: JSON.stringify({
-              attendees: updatedAttendees,
-            }),
-          }
-      );
+      await fetch(`/api/user/${session?.user.id}?type=attending`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          attendingEvents: updatedAttendingEvents,
+        }),
+      });
+      await fetch(`/api/event/${eventDetails._id}?type=attending`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          attendees: updatedAttendees,
+        }),
+      });
       setUser({
         attendingEvents: updatedAttendingEvents,
       });
 
-      setEventDetails(prevEventDetails => ({
+      setEventDetails((prevEventDetails) => ({
         ...prevEventDetails,
         attendees: updatedAttendees,
       }));
@@ -199,17 +198,17 @@ const Event = ({ params }) => {
   const handleDelete = async (eventId) => {
     try {
       const response = await fetch(`/api/event/${eventId}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
 
       if (response.ok) {
         // Refresh comments after deletion
-        router.push("/home")
+        router.push("/home");
       }
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   /**
    * Adds the images to the event
@@ -224,7 +223,7 @@ const Event = ({ params }) => {
     } else {
       setEventDetails({ ...eventDetails, uploadedPictures: keysArray });
     }
-  }
+  };
 
   /**
    * Updates the event uploaded images

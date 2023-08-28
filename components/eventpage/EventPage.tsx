@@ -350,11 +350,15 @@ const EventPage = ({
   // Initialize newEvent state
   const [newEvent, setNewEvent] = useState(null);
 
-  const handleDeletedImagesFromEvent = (deletedMessage) => {
-      const updatedPictures = event.uploadedPictures.filter(picture => !deletedMessage.uploadedMessagePictures.includes(picture));
-      setEvent({ ...event, uploadedPictures: updatedPictures });
-  }
+  const handleDeletePatch = (e) => {
+      // const updatedPictures = event.uploadedPictures.filter(picture => !deletedMessage.uploadedMessagePictures.includes(picture));
+      // console.log("This is the deleted pictures", deletedMessage)
+      // console.log("This is the updated pictures", updatedPictures)
 
+      // setEvent({ ...event, uploadedPictures: updatedPictures });
+
+      fetchEventDetails();
+  }
 
   // Update newEvent state when event changesnpm r
   return (
@@ -722,7 +726,7 @@ const EventPage = ({
               <MessageBoard
                 eventDetails={event}
                 addImagesToEvent={addImagesToEvent}
-                handleDeletedImagesFromEvent={handleDeletedImagesFromEvent}
+                handleDeletePatch={handleDeletePatch}
               />
             </div>
           </div>

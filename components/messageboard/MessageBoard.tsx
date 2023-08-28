@@ -17,7 +17,7 @@ import { Heading, useToast } from "@chakra-ui/react";
 const MessageBoard = ({
   eventDetails,
   addImagesToEvent,
-  handleDeletedImagesFromEvent,
+  handleDeletePatch,
 }) => {
   const [eventMessages, setEventMessages] = useState([]);
   const [message, setMessage] = useState({
@@ -192,6 +192,7 @@ const MessageBoard = ({
     } catch (error) {
       console.log(error);
     } finally {
+      handleDeletePatch();
       setSubmitting(false);
     }
   };
@@ -222,7 +223,7 @@ const MessageBoard = ({
       console.log(error);
     } finally {
       setSubmitting(false);
-      handleDeletedImagesFromEvent(deletedMessage);
+      handleDeletePatch();
     }
   };
 

@@ -12,32 +12,43 @@ import { useDisclosure, Modal, Grid, GridItem, Image, ModalOverlay, ModalContent
 const PhotoTimeline = ({ event }) => {
   const [uploadedEventPictures, setUploadedEventPictures] = useState([]);
 
+  const [pictureKeys, setPictureKeys] = useState([]);
   /**
    * This function is used to fetch uploaded event pictures.
    */
-  const fetchUploadedEventPictures = async () => {
-    try {
-      const keysArray = event.uploadedPictures;
-      const response = await fetch(
-        `/api/media?keys=${encodeURIComponent(JSON.stringify(keysArray))}`
-      );
-      const data = await response.json();
-
-      if (response.ok) {
-        setUploadedEventPictures(data.urls);
-      } else {
-        console.error("Error fetching event pictures");
-      }
-    } catch (error) {
-      console.error("Error fetching event pictures: ", error);
-    }
-  };
-
+  
   useEffect(() => {
+    const fetchUploadedEventPictures = async () => {
+      try {
+        const keysArray = pictureKeys;
+        const response = await fetch(
+          `/api/media?keys=${encodeURIComponent(JSON.stringify(keysArray))}`
+        );
+        const data = await response.json();
+  
+        if (response.ok) {
+          setUploadedEventPictures(data.urls);
+        } else {
+          console.error("Error fetching event pictures");
+        }
+      } catch (error) {
+        console.error("Error fetching event pictures: ", error);
+      }
+    };
+
     if (event.uploadedPictures?.length > 0) {
       fetchUploadedEventPictures();
     }
-  }, [event.uploadedPictures]);
+  }, [event.uploadedPictures, event, pictureKeys]);
+
+
+  useEffect(() => {
+    const fetchUploadedEventPictureKeys = async () => {
+      const keysArray = event.uploadedPictures;
+      setPictureKeys(keysArray);
+    }
+    fetchUploadedEventPictureKeys();
+  }, [event]);
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
 
