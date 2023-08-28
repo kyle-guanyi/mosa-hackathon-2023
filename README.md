@@ -145,13 +145,13 @@ Login Page using Google and restricted to seas.upenn.edu emails only
 Event Home Page
 ![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/cc99f5e8-82bd-46a3-bbc5-a565b373484d)
 
-Create New Event Page
-![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/39a5c7b0-d875-4763-9fe3-2b6d644ebc99)
-
 Edit Profile Page
 ![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/a3351919-dacb-4994-8d01-fa5d7be47bc3)
 
-Event Home Page
+Create New Event Page
+![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/39a5c7b0-d875-4763-9fe3-2b6d644ebc99)
+
+Event Home Page - Filtered
 ![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/d1ef59ea-45d2-40c5-9c37-4ccce8dc0579)
 
 Event Page
@@ -183,15 +183,6 @@ Which frameworks, libraries, or other tools did you use to create your project?
 * [Amazon Web Services Software Development Kit](https://aws.amazon.com/developer/tools/) - S3 buckets for storing images
 * [Google API](https://cloud.google.com/?hl=en) - Google API for user login for Upenn email accounts only
 
-
-
-### Acknowledgments
-
-Use anyone else's code? Inspired by a particular project? List / link here.
-
-* Item 1
-* Item 2
-* Item 3
 
 ### License
 
