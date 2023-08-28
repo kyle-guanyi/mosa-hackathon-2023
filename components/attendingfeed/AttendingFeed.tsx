@@ -29,7 +29,7 @@ const EventCardList = ({ data }) => {
  * @constructor - Renders a list of event cards
  * @returns A list of event cards
  */
-const AttendingFeed = () => {
+const AttendingFeed = ( { allEvents }) => {
   // constant containing JSONs of events
   const [events, setEvents] = useState([]);
 
@@ -40,21 +40,21 @@ const AttendingFeed = () => {
 
   const [filteredEvents, setFilteredEvents] = useState([]);
 
-  // obtains all the event JSONs
-  const fetchEvents = async () => {
-    const response = await fetch("/api/event");
-    const data = await response.json();
-    const currentDate = new Date();
-    const currentEvents = data.filter((event) => {
-      const eventDate = new Date(event.startDate);
-       // console.log('attending event DATE', eventDate);
-      return eventDate >= currentDate;
-    })
-    setEvents(currentEvents);
-  };
+  // obtains all the current event JSONs
+  
   useEffect(() => {
-    fetchEvents();
-  }, []);
+    const fetchCurrentEvents = async () => {
+      const currentDate = new Date();
+      const currentEvents = allEvents.filter((event) => {
+        const eventDate = new Date(event.startDate);
+        return eventDate >= currentDate;
+      });
+  
+      setEvents([...currentEvents]);
+    };
+  
+    fetchCurrentEvents();
+  }, [allEvents]);
 
   const [userAttendingEventIDs, setUserAttendingEvents] = useState({
     attendingEvents: [],
@@ -71,7 +71,7 @@ const AttendingFeed = () => {
     };
 
     if (session?.user.id) getUserAttendingEvents();
-  }, [session?.user.id]);
+  }, [session?.user.id, allEvents]);
 
   useEffect(() => {
     // Function to filter events based on user's attending events

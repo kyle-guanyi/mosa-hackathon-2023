@@ -174,7 +174,6 @@ const EventCard = ({ event }) => {
       // Extract hours and minutes from the startTime string
       const hours = parseInt(event.startTime.substring(0, 2), 10);
       const minutes = parseInt(event.startTime.substring(3, 5), 10);
-      console.log(event.timeZone);
       // Create a DateTime object for the start date
       const eventStartDate = DateTime.fromObject(
         {

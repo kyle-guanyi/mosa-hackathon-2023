@@ -104,7 +104,7 @@ const EventCardList = ({ data }) => {
  * @constructor - Renders a list of event cards
  * @returns A list of event cards
  */
-const EventFeed = ({ selectedDate }) => {
+const EventFeed = ({ selectedDate, fetchAllEvents, allEvents, onCreateEvent }) => {
   const [events, setEvents] = useState([]);
   const [filteredEvents, setFilteredEvents] = useState([]);
   const [filterCity, setFilterCity] = useState([]);
@@ -112,11 +112,24 @@ const EventFeed = ({ selectedDate }) => {
   const [sortOption, setSortOption] = useState(true);
 
   // obtains all the event JSONs
-  const fetchEvents = async () => {
-    const response = await fetch("/api/event");
-    const data = await response.json();
+  // const fetchEvents = async () => {
+  //   const response = await fetch("/api/event");
+  //   const data = await response.json();
+  //   const currentDate = new Date();
+  //   const currentEvents = data.filter((event) => {
+  //     const eventDate = new Date(event.startDate);
+  //     return eventDate >= currentDate;
+  //   });
+  //   setEvents(currentEvents);
+  // };
+
+  // useEffect(() => {
+  //   fetchEvents();
+  // }, []);
+
+  const fetchCurrentEvents = async () => {
     const currentDate = new Date();
-    const currentEvents = data.filter((event) => {
+    const currentEvents = allEvents.filter((event) => {
       const eventDate = new Date(event.startDate);
       return eventDate >= currentDate;
     });
@@ -124,8 +137,8 @@ const EventFeed = ({ selectedDate }) => {
   };
 
   useEffect(() => {
-    fetchEvents();
-  }, []);
+    fetchCurrentEvents();
+  }, [allEvents]);
 
   useEffect(() => {
     const results = Object.values(events).filter((event) => {
@@ -297,16 +310,14 @@ const EventFeed = ({ selectedDate }) => {
           });
 
           onCreateEventClose();
-          if (home) {
-            location.reload();
-          }
         }
       }
     } catch (error) {
       console.log(error);
     } finally {
       resetEventState();
-      fetchEvents();
+      fetchAllEvents();
+      onCreateEvent(newEvent);
       setSubmitting(false);
     }
   };

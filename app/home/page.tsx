@@ -5,7 +5,7 @@ import Calendar from "../../components/Calendar";
 import AttendingFeed from "../../components/attendingfeed/AttendingFeed";
 import PastEventsFeed from "@/components/pasteventsfeed/PastEventsFeed";
 import { Divider, Center } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState, useEffect,  } from "react";
 import { Heading } from "@chakra-ui/react";
 
 /**
@@ -33,6 +33,25 @@ const Home = () => {
     }
   };
 
+  const [allEvents, setAllEvents] = useState([]);
+
+  // obtains all the event JSONs
+  const fetchAllEvents = async () => {
+    const response = await fetch("/api/event");
+    const data = await response.json();
+    setAllEvents(data);
+  };
+
+  useEffect(() => {
+    fetchAllEvents();
+  }, []);
+
+  const handleCreateEvent = (newEvent) => {
+    // Add the new event to the existing events
+    setAllEvents((prevEvents) => [...prevEvents, newEvent]);
+  };
+
+
   return (
     <div className="h-full w-full flex">
       <div
@@ -58,7 +77,7 @@ const Home = () => {
         <div className=" w-full h-1/2">
           <Divider />
           <Heading className="pt-4 text-center">Your Upcoming Events</Heading>
-          <AttendingFeed />
+          <AttendingFeed allEvents={allEvents}/>
         </div>
       </div>
       <Center className="v-full">
@@ -66,7 +85,7 @@ const Home = () => {
       </Center>
       <div className="w-3/5">
         <div className=" w-full v-full ">
-          <EventFeed selectedDate={selectedDate} />
+          <EventFeed selectedDate={selectedDate} fetchAllEvents={fetchAllEvents} allEvents={allEvents} onCreateEvent = {handleCreateEvent}/>
         </div>
       </div>
       <Center className="v-full">
@@ -74,7 +93,7 @@ const Home = () => {
       </Center>
       <div className="w-1/5 hidden md:block ">
         <Heading className="pt-4 text-center">Past Events</Heading>
-        <PastEventsFeed />
+        <PastEventsFeed allEvents={allEvents}/>
       </div>
     </div>
   );
