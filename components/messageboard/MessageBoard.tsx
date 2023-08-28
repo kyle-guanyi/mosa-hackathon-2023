@@ -233,7 +233,7 @@ const MessageBoard = ({
     <div>
       <div>
         {" "}
-        <Heading as="h3" size="md">
+        <Heading as="h3" size="md" pb="3">
           Discussion Board
         </Heading>{" "}
       </div>

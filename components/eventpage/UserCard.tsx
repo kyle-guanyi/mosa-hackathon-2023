@@ -3,7 +3,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { Avatar } from "@chakra-ui/react";
+import { Avatar, Skeleton, SkeletonCircle } from "@chakra-ui/react";
 import { Card, CardHeader, Flex, Box, Heading, Text } from "@chakra-ui/react";
 
 /**
@@ -20,6 +20,7 @@ const UserCard = ({ user }) => {
   const router = useRouter();
   // fetch profilepic for user
   const [profilePicture, setProfilePicture] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchProfilePicture = async () => {
     try {
@@ -36,6 +37,8 @@ const UserCard = ({ user }) => {
       }
     } catch (error) {
       console.error("Error fetching profile picture:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -63,16 +66,25 @@ const UserCard = ({ user }) => {
         <CardHeader>
           <Flex gap="4">
             <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
-              <Avatar
-                name={user?.firstName}
-                src={profilePicture || user?.googleProfileImage}
-              />
-
+              {isLoading ? (
+                <SkeletonCircle size="8"/>
+              ) : (
+                <Avatar
+                  name={user?.firstName}
+                  src={profilePicture || user?.googleProfileImage}
+                />
+              )}
               <Box>
                 <Heading size="sm">
-                  {user?.firstName} {user?.lastName}
+                  {isLoading ? (
+                    <Skeleton width="50px" height="20px"/>
+                  ) : (
+                    `${user?.firstName} ${user?.lastName}`
+                  )}
                 </Heading>
-                <Text fontSize='xs'>{user?.email}</Text>
+                <Text fontSize="xs" mt="2">
+                  {isLoading ? <Skeleton width="70px" height="12px"/> : user?.email}
+                </Text>
               </Box>
             </Flex>
           </Flex>

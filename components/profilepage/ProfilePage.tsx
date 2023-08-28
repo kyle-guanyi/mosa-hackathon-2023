@@ -266,8 +266,7 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
         }}
       />
 
-      <Card maxW="xl"  p="4" m="4" borderRadius="20px">
-
+      <Card maxW="xl" p="4" m="4" borderRadius="20px">
         <Flex direction="column" alignItems="center" justifyContent="center">
           <CardHeader>
             <div className="pt-4 flex">
@@ -398,15 +397,15 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
                 <Skeleton height="160px" width="100%" mt="2" />
               </>
             )}
-            
-              <Collapse
-                startingHeight={100}
-                in={show}
-                className="mx-auto text-justify"
-              >
-                {profileDetails?.bio}
-              </Collapse>
-              {profileDetails?.bio.length > 300 && (
+
+            <Collapse
+              startingHeight={100}
+              in={show}
+              className="mx-auto text-justify"
+            >
+              {profileDetails?.bio}
+            </Collapse>
+            {profileDetails?.bio.length > 300 && (
               <Button
                 size="sm"
                 isActive={true}
@@ -417,7 +416,6 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
                 Show {show ? "Less" : "More"}
               </Button>
             )}
-            
           </div>
           <Divider />
           <div className="pt-4 pb-4 w-full">
