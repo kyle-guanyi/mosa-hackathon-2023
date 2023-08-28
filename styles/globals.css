@@ -51,6 +51,24 @@
   transition: max-height 0.5s ease, opacity 0.3s ease;
 }
 
+.event-name,
+.event-location {
+  max-height: 2.4em; /* Equivalent to roughly two lines */
+  line-height: 1.2em; /* Adjust as needed to control line spacing */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  @supports (-webkit-line-clamp: 2) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: initial;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+}
+
+
 /* Tailwind Styles */
 
 .app {
