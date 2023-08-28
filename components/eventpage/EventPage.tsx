@@ -32,6 +32,8 @@ import {
   DrawerHeader,
   DrawerFooter,
   useToast,
+  LinkBox,
+  LinkOverlay,
 } from "@chakra-ui/react";
 
 import { EditIcon } from "@chakra-ui/icons";
@@ -73,6 +75,11 @@ const EventPage = ({
   }, [eventDetails]);
 
   // Convert start date to a readable format
+  const startDate = new Date(event.startDate).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
   const startDate = new Date(event.startDate).toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
@@ -443,6 +450,11 @@ const EventPage = ({
                               mr={3}
                               onClick={onDrawerClose}
                             >
+                            <Button
+                              variant="outline"
+                              mr={3}
+                              onClick={onDrawerClose}
+                            >
                               Cancel
                             </Button>
                             {submitting ? (
@@ -590,7 +602,7 @@ const EventPage = ({
                             rounded="md"
                             shadow="md"
                           >
-                            {event.zoomLink}
+                            <a href={event.zoomLink} target="_blank">Redirect to Zoom</a>
                           </Box>
                         </Collapse>
                       </div>
@@ -606,10 +618,7 @@ const EventPage = ({
                       <FiClock />
                     </span>
                     <div className="ml-4">
-                      Event's Local Timezone Event Date:{" "}
-                      {eventDateTime?.toFormat("EEEE, MMMM d, yyyy")},{" "}
-                      {eventDateTime?.toFormat("h:mm a")}{" "}
-                      {convertIANAToTimezoneAcronym(eventDateTime?.zoneName)}
+                      {startDate} at {event.startTime} {event.timeZone}
                     </div>
                   </div>
                   <div className="flex-row flex items-center pb-2">
