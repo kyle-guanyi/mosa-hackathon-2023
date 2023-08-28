@@ -80,11 +80,6 @@ const EventPage = ({
     month: "long",
     day: "numeric",
   });
-  const startDate = new Date(event.startDate).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
 
   const [show, setShow] = React.useState(false);
   const handleToggle = () => setShow(!show);
@@ -450,11 +445,6 @@ const EventPage = ({
                               mr={3}
                               onClick={onDrawerClose}
                             >
-                            <Button
-                              variant="outline"
-                              mr={3}
-                              onClick={onDrawerClose}
-                            >
                               Cancel
                             </Button>
                             {submitting ? (
@@ -602,7 +592,9 @@ const EventPage = ({
                             rounded="md"
                             shadow="md"
                           >
-                            <a href={event.zoomLink} target="_blank">Redirect to Zoom</a>
+                            <a href={event.zoomLink} target="_blank">
+                              Redirect to Zoom
+                            </a>
                           </Box>
                         </Collapse>
                       </div>
@@ -618,7 +610,14 @@ const EventPage = ({
                       <FiClock />
                     </span>
                     <div className="ml-4">
-                      {startDate} at {event.startTime} {event.timeZone}
+                      <p>
+                        Event's Local Timezone Date:{" "}
+                      {eventDateTime?.toFormat("EEEE, MMMM d, yyyy")},{" "}
+                      {eventDateTime?.toFormat("h:mm a")}{" "}
+                      {convertIANAToTimezoneAcronym(
+                        eventDateTime?.zoneName
+                      )}
+                      </p>
                     </div>
                   </div>
                   <div className="flex-row flex items-center pb-2">
