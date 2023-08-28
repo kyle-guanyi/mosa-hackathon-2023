@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Message from "./Message";
 import MessageForm from "./MessageForm";
 import { useSession } from "next-auth/react";
-import { Heading } from "@chakra-ui/react";
+import { Heading, useToast } from "@chakra-ui/react";
 
 /**
  * This component is used to render a message board.
@@ -65,12 +65,13 @@ const MessageBoard = ({ eventDetails, addImagesToEvent }) => {
         }),
       });
 
-      // If the message is empty, do not submit
+      // Reset message to empty
       if (response.ok) {
-        setMessage({ content: "" });
         if (message.uploadedMessagePictures) {
           addImagesToEvent(message.uploadedMessagePictures);
         }
+
+        setMessage({ content: "", uploadedMessagePictures: [] });
         fetchEventMessages();
       }
     } catch (error) {
@@ -129,6 +130,8 @@ const MessageBoard = ({ eventDetails, addImagesToEvent }) => {
     }
   };
 
+  const toast = useToast();
+
   /**
    * This function is used to handle the keys array.
    *
@@ -137,6 +140,14 @@ const MessageBoard = ({ eventDetails, addImagesToEvent }) => {
    */
   const handleKeysArray = async (keysArray) => {
     setMessage({ ...message, uploadedMessagePictures: keysArray });
+    toast({
+      title: "Your newly uploaded image(s) have been attached to your message.",
+      description:
+        "Be sure to submit your edits to replace your previously uploaded image(s).",
+      status: "info",
+      duration: 5000,
+      isClosable: true,
+    });
   };
 
   /**
@@ -179,12 +190,12 @@ const MessageBoard = ({ eventDetails, addImagesToEvent }) => {
         existingFiles={[]}
         type="Submit"
       />
-      {eventMessages 
+      {eventMessages
         .slice()
         .reverse()
         .map((eventMessage) => {
           return (
-            <Message 
+            <Message
               key={eventMessage._id}
               message={eventMessage}
               onDeleteItem={() => handleDeleteMessage(eventMessage._id)}

@@ -231,6 +231,7 @@ const Event = ({ params }) => {
    * Updates the event uploaded images
    */
   const updateEventUploadedImages = async () => {
+    console.log(eventDetails.uploadedPictures)
     await fetch(`/api/event/${eventDetails._id}?type=uploadedPictures`, {
       method: "PATCH",
       body: JSON.stringify({

@@ -84,6 +84,7 @@ const Message = ({
 
   // add the editedMessage into the database where the message is stored
   const handleMessageEditSubmit = () => {
+    console.log("Edited message from messageform:", editedMessage)
     onPatchMessage(editedMessage);
     handlePatchEventPictures(editedMessage);
     onClose();
@@ -265,12 +266,12 @@ const Message = ({
   };
 
   /**
-   * This function is used to delete a message.
+   * This function is used to update event message pictures
    *
    * @param keysArray - The keys array
-   * @returns The deleted message
    */
-  const handlePatchMessagePictures = async (keysArray) => {
+  const handleKeysArray = async (keysArray) => {
+    console.log("Reached patch message pictures")
     setEditedMessage({ ...editedMessage, uploadedMessagePictures: keysArray });
     toast({
       title: "Your newly uploaded image(s) have been attached to your message.",
@@ -331,7 +332,7 @@ const Message = ({
                         message={editedMessage}
                         setMessage={setEditedMessage}
                         handleMessageSubmit={handleMessageEditSubmit}
-                        handleKeysArray={handlePatchMessagePictures}
+                        handleKeysArray={handleKeysArray}
                         existingFiles={editedMessage.uploadedMessagePictures}
                         type={"Edit"}
                       />

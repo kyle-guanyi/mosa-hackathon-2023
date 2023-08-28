@@ -126,6 +126,8 @@ const CreateMessage = ({
     }
   }, [session?.user.id]);
 
+  
+
   return (
     <Card align="center" variant="outline">
       <CardBody style={{ display: "flex", alignItems: "start", width: "100%" }}>
@@ -156,8 +158,10 @@ const CreateMessage = ({
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={onClose}>
-              Close
+            <Button colorScheme="red"
+                            isActive={true}
+                            className="hover:opacity-80" mr={3} onClick={onClose}>
+              Done Attaching Images
             </Button>
           </ModalFooter>
         </ModalContent>

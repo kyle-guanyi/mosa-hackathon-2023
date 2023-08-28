@@ -205,11 +205,16 @@ export const PATCH_UPLOADED_PICTURES = async (request, { params }) => {
     console.log("these are the existing pictures", existingEvent.uploadedPictures)
     console.log("these are the pictures to be filtered out", existingEvent.originalPictures)
     // filter our old images
-    existingEvent.uploadedPictures = existingEvent.uploadedPictures.filter(picture => !originalPictures.includes(picture));
-    console.log("after filtering", existingEvent.uploadedPictures)
-    // update event's uploaded pictures
-    existingEvent.uploadedPictures.push(...uploadedPictures);
-    console.log("after adding", existingEvent.uploadedPictures)
+    if (existingEvent.originalPictures) {
+      existingEvent.uploadedPictures = existingEvent.uploadedPictures.filter(picture => !originalPictures.includes(picture));
+      console.log("after filtering", existingEvent.uploadedPictures)
+      // update event's uploaded pictures
+      existingEvent.uploadedPictures.push(...uploadedPictures);
+      console.log("after adding", existingEvent.uploadedPictures)
+    } else {
+      existingEvent.uploadedPictures = uploadedPictures;
+    }
+    
 
     await existingEvent.save();
 
