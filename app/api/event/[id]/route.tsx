@@ -42,7 +42,7 @@ export const PATCH = async (request, { params }) => {
     return PATCH_EVENT_IMAGE(request, {params});
   } else if (request.nextUrl.searchParams.get("type") === "uploadedPictures") {
     return PATCH_UPLOADED_PICTURES(request, {params});
-  }
+  } 
 
   const { isPublic, eventName, isVirtual, location, zoomLink, startDate, startTime, timeZone, eventDescription, closestCity } = await request.json();
 
@@ -202,10 +202,11 @@ export const PATCH_UPLOADED_PICTURES = async (request, { params }) => {
       return new Response("Event not found", { status: 404 });
     }
     console.log("these are the new pictures", uploadedPictures)
+    
+    console.log("these are the original pictures to be filtered out", originalPictures)
     console.log("these are the existing pictures", existingEvent.uploadedPictures)
-    console.log("these are the pictures to be filtered out", existingEvent.originalPictures)
     // filter our old images
-    if (existingEvent.originalPictures) {
+    if (existingEvent.uploadedPictures && originalPictures) {
       existingEvent.uploadedPictures = existingEvent.uploadedPictures.filter(picture => !originalPictures.includes(picture));
       console.log("after filtering", existingEvent.uploadedPictures)
       // update event's uploaded pictures
@@ -233,6 +234,10 @@ export const PATCH_UPLOADED_PICTURES = async (request, { params }) => {
  * @constructor - The function that is called when the route is visited
  */
 export const DELETE = async (request, { params }) => {
+  if (request.nextUrl.searchParams.get("type") === "deletedPictures") {
+    return DELETE_MESSAGE_IMAGES(request, {params});
+  }
+
   try {
     await connectToDB();
 
@@ -257,6 +262,37 @@ export const DELETE = async (request, { params }) => {
   } catch (error) {
     console.error("Error deleting event", error); // Log the error for debugging
     return new Response("Error deleting event", { status: 500 });
+  }
+};
+
+/**
+ * This function deletes images from the event if the message associated with them is deleted
+ *
+ * @param request - The incoming request object
+ * @param params - The route parameters
+ * @constructor - The function that is called when the route is visited
+ */
+export const DELETE_MESSAGE_IMAGES = async (request, { params }) => {
+  const { uploadedPictures } = await request.json();
+
+  try {
+    await connectToDB();
+
+    // Find the existing event by ID
+    const existingEvent = await Event.findById(params?.id);
+
+    if (!existingEvent) {
+      return new Response("Event not found", { status: 404 });
+    }
+
+    existingEvent.uploadedPictures = existingEvent.uploadedPictures.filter(picture => !uploadedPictures.includes(picture));
+
+    await existingEvent.save();
+
+    return new Response("Successfully deleted message pictures from event", { status: 200 });
+  } catch (error) {
+    console.error("Error deleting message pictures from event", error); // Log the error for debugging
+    return new Response("Error deleting message pictures from event", { status: 500 });
   }
 };
 

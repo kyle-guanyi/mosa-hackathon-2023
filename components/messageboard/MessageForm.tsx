@@ -32,24 +32,24 @@ import {
  * @returns A message
  */
 const CreateMessage = ({
+  submitting,
   message,
   setMessage,
   handleMessageSubmit,
   handleKeysArray,
   existingFiles,
+  setExistingFiles,
   type,
 }) => {
   const toast = useToast();
-  const { isOpen, onOpen, onClose } = useDisclosure()
-
+  const { isOpen, onOpen, onClose } = useDisclosure();
   /**
    * This function is used to submit a message.
    *
    * @param e - An event
    * @returns A message
    */
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     if (message.content === "") {
       toast({
         title: "The post cannot be empty!",
@@ -59,11 +59,13 @@ const CreateMessage = ({
       });
     } else {
       setInitialFiles(null);
-      handleMessageSubmit(e);
+      handleMessageSubmit();
     }
   };
 
-  const [initialFiles, setInitialFiles] = useState(message.uploadedMessagePictures);
+  const [initialFiles, setInitialFiles] = useState(
+    message.uploadedMessagePictures
+  );
 
   useEffect(() => {
     if (existingFiles) {
@@ -126,55 +128,90 @@ const CreateMessage = ({
     }
   }, [session?.user.id]);
 
-  
-
   return (
     <Card align="center" variant="outline">
       <CardBody style={{ display: "flex", alignItems: "start", width: "100%" }}>
-        <Avatar size='md' src={userInfo.userUpdatedProfileImage || userInfo.googleProfileImage} mr={3}/>
-        
+        <Avatar
+          size="md"
+          src={userInfo.userUpdatedProfileImage || userInfo.googleProfileImage}
+          mr={3}
+        />
+
         <Textarea
           id="bio"
           value={message.content}
           onChange={(e) => setMessage({ ...message, content: e.target.value })}
           placeholder="Write your post here"
           required
-          style={{ width: '100%' }}
+          style={{ width: "100%" }}
         />
       </CardBody>
-      <CardFooter style={{ display: "flex", justifyContent: "right", alignItems: "center", width: "100%" }}>
-      <div style={{ display: "flex", alignItems: "center" }}>
-      <>
-      <Button onClick={onOpen}>Attach Images</Button>
-
-      <Modal isOpen={isOpen} onClose={onClose} size="2xl">
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Upload your images</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-          <Dropzone handleKeysArray={handleKeysArray} maxUploads={5} initialFiles={initialFiles}
-          updateInitialFiles={updateInitialFiles} />
-          </ModalBody>
-
-          <ModalFooter>
-            <Button colorScheme="red"
-                            isActive={true}
-                            className="hover:opacity-80" mr={3} onClick={onClose}>
-              Done Attaching Images
+      <CardFooter
+        style={{
+          display: "flex",
+          justifyContent: "right",
+          alignItems: "center",
+          width: "100%",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <>
+            <Button onClick={onOpen} mr="4">
+              Attach Images
             </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </>
-        <Button
-          colorScheme="facebook"
-          isActive={true}
-          className="hover:opacity-80"
-          onClick={handleSubmit}
-        >
-          {type === "Submit" ? ("Submit Post") : ("Confirm Edits") }
-        </Button>
+
+            <Modal isOpen={isOpen} onClose={onClose} size="2xl">
+              <ModalOverlay />
+              <ModalContent>
+                <ModalHeader>Upload your images</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                  <Dropzone
+                    handleKeysArray={handleKeysArray}
+                    maxUploads={5}
+                    initialFiles={initialFiles}
+                    updateInitialFiles={updateInitialFiles}
+                  />
+                </ModalBody>
+
+                <ModalFooter>
+                  <Button
+                    colorScheme="red"
+                    isActive={true}
+                    className="hover:opacity-80"
+                    mr={3}
+                    onClick={() => {
+                      if (setExistingFiles) {
+                        setExistingFiles(initialFiles);
+                      }
+                      onClose();
+                    }}
+                  >
+                    Done Attaching Images
+                  </Button>
+                </ModalFooter>
+              </ModalContent>
+            </Modal>
+          </>
+          {submitting ? (
+            <Button
+              colorScheme="facebook"
+              isLoading
+              loadingText="Submitting..."
+              isActive={true}
+            >
+              Submit
+            </Button>
+          ) : (
+            <Button
+              colorScheme="facebook"
+              isActive={true}
+              className="hover:opacity-80"
+              onClick={handleSubmit}
+            >
+              {type === "Submit" ? "Submit Post" : "Confirm Edits"}
+            </Button>
+          )}
         </div>
       </CardFooter>
     </Card>

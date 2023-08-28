@@ -1,10 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import CreateMessage from "./MessageForm";
 import {
+  AlertDialog,
+  AlertDialogOverlay,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogCloseButton,
+  AlertDialogFooter,
+  AlertDialogBody,
   Card,
   CardHeader,
   Flex,
@@ -60,6 +66,13 @@ const Message = ({
   });
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+   const {
+    isOpen: isAlertOpen,
+    onOpen: onAlertOpen,
+    onClose: onAlertClose,
+  } = useDisclosure();
+
+  const cancelRef = React.useRef();
 
   const [show, setShow] = React.useState(false);
   const handleToggle = () => setShow(!show);
@@ -151,11 +164,11 @@ const Message = ({
     setMessageComments(data);
   };
 
-  useEffect(() => {
-    if (message._id) {
-      fetchMessageComments();
-    }
-  }, [message._id]);
+  // useEffect(() => {
+  //   if (message._id) {
+  //     fetchMessageComments();
+  //   }
+  // }, [message._id]);
 
   const [uploadedMessagePictures, setUploadedMessagePictures] = useState([]);
 
@@ -183,6 +196,9 @@ const Message = ({
   useEffect(() => {
     if (message.uploadedMessagePictures?.length > 0) {
       fetchUploadedMessagePictures();
+      setEditedMessage({...editedMessage, originalPictures: message.uploadedMessagePictures});
+
+      console.log("this is the edited message with og stuff", editedMessage)
     }
   }, [message.uploadedMessagePictures]);
 
@@ -348,11 +364,42 @@ const Message = ({
                 <MenuItem
                   icon={<FiTrash2 />}
                   isDisabled={false}
-                  onClick={onDeleteItem}
+                  onClick={onAlertOpen}
                   className="hover:bg-gray-100 focus:bg-gray-100"
                 >
                   Delete Post
                 </MenuItem>
+                <AlertDialog
+                      motionPreset="slideInBottom"
+                      leastDestructiveRef={cancelRef}
+                      onClose={onAlertClose}
+                      isOpen={isAlertOpen}
+                      isCentered
+                    >
+                      <AlertDialogOverlay />
+                      <AlertDialogContent>
+                        <AlertDialogHeader>Delete Message?</AlertDialogHeader>
+                        <AlertDialogCloseButton className="hover:opacity-50" />
+                        <AlertDialogBody>
+                          Are you sure you want to delete this message and its associated pictures?                     
+                        </AlertDialogBody>
+                        <AlertDialogFooter>
+                          <Button ref={cancelRef} onClick={onAlertClose}>
+                            No
+                          </Button>
+                          <Button
+                            colorScheme="red"
+                            variant={"solid"}
+                            isActive={true}
+                            className="hover:opacity-80"
+                            ml={3}
+                            onClick={onDeleteItem}
+                          >
+                            Yes
+                          </Button>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
               </MenuList>
             </Menu>
           )}

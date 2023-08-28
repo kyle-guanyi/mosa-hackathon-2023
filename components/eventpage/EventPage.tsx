@@ -350,6 +350,12 @@ const EventPage = ({
   // Initialize newEvent state
   const [newEvent, setNewEvent] = useState(null);
 
+  const handleDeletedImagesFromEvent = (deletedMessage) => {
+      const updatedPictures = event.uploadedPictures.filter(picture => !deletedMessage.uploadedMessagePictures.includes(picture));
+      setEvent({ ...event, uploadedPictures: updatedPictures });
+  }
+
+
   // Update newEvent state when event changesnpm r
   return (
     <div className="h-full w-full flex">
@@ -559,7 +565,7 @@ const EventPage = ({
                           Are you sure you want to delete this event? <br />{" "}
                           <br />
                           <em>
-                            All messages, comments, and uploaded pictures
+                            All messages and uploaded pictures
                             associated with this event will also be deleted.
                           </em>
                         </AlertDialogBody>
@@ -625,15 +631,17 @@ const EventPage = ({
                     >
                       {event.eventDescription}
                     </Collapse>
-                    <Button
-                      size="sm"
-                      isActive={true}
-                      className="hover:opacity-80"
-                      onClick={handleToggle}
-                      mt="1rem"
-                    >
-                      Show {show ? "Less" : "More"}
-                    </Button>
+                    {event?.eventDescription?.length > 300 && (
+                      <Button
+                        size="sm"
+                        isActive={true}
+                        className="hover:opacity-80"
+                        onClick={handleToggle}
+                        mt="1rem"
+                      >
+                        Show {show ? "Less" : "More"}
+                      </Button>
+                    )}
                   </div>
                   <div>
                     {event?.zoomLink && (
@@ -714,6 +722,7 @@ const EventPage = ({
               <MessageBoard
                 eventDetails={event}
                 addImagesToEvent={addImagesToEvent}
+                handleDeletedImagesFromEvent={handleDeletedImagesFromEvent}
               />
             </div>
           </div>
