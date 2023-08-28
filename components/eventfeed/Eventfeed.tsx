@@ -104,7 +104,12 @@ const EventCardList = ({ data }) => {
  * @constructor - Renders a list of event cards
  * @returns A list of event cards
  */
-const EventFeed = ({ selectedDate, fetchAllEvents, allEvents, onCreateEvent }) => {
+const EventFeed = ({
+  selectedDate,
+  fetchAllEvents,
+  allEvents,
+  onCreateEvent,
+}) => {
   const [events, setEvents] = useState([]);
   const [filteredEvents, setFilteredEvents] = useState([]);
   const [filterCity, setFilterCity] = useState([]);
@@ -348,7 +353,7 @@ const EventFeed = ({ selectedDate, fetchAllEvents, allEvents, onCreateEvent }) =
           colorScheme="facebook"
           isActive={true}
           className="hover:opacity-80"
-          size={"md"}
+          size={"lg"}
           mr={4}
           onClick={onCreateEventOpen}
           rightIcon={<EditIcon />}
@@ -364,7 +369,7 @@ const EventFeed = ({ selectedDate, fetchAllEvents, allEvents, onCreateEvent }) =
           <ModalOverlay />
           <ModalContent>
             <ModalHeader>Create New Event</ModalHeader>
-            <ModalCloseButton onClick={resetEventState}/>
+            <ModalCloseButton onClick={resetEventState} />
             <ModalBody>
               <EventForm
                 type="Create"
@@ -415,7 +420,7 @@ const EventFeed = ({ selectedDate, fetchAllEvents, allEvents, onCreateEvent }) =
         </Modal>
       </div>
 
-      <div className="flex space-x-8 justify-center text-center">
+      <div className="flex space-x-4 justify-center text-center">
         <Select
           isSearchable={false}
           options={sortByEventType}
@@ -444,7 +449,9 @@ const EventFeed = ({ selectedDate, fetchAllEvents, allEvents, onCreateEvent }) =
         <Select
           isSearchable={false}
           options={sortByUpcomingRecent}
-          value={sortByUpcomingRecent.find((choice) => choice.value === sortOption.toString())}
+          value={sortByUpcomingRecent.find(
+            (choice) => choice.value === sortOption.toString()
+          )}
           onChange={(e) => setSortOption(e.value)}
         />
       </div>

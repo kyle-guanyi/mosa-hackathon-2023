@@ -2,7 +2,6 @@
 
 import React, { useCallback, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { DateTime } from "luxon";
 import {
@@ -19,8 +18,6 @@ import {
 } from "@chakra-ui/react";
 
 const SmallerEventCard = ({ event }) => {
-  const router = useRouter();
-
   const [isLoading, setIsLoading] = useState(true);
 
   // fetch profilepic for user
@@ -133,10 +130,6 @@ const SmallerEventCard = ({ event }) => {
     }
   }, [event?.attendees]);
 
-  const handleEventClick = () => {
-    router.push(`/event/${event._id}`);
-  };
-
   const [userEventDateTime, setUserEventDateTime] = useState(null);
   const [eventDateTime, setEventDateTime] = useState(null);
 
@@ -226,7 +219,7 @@ const SmallerEventCard = ({ event }) => {
   return (
     <Link href={`/event/${event._id}`}>
       <Card
-        maxW="450px"
+        maxW="90%"
         className="m-auto cursor-pointer hover:-translate-y-2 hover:opacity-80 transition-all event-card"
       >
         <CardBody>
