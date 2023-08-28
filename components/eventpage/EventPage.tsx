@@ -33,6 +33,10 @@ import {
   DrawerHeader,
   DrawerFooter,
   useToast,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalCloseButton,
 } from "@chakra-ui/react";
 
 import { EditIcon } from "@chakra-ui/icons";
@@ -61,6 +65,13 @@ const EventPage = ({
     onOpen: onDrawerOpen,
     onClose: onDrawerClose,
   } = useDisclosure();
+
+  const {
+    isOpen: isModalOpen,
+    onOpen: onModalOpen,
+    onClose: onModalClose,
+  } = useDisclosure();
+
   const cancelRef = React.useRef();
   const firstField = React.useRef();
 
@@ -362,22 +373,75 @@ const EventPage = ({
       <div className="w-3/5 flex-grow pl-4 pr-4">
         <div className="w-full h-1/10 font-satoshi">
           {event?.eventImage ? (
-            <Image
-              borderRadius="lg"
-              src={eventImage}
-              alt="Cover Picture"
-              height="300px" // Adjust the height as needed
-              width="100%" // Adjust the width as needed
-              objectFit="cover"
-            />
+            <>
+              <Image
+                src={eventImage}
+                alt={"Event Cover Image"}
+                height="300px" // Adjust the height as needed
+                width="100%" // Adjust the width as needed
+                objectFit="cover"
+                className="cursor-pointer"
+                onLoad={() => {
+                  URL.revokeObjectURL(eventImage);
+                }}
+                onClick={() => {
+                  onModalOpen();
+                }}
+              />
+              <Modal
+                isOpen={isModalOpen}
+                onClose={() => {
+                  onModalClose();
+                }}
+                size="xl"
+              >
+                <ModalOverlay />
+                <ModalContent>
+                  <ModalCloseButton />
+                  <Image
+                    src={eventImage}
+                    alt={"Event Cover Image"}
+                    height="100%" // Adjust the height as needed
+                    width="100%" // Adjust the width as needed
+                    onLoad={() => {
+                      URL.revokeObjectURL(eventImage);
+                    }}
+                  />
+                </ModalContent>
+              </Modal>
+            </>
           ) : (
-            <NextImage
-              src="/assets/images/benny.png"
-              alt="event_banner"
-              width={120}
-              height={120}
-              className="mx-auto rounded-full object-contain"
-            />
+            <>
+              <Image
+                className="cursor-pointer"
+                src="/assets/images/benny.png"
+                alt={"default event cover image"}
+                height="300px" // Adjust the height as needed
+                width="100%" // Adjust the width as needed
+                objectFit="cover"
+                onClick={() => {
+                  onModalOpen();
+                }}
+              />
+              <Modal
+                isOpen={isModalOpen}
+                onClose={() => {
+                  onModalClose();
+                }}
+                size="xl"
+              >
+                <ModalOverlay />
+                <ModalContent>
+                  <ModalCloseButton />
+                  <Image
+                    src="/assets/images/benny.png"
+                    alt={"default event cover image"}
+                    height="100%" // Adjust the height as needed
+                    width="100%" // Adjust the width as needed
+                  />
+                </ModalContent>
+              </Modal>
+            </>
           )}
 
           <Heading as="h1" size="xl" className="pt-4 pb-4">
@@ -612,11 +676,9 @@ const EventPage = ({
                     <div className="ml-4">
                       <p>
                         Event's Local Timezone Date:{" "}
-                      {eventDateTime?.toFormat("EEEE, MMMM d, yyyy")},{" "}
-                      {eventDateTime?.toFormat("h:mm a")}{" "}
-                      {convertIANAToTimezoneAcronym(
-                        eventDateTime?.zoneName
-                      )}
+                        {eventDateTime?.toFormat("EEEE, MMMM d, yyyy")},{" "}
+                        {eventDateTime?.toFormat("h:mm a")}{" "}
+                        {convertIANAToTimezoneAcronym(eventDateTime?.zoneName)}
                       </p>
                     </div>
                   </div>
@@ -649,7 +711,7 @@ const EventPage = ({
             </div>
             <Divider />
             <div className="pt-4 mr-20">
-              <MessageBoard 
+              <MessageBoard
                 eventDetails={event}
                 addImagesToEvent={addImagesToEvent}
               />
