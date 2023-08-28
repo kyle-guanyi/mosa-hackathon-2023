@@ -32,6 +32,8 @@ import {
   DrawerHeader,
   DrawerFooter,
   useToast,
+  LinkBox,
+  LinkOverlay,
 } from "@chakra-ui/react";
 
 import { EditIcon } from "@chakra-ui/icons";
@@ -600,7 +602,7 @@ const EventPage = ({
                             rounded="md"
                             shadow="md"
                           >
-                            {event.zoomLink}
+                            <a href={event.zoomLink} target="_blank">Redirect to Zoom</a>
                           </Box>
                         </Collapse>
                       </div>
