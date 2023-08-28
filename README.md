@@ -145,6 +145,9 @@ Login Page using Google and restricted to seas.upenn.edu emails only
 Event Home Page
 ![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/cc99f5e8-82bd-46a3-bbc5-a565b373484d)
 
+Profile Page
+![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/d6291d0a-77a1-4192-b5a6-d5358d96f219)
+
 Edit Profile Page
 ![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/a3351919-dacb-4994-8d01-fa5d7be47bc3)
 
@@ -155,7 +158,10 @@ Event Home Page - Filtered
 ![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/d1ef59ea-45d2-40c5-9c37-4ccce8dc0579)
 
 Event Page
-![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/c9febcc4-b345-423a-855f-153cabc1b39a)
+![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/378f009e-33b0-457c-b2ba-76b364d6da80)
+
+Event Discussion Board
+![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/521bb749-2ff7-4034-9ac9-d0cfab622681)
 
 Sign Out
 ![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/d92fa765-c844-4d86-a418-78a1ba6982d4)
