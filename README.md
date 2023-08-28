@@ -127,7 +127,39 @@ In the terminal, type `npm run dev` to run the code.
 
 Step 4: 
 
-In the web browser of your choice, navigate to `localhost:3000
+In the web browser of your choice, navigate to `localhost:3000`
+
+Step 5: 
+
+Step 9: To terminate localhost, in the Terminal type "Control + C"
+
+Welcome Page - http://localhost:3000
+![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/e9eb2149-c9b7-4a20-975a-0cf743457ab2)
+
+About Page
+![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/1f2a127b-b485-4261-a7f2-e362ba2b32fe)
+
+Login Page using Google and restricted to seas.upenn.edu emails only
+![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/ff4cc641-1e66-4073-a2b9-37c1018b9185)
+
+Event Home Page
+![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/d1ef59ea-45d2-40c5-9c37-4ccce8dc0579)
+
+Create New Event Page
+![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/39a5c7b0-d875-4763-9fe3-2b6d644ebc99)
+
+Edit Profile Page
+![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/a3351919-dacb-4994-8d01-fa5d7be47bc3)
+
+Event Home Page
+![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/d1ef59ea-45d2-40c5-9c37-4ccce8dc0579)
+
+Event Page
+![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/c9febcc4-b345-423a-855f-153cabc1b39a)
+
+Sign Out
+![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/d92fa765-c844-4d86-a418-78a1ba6982d4)
+
 
 ## Additional information
 
