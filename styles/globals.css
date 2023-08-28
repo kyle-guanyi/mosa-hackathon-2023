@@ -68,6 +68,21 @@
   }
 }
 
+@layer utilities {
+  @variants responsive {
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Hide scrollbar for IE, Edge and Firefox */
+    .no-scrollbar {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+    }
+  }
+}
+
 
 /* Tailwind Styles */
 
@@ -197,4 +212,27 @@
   left: 50%;
   transform: translate(-50%, -50%);
   z-Index: -1;
+}
+
+.DivToScroll{   
+  background-color: #F5F5F5;
+  border: 1px solid #DDDDDD;
+  border-radius: 4px 0 4px 0;
+  color: #3B3C3E;
+  font-size: 12px;
+  font-weight: bold;
+  left: -1px;
+  padding: 10px 7px 5px;
+}
+
+.DivWithScroll{
+  height:1000px;
+  overflow:scroll;
+  overflow-x:hidden;
+}
+
+.DivWithScrollAttending{
+  height:650px;
+  overflow:scroll;
+  overflow-x:hidden;
 }

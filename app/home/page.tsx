@@ -74,7 +74,7 @@ const Home = () => {
         <Center className="w-full h-flex flex items-center justify-center">
           <Calendar handleDate={handleDate} allEvents={allEvents} />
         </Center>
-        <div className=" w-full h-1/2">
+        <div className=" w-full h-1/2 DivWithScrollAttending no-scrollbar">
           <Divider />
           <Heading className="pt-4 text-center">Your Upcoming Events</Heading>
           <AttendingFeed allEvents={allEvents}/>
@@ -84,14 +84,14 @@ const Home = () => {
         <Divider orientation="vertical" borderWidth="2px" />
       </Center>
       <div className="w-3/5">
-        <div className=" w-full v-full ">
+        <div className=" w-full v-full DivWithScroll no-scrollbar">
           <EventFeed selectedDate={selectedDate} fetchAllEvents={fetchAllEvents} allEvents={allEvents} onCreateEvent = {handleCreateEvent}/>
         </div>
       </div>
       <Center className="v-full">
         <Divider orientation="vertical" borderWidth="2px" />
       </Center>
-      <div className="w-1/5 hidden md:block ">
+      <div className="w-1/5 hidden md:block DivWithScroll no-scrollbar" >
         <Heading className="pt-4 text-center">Past Events</Heading>
         <PastEventsFeed allEvents={allEvents}/>
       </div>
