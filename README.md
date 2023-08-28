@@ -152,13 +152,13 @@ Edit Profile Page
 ![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/a3351919-dacb-4994-8d01-fa5d7be47bc3)
 
 Create New Event Page
-![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/39a5c7b0-d875-4763-9fe3-2b6d644ebc99)
+![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/a187d386-4d41-4765-85d3-0659bd902338)
 
 Event Home Page - Filtered
-![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/d1ef59ea-45d2-40c5-9c37-4ccce8dc0579)
+![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/fe3afef4-cd9d-4901-bbcd-1c340f6b5eb9)
 
 Event Page
-![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/378f009e-33b0-457c-b2ba-76b364d6da80)
+![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/853dd0cb-5858-45c5-aff9-32c8bc8f2942)
 
 Event Discussion Board
 ![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/521bb749-2ff7-4034-9ac9-d0cfab622681)
