@@ -1,35 +1,24 @@
 "use client";
+
 import React, { useCallback, useEffect, useState } from "react";
-// import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { DateTime } from "luxon";
 import {
   Avatar,
-  AvatarGroup,
   Card,
   CardBody,
   CardFooter,
   Divider,
   Heading,
-  Image,
-  Skeleton,
-  SkeletonCircle,
-  Stack,
   Text,
   Tooltip,
+  SkeletonCircle,
+  AvatarGroup
 } from "@chakra-ui/react";
 
-/**
- * This component is used to render an event card.
- * It takes in an event JSON and renders an event card.
- *
- * @param event - An event JSON
- * @constructor - Renders an event card
- * @returns An event card
- */
-const EventCard = ({ event }) => {
+const SmallerEventCard = ({ event }) => {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(true);
@@ -237,78 +226,59 @@ const EventCard = ({ event }) => {
   return (
     <Link href={`/event/${event._id}`}>
       <Card
-        maxW="90%"
-        maxH="100%"
+        maxW="450px"
         className="m-auto cursor-pointer hover:-translate-y-2 hover:opacity-80 transition-all event-card"
         onClick={handleEventClick}
-        minWidth="300px"
-        minHeight="400px"
-        height="100%"
       >
         <CardBody>
-          {isLoading ? (
-            <Skeleton height="300px" width="100%" borderRadius="lg" />
-          ) : event?.eventImage ? (
-            <Image
-              borderRadius="lg"
-              src={eventPicture}
-              alt="Cover Picture"
-              height="300px"
-              width="100%"
-              objectFit="cover"
-            />
-          ) : (
-            <Image
-              borderRadius="lg"
-              src="/assets/images/benny.png"
-              alt="Default Cover Picture"
-              height="300px"
-              width="100%"
-              objectFit="cover"
-            />
-          )}
-          <Stack mt="6" spacing="3">
-            {isLoading ? (
-              <>
-                <Skeleton height="20px" width="100%" />
-                <Skeleton height="15px" width="100%" />
-                <Skeleton height="15px" width="100%" />
-                <Skeleton height="15px" width="100%" />
-                <Skeleton height="20px" width="100%" />
-              </>
-            ) : (
-              <>
-                <Tooltip label={event.eventName} aria-label="Event Name">
-                  <Heading size="md" className="event-name">{event.eventName}</Heading>
-                </Tooltip>
-                <Heading size="sm">
-                  <em>Major City/Region: {event.closestCity}</em>
-                </Heading>
-                <Tooltip
-                  label={event.location || "Virtual Event"}
-                  aria-label="Event Location"
-                >
-                  <Text className="event-location">{event.location || "Virtual Event"}</Text>
-                </Tooltip>
-                <Text>
-                  Event Local Time:
-                  <br />
-                  {eventDateTime?.toFormat("EEEE, MMMM d, yyyy")},{" "}
-                  {eventDateTime?.toFormat("h:mm a")}{" "}
-                  {convertIANAToTimezoneAcronym(eventDateTime?.zoneName)}
-                </Text>
-                <div className="extra-info">
-                  <Text color="blue.600">
-                    Time in {DateTime.local().zoneName}
-                    <br />
-                    {userEventDateTime?.toFormat("EEEE, MMMM d, yyyy")},{" "}
-                    {userEventDateTime?.toFormat("h:mm a")}{" "}
-                    {convertIANAToTimezoneAcronym(userEventDateTime?.zoneName)}
+          <div className="horizontal-card-content">
+            <div className="avatar-container">
+              {isLoading ? (
+                <Avatar size="md" />
+              ) : (
+                <Avatar
+                  size="md"
+                  name={`${event.eventName}`}
+                  src={eventPicture || "/assets/images/benny.png"} // Use a default image here
+                />
+              )}
+            </div>
+            <div className="card-info">
+              {isLoading ? (
+                <Text>Loading...</Text>
+              ) : (
+                <div>
+                  <Tooltip label={event.eventName} aria-label="Event Name">
+                    <Heading size="md" className="event-name">
+                      {event.eventName}
+                    </Heading>
+                  </Tooltip>
+                  <Text>
+                    <em>Major City/Region: {event.closestCity}</em>
                   </Text>
+                  {/* ... (other event details) */}
+                  <Text>
+                    Event Local Time:
+                    <br />
+                    {eventDateTime?.toFormat("EEEE, MMMM d, yyyy")},{" "}
+                    {eventDateTime?.toFormat("h:mm a")}{" "}
+                    {convertIANAToTimezoneAcronym(eventDateTime?.zoneName)}
+                  </Text>
+                  <div className="extra-info">
+                    <Text color="blue.600">
+                      Time in {DateTime.local().zoneName}
+                      <br />
+                      {userEventDateTime?.toFormat("EEEE, MMMM d, yyyy")},{" "}
+                      {userEventDateTime?.toFormat("h:mm a")}{" "}
+                      {convertIANAToTimezoneAcronym(
+                        userEventDateTime?.zoneName
+                      )}
+                    </Text>
+                  </div>
                 </div>
-              </>
-            )}
-          </Stack>
+              )}
+            </div>
+          </div>
         </CardBody>
         <Divider />
         <CardFooter>
@@ -334,4 +304,4 @@ const EventCard = ({ event }) => {
   );
 };
 
-export default EventCard;
+export default SmallerEventCard;

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import Card from "../eventfeed/EventCard";
+import SmallerEventCard from "../eventfeed/SmallerEventCard";
 import Select from "react-select";
 
 /**
@@ -16,7 +16,7 @@ const EventCardList = ({ data }) => {
   return (
     <div className="grid grid-cols-1 pt-8 gap-y-5">
       {data.map((event) => (
-        <Card key={event._id} event={event} />
+        <SmallerEventCard key={event._id} event={event} />
       ))}
     </div>
   );

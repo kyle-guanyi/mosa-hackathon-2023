@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import EventCard from "../eventfeed/EventCard";
+import SmallerEventCard from "../eventfeed/SmallerEventCard";
 
 /**
  * This component is used to render a list of event cards.
@@ -16,7 +16,7 @@ const EventCardList = ({ data }) => {
   return (
     <div className="grid grid-cols-1 pt-8 gap-y-5">
       {data.map((event) => (
-        <EventCard key={event._id} event={event} />
+        <SmallerEventCard key={event._id} event={event} />
       ))}
     </div>
   );
