@@ -272,7 +272,7 @@ const EventCard = ({ event }) => {
           ) : (
             <Image
               borderRadius="lg"
-              src="/assets/images/ben.png"
+              src="/assets/images/benny.png"
               alt="Default Cover Picture"
               height="300px"
               width="100%"

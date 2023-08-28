@@ -372,7 +372,7 @@ const EventPage = ({
             />
           ) : (
             <NextImage
-              src="/assets/images/ben.png"
+              src="/assets/images/benny.png"
               alt="event_banner"
               width={120}
               height={120}
