@@ -44,15 +44,25 @@ const EventPage = ({
   user,
   handleAdd,
   handleRemove,
-                     handleDelete,
+  handleDelete,
   addImagesToEvent,
-  fetchEventDetails
+  fetchEventDetails,
 }) => {
-
+  // Fetch the current user's session
   const { data: session } = useSession();
-  const { isOpen: isAlertOpen, onOpen: onAlertOpen, onClose: onAlertClose } = useDisclosure();
 
-  const { isOpen: isDrawerOpen, onOpen: onDrawerOpen, onClose: onDrawerClose } = useDisclosure();
+  // Manage the state of various modal dialogs and forms using Chakra UI hooks
+  const {
+    isOpen: isAlertOpen,
+    onOpen: onAlertOpen,
+    onClose: onAlertClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: isDrawerOpen,
+    onOpen: onDrawerOpen,
+    onClose: onDrawerClose,
+  } = useDisclosure();
   const cancelRef = React.useRef();
   const firstField = React.useRef();
 
@@ -66,14 +76,11 @@ const EventPage = ({
   }, [eventDetails]);
 
   // Convert start date to a readable format
-  const startDate = new Date(event.startDate).toLocaleDateString(
-    "en-US",
-    {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    }
-  );
+  const startDate = new Date(event.startDate).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 
   const [show, setShow] = React.useState(false);
   const handleToggle = () => setShow(!show);
@@ -148,7 +155,6 @@ const EventPage = ({
       return false;
     }
     return !(newEvent.isVirtual && !newEvent.zoomLink);
-
   };
 
   // Use toast to display error message if any required fields are missing
@@ -208,7 +214,6 @@ const EventPage = ({
     } catch (error) {
       console.log(error);
     } finally {
-      
       setIsSubmitting(false);
     }
   };
@@ -359,7 +364,11 @@ const EventPage = ({
                           </DrawerBody>
                           {/* You can customize the footer buttons as needed */}
                           <DrawerFooter borderTopWidth="1px">
-                            <Button variant="outline" mr={3} onClick={onDrawerClose}>
+                            <Button
+                              variant="outline"
+                              mr={3}
+                              onClick={onDrawerClose}
+                            >
                               Cancel
                             </Button>
                             {submitting ? (
@@ -523,8 +532,7 @@ const EventPage = ({
                       <FiClock />
                     </span>
                     <div className="ml-4">
-                      {startDate} at {event.startTime}{" "}
-                      {event.timeZone}
+                      {startDate} at {event.startTime} {event.timeZone}
                     </div>
                   </div>
                   <div className="flex-row flex items-center pb-2">
