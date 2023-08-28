@@ -14,7 +14,8 @@ import {
   Text,
   Tooltip,
   SkeletonCircle,
-  AvatarGroup
+  AvatarGroup,
+  Skeleton
 } from "@chakra-ui/react";
 
 const SmallerEventCard = ({ event }) => {
@@ -237,7 +238,13 @@ const SmallerEventCard = ({ event }) => {
             </div>
             <div className="card-info">
               {isLoading ? (
-                <Text>Loading...</Text>
+                <>
+                <Skeleton height="30px" width="100%" mt="2"/>
+                <Skeleton height="20px" width="100%" mt="2"/>
+                <Skeleton height="20px" width="100%" mt="2"/>
+                <Skeleton height="20px" width="100%" mt="2"/>
+                </>
+                
               ) : (
                 <div>
                   <Tooltip label={event.eventName} aria-label="Event Name">
