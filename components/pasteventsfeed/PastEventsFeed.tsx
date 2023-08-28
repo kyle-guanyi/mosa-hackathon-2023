@@ -33,7 +33,7 @@ const sortByAllorYours = [
  * @constructor - Renders a list of past events
  * @returns A list of past events
  */
-const PastEventsFeed = () => {
+const PastEventsFeed = ({ allEvents }) => {
   // constant containing JSONs of events
   const [events, setEvents] = useState([]);
   const [pastEventType, setPastEventType] = useState("All Past Events");
@@ -43,15 +43,16 @@ const PastEventsFeed = () => {
 
   const [filteredEvents, setFilteredEvents] = useState([]);
 
-  // obtains all the event JSONs
-  const fetchEvents = async () => {
-    const response = await fetch("/api/event");
-    const data = await response.json();
-    setEvents(data);
-  };
+  // // obtains all the event JSONs
+  // const fetchEvents = async () => {
+  //   const response = await fetch("/api/event");
+  //   const data = await response.json();
+  //   setEvents(data);
+  // };
+
   useEffect(() => {
-    fetchEvents();
-  }, []);
+    setEvents([...allEvents]);
+  }, [allEvents]);
 
   const [userAttendingEventIDs, setUserAttendingEvents] = useState({
     attendingEvents: [],
@@ -70,7 +71,7 @@ const PastEventsFeed = () => {
 
     // only fetches the user's attending events if the user is logged in
     if (session?.user.id) getUserAttendingEvents();
-  }, [session?.user.id]);
+  }, [session?.user.id, allEvents]);
 
   useEffect(() => {
     // Function to filter events based on user's attending events and date
@@ -107,7 +108,9 @@ const PastEventsFeed = () => {
         <Select
           isSearchable={false}
           options={sortByAllorYours}
-          value={sortByAllorYours.find((choice) => choice.value === pastEventType)}
+          value={sortByAllorYours.find(
+            (choice) => choice.value === pastEventType
+          )}
           onChange={(e) => setPastEventType(e.value)}
         />
       </div>

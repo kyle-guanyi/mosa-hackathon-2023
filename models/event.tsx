@@ -19,7 +19,6 @@ type IEvent = Document & {
   uploadedPictures: string[];
   eventImage: string;
   lastEdited: Date;
-  UTCEventTime: Date;
 };
 
 /**
@@ -95,34 +94,8 @@ const eventSchema = new Schema({
     type: Date,
     default: Date.now,
   },
-  UTCEventTime: {
-    type: Date,
-  }
 });
 
-/**
- * Pre-save hook
- */
-eventSchema.pre<IEvent>('save', async function (next) {
-  const eventDateTime = DateTime.fromJSDate(this.startDate, {
-    zone: 'UTC', // Always use UTC for initial calculations
-  });
-
-  const [hours, minutes] = this.startTime.split(':').map(Number);
-
-  // Parse startTime with the specified timeZone
-  const startTimeInTimeZone = eventDateTime.setZone(this.timeZone).set({
-    hour: hours,
-    minute: minutes,
-  });
-
-  // Convert startTime to UTC
-  const eventStartTime = startTimeInTimeZone.toUTC();
-
-  this.UTCEventTime = eventStartTime.toJSDate();
-
-  next();
-});
 
 // Export the model and return your IUser interface
 const Event = models.Event || model('Event', eventSchema);

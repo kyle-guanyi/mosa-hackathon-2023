@@ -55,7 +55,7 @@ export async function POST(request: NextRequest, response: NextResponse) {
   try {
     const formData = await request.formData();
     const files = formData.getAll("file"); // Get all files
-
+    
     // Upload all files
     const uploadedData = await Promise.all(files.map(async (file) => {
       const mimeType = file.type;

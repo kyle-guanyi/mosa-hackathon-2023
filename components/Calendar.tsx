@@ -14,7 +14,7 @@ import { RepeatClockIcon } from "@chakra-ui/icons"
  * @constructor - Renders a calendar
  * @returns A calendar
  */
-const Calendar = ( { handleDate }) => {
+const Calendar = ( { handleDate, allEvents }) => {
   // constant containing JSONs of events
   const [events, setEvents] = useState([]);
 
@@ -65,14 +65,9 @@ const Calendar = ( { handleDate }) => {
   /**
    * This function is used to fetch events.
    */
-  const fetchEvents = async () => {
-    const response = await fetch("/api/event");
-    const data = await response.json();
-    setEvents(data);
-  };
   useEffect(() => {
-    fetchEvents();
-  }, []);
+    setEvents([...allEvents]);
+  }, [allEvents]);
 
   /**
    * This function is used to fetch user attending events.
@@ -95,7 +90,7 @@ const Calendar = ( { handleDate }) => {
     };
     // If user is logged in, get their attending events
     if (session?.user.id) getUserAttendingEvents();
-  }, [session?.user.id]);
+  }, [session?.user.id, allEvents]);
 
   useEffect(() => {
     // Function to filter events based on user's attending events

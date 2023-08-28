@@ -4,7 +4,7 @@ import MessageBoard from "/components/messageboard/MessageBoard";
 import { FiClock } from "react-icons/Fi";
 import { TbLocation } from "react-icons/Tb";
 import { InfoOutlineIcon } from "@chakra-ui/icons";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import NextImage from "next/image";
 import { DateTime } from "luxon";
@@ -48,10 +48,7 @@ const EventPage = ({
   addImagesToEvent,
   fetchEventDetails,
 }) => {
-  // Fetch the current user's session
   const { data: session } = useSession();
-
-  // Manage the state of various modal dialogs and forms using Chakra UI hooks
   const {
     isOpen: isAlertOpen,
     onOpen: onAlertOpen,
@@ -76,6 +73,11 @@ const EventPage = ({
   }, [eventDetails]);
 
   // Convert start date to a readable format
+  const startDate = new Date(event.startDate).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
   const startDate = new Date(event.startDate).toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
@@ -117,6 +119,57 @@ const EventPage = ({
 
   const [isLoading, setIsLoading] = useState(true);
   const [userEventDateTime, setUserEventDateTime] = useState(null);
+  const [eventDateTime, setEventDateTime] = useState(null);
+
+  const timezoneMapping = {
+    "Etc/GMT+12": "UTC-12",
+    "Pacific/Niue": "UTC-11",
+    "Pacific/Marquesas": "UTC-09:30",
+    "America/Adak": "HST", // Not a standard acronym; using HST as an example
+    "America/Los_Angeles": "PST",
+    "America/Denver": "MST",
+    "America/Chicago": "CST",
+    "America/New_York": "EST",
+    "America/Halifax": "AST",
+    "America/St_Johns": "NST",
+    "America/Manaus": "AMT",
+    "America/Noronha": "FNT",
+    "Atlantic/Azores": "AZOST",
+    "Etc/GMT": "GMT",
+    "Europe/Paris": "CET",
+    "Europe/Kiev": "EET",
+    "Europe/Moscow": "MSK",
+    "Asia/Tehran": "IRST",
+    "Asia/Dubai": "GST",
+    "Asia/Kabul": "AFT",
+    "Asia/Kolkata": "IST",
+    "Asia/Kathmandu": "NPT",
+    "Asia/Dhaka": "BST",
+    "Asia/Yangon": "MMT",
+    "Asia/Bangkok": "ICT",
+    "Asia/Shanghai": "CST",
+    "Australia/Eucla": "CWST",
+    "Asia/Tokyo": "JST",
+    "Australia/Adelaide": "ACST",
+    "Asia/Seoul": "KST",
+    "Australia/Lord_Howe": "LHST",
+    "Pacific/Guadalcanal": "SBT",
+    "Pacific/Norfolk": "NFT",
+    "Pacific/Auckland": "NZST",
+    "Pacific/Chatham": "CHAST",
+    "Pacific/Tongatapu": "TOT",
+    "Pacific/Kiritimati": "LINT",
+  };
+
+  const convertIANAToTimezoneAcronym = useCallback((ianaTimeZone) => {
+    const mappedAcronym = timezoneMapping[ianaTimeZone];
+    if (mappedAcronym) {
+      return mappedAcronym;
+    }
+
+    const now = DateTime.now().setZone(ianaTimeZone);
+    return now.toFormat("z");
+  }, []);
 
   // UseEffect to set isLoading to false once data is fetched
   useEffect(() => {
@@ -126,11 +179,37 @@ const EventPage = ({
 
       // Convert event time to user's timezone
       if (session?.user.id) {
-        const dateTimeObject = DateTime.fromISO(event.UTCEventTime);
-        const userTimezone = DateTime.local().zoneName;
-        const userEventDateTime = dateTimeObject.setZone(userTimezone);
-        setUserEventDateTime(userEventDateTime);
-        console.log("This is the user event date time", userEventDateTime);
+        // const dateTimeObject = DateTime.fromISO(event.UTCEventTime);
+        // const userTimezone = DateTime.local().zoneName;
+        // const userEventDateTime = dateTimeObject.setZone(userTimezone);
+        // setUserEventDateTime(userEventDateTime);
+        // console.log("This is the user event date time", userEventDateTime);
+        const year = parseInt(eventDetails.startDate.substring(0, 4), 10);
+        const month = parseInt(eventDetails.startDate.substring(5, 7), 10);
+        const day = parseInt(eventDetails.startDate.substring(8, 10), 10);
+
+        // Extract hours and minutes from the startTime string
+        const hours = parseInt(eventDetails.startTime.substring(0, 2), 10);
+        const minutes = parseInt(eventDetails.startTime.substring(3, 5), 10);
+        // Create a DateTime object for the start date
+        const eventStartDate = DateTime.fromObject(
+          {
+            year: year,
+            month: month,
+            day: day,
+            hour: hours,
+            minute: minutes,
+            second: 0,
+            millisecond: 0,
+          },
+          { zone: event.timeZone }
+        );
+
+        setEventDateTime(eventStartDate);
+
+        const userAdjustedStartDate = eventStartDate.toLocal();
+
+        setUserEventDateTime(userAdjustedStartDate);
       }
     }
   }, [event, creatorInfo, attendeesInfo, session?.user.id]);
@@ -369,6 +448,11 @@ const EventPage = ({
                               mr={3}
                               onClick={onDrawerClose}
                             >
+                            <Button
+                              variant="outline"
+                              mr={3}
+                              onClick={onDrawerClose}
+                            >
                               Cancel
                             </Button>
                             {submitting ? (
@@ -541,11 +625,12 @@ const EventPage = ({
                     </span>
                     <div className="ml-4">
                       <p>
-                        Event Date:{" "}
-                        {userEventDateTime?.toFormat("cccc, LLLL d, yyyy")}
-                      </p>
-                      <p>
-                        Start Time: {userEventDateTime?.toFormat("hh:mm a")}
+                        User's Local Timezone Event Date:{" "}
+                        {userEventDateTime?.toFormat("EEEE, MMMM d, yyyy")},{" "}
+                        {userEventDateTime?.toFormat("h:mm a")}{" "}
+                        {convertIANAToTimezoneAcronym(
+                          userEventDateTime?.zoneName
+                        )}
                       </p>
                     </div>
                   </div>

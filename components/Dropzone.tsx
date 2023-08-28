@@ -192,6 +192,7 @@ export default function FileUpload({
     try {
       setIsSubmitting(true);
       const formData = new FormData();
+      
       files.forEach((file) => {
         formData.append("file", file);
         formData.append("type", file.type);
@@ -204,6 +205,7 @@ export default function FileUpload({
           "Access-Control-Allow-Origin": "*",
         },
       });
+
 
       // Handle keys array
       handleKeysArray(data.keysArray);
