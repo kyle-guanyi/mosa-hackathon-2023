@@ -18,6 +18,8 @@ import {
   DrawerOverlay,
   DrawerContent,
   DrawerCloseButton,
+  Skeleton,
+  SkeletonCircle,
   useToast,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
@@ -50,11 +52,14 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
   const [show, setShow] = React.useState(false);
   const handleToggle = () => setShow(!show);
 
+  const [isLoading, setIsLoading] = useState(true);
+
   /**
    * This function is used to fetch a profile picture.
    */
   const fetchProfilePicture = async () => {
     try {
+      setIsLoading(true);
       const keysArray = [profileDetails.userUpdatedProfileImage];
       const response = await fetch(
         `/api/media?keys=${encodeURIComponent(JSON.stringify(keysArray))}`
@@ -66,8 +71,10 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
       } else {
         console.error("Error fetching profile picture");
       }
+      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching profile picture:", error);
+      setIsLoading(false);
     }
   };
 
@@ -95,6 +102,7 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
 
   // Fetch user details
   useEffect(() => {
+    setIsLoading(true);
     const getUserDetails = async () => {
       const response = await fetch(`/api/user/${session?.user.id}`);
       const data = await response.json();
@@ -123,7 +131,6 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
    */
   const validateFields = () => {
     return !(!user.firstName || !user.lastName);
-
   };
 
   /**
@@ -152,6 +159,7 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
 
     // Update user
     try {
+      setIsLoading(true);
       const response = await fetch(`/api/user/${session?.user.id}`, {
         method: "PATCH",
         body: JSON.stringify({
@@ -175,11 +183,14 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
           isClosable: true,
         });
         onClose();
+        setIsLoading(false);
       }
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
     } finally {
       setIsSubmitting(false);
+      setIsLoading(false);
     }
   };
 
@@ -197,6 +208,7 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
 
     // Update user profile picture
     try {
+      setIsLoading(true);
       const response = await fetch(`/api/user/${session?.user.id}?type=pic`, {
         method: "PATCH",
         body: JSON.stringify({
@@ -213,11 +225,14 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
           duration: 6000,
           isClosable: true,
         });
+        setIsLoading(false);
       }
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
     } finally {
       setIsSubmitting(false);
+      setIsLoading(false);
     }
   };
 
@@ -251,11 +266,14 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
         }}
       />
 
-      <Card maxW="lg" p="4" m="4" borderRadius="20px">
+      <Card maxW="xl"  p="4" m="4" borderRadius="20px">
+
         <Flex direction="column" alignItems="center" justifyContent="center">
           <CardHeader>
             <div className="pt-4 flex">
-              {profileDetails?.userUpdatedProfileImage ? (
+              {isLoading ? (
+                <SkeletonCircle size="325" />
+              ) : profileDetails?.userUpdatedProfileImage ? (
                 <Image
                   className="mx-auto"
                   boxSize="300px"
@@ -278,13 +296,21 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
               )}
             </div>
             <div className="flex">
-              <h1 className="head_text mx-auto">
-                {profileDetails?.firstName} {profileDetails?.lastName}
-              </h1>
+              {isLoading ? (
+                <Skeleton height="60px" width="100%" mt="4" />
+              ) : (
+                <h1 className="head_text mx-auto">
+                  {profileDetails?.firstName} {profileDetails?.lastName}
+                </h1>
+              )}
             </div>
 
             <div className="pt-4 flex">
-              <h3 className="mx-auto">{profileDetails?.email}</h3>
+              {isLoading ? (
+                <Skeleton height="20px" width="100%" mt="2" />
+              ) : (
+                <h3 className="mx-auto">{profileDetails?.email}</h3>
+              )}
             </div>
             <div className="pt-1 flex">
               {profileDetails &&
@@ -366,62 +392,91 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
             </div>
           </CardHeader>
           <Divider />
-          <div className="pt-4 pb-4">
-            <Collapse
-              startingHeight={100}
-              in={show}
-              className="mx-auto text-justify"
-            >
-              {profileDetails?.bio}
-            </Collapse>
-            <Button
-              size="sm"
-              isActive="true"
-              className="hover:opacity-80"
-              onClick={handleToggle}
-              mt="1rem"
-            >
-              Show {show ? "Less" : "More"}
-            </Button>
+          <div className="pt-4 pb-4 w-full">
+            {isLoading && (
+              <>
+                <Skeleton height="160px" width="100%" mt="2" />
+              </>
+            )}
+            
+              <Collapse
+                startingHeight={100}
+                in={show}
+                className="mx-auto text-justify"
+              >
+                {profileDetails?.bio}
+              </Collapse>
+              {profileDetails?.bio.length > 300 && (
+              <Button
+                size="sm"
+                isActive={true}
+                className="hover:opacity-80"
+                onClick={handleToggle}
+                mt="1rem"
+              >
+                Show {show ? "Less" : "More"}
+              </Button>
+            )}
+            
           </div>
           <Divider />
           <div className="pt-4 pb-4 w-full">
-            <TableContainer className="w-full" style={{ width: "100%" }}>
-              <Table size="sm">
-                <Thead>
-                  <Tr>
-                    <Th>Classes Taken</Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {profileDetails?.classesTaken?.map((classTaken, index) => (
-                    <Tr key={index}>
-                      <Td>{classTaken}</Td>
+            {isLoading ? (
+              <>
+                <Skeleton height="20px" width="100%" mt="2" />
+                <Skeleton height="20px" width="100%" mt="2" />
+                <Skeleton height="20px" width="100%" mt="2" />
+              </>
+            ) : (
+              <TableContainer className="w-full" style={{ width: "100%" }}>
+                <Table size="sm">
+                  <Thead>
+                    <Tr>
+                      <Th>Classes Taken</Th>
                     </Tr>
-                  ))}
-                </Tbody>
-              </Table>
-            </TableContainer>
+                  </Thead>
+                  <Tbody>
+                    <>
+                      {profileDetails?.classesTaken?.map(
+                        (classTaken, index) => (
+                          <Tr key={index}>
+                            <Td>{classTaken}</Td>
+                          </Tr>
+                        )
+                      )}
+                    </>
+                  </Tbody>
+                </Table>
+              </TableContainer>
+            )}
           </div>
           <div className="mt-4 mb-10 w-full">
-            <TableContainer className="w-full" style={{ width: "100%" }}>
-              <Table size="sm">
-                <Thead>
-                  <Tr>
-                    <Th>Fields of Interest</Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {profileDetails?.fieldOfInterest?.map(
-                    (fieldInterest, index) => (
-                      <Tr key={index}>
-                        <Td>{fieldInterest}</Td>
-                      </Tr>
-                    )
-                  )}
-                </Tbody>
-              </Table>
-            </TableContainer>
+            {isLoading ? (
+              <>
+                <Skeleton height="20px" width="100%" mt="2" />
+                <Skeleton height="20px" width="100%" mt="2" />
+                <Skeleton height="20px" width="100%" mt="2" />
+              </>
+            ) : (
+              <TableContainer className="w-full" style={{ width: "100%" }}>
+                <Table size="sm">
+                  <Thead>
+                    <Tr>
+                      <Th>Fields of Interest</Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {profileDetails?.fieldOfInterest?.map(
+                      (fieldInterest, index) => (
+                        <Tr key={index}>
+                          <Td>{fieldInterest}</Td>
+                        </Tr>
+                      )
+                    )}
+                  </Tbody>
+                </Table>
+              </TableContainer>
+            )}
           </div>
         </Flex>
       </Card>
