@@ -21,8 +21,6 @@ export default withAuth({
  */
 export const config = {
     matcher: [
-      '/((?!about).*)',
-        '/assets/images/shield.png',
-        '/assets/images/logo.png',
+      '/((?!about|assets/images/shield.png|assets/images/logo.png).*)',
     ],
   }
