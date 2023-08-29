@@ -103,7 +103,7 @@ export async function GET(request: NextRequest, response: NextResponse) {
     const presignedUrls = await Promise.all(keysArray.map(async (key) => {
       // Upload the file to the bucket
       const command = new GetObjectCommand({
-        Bucket: process.env.AWS_BUCKET_NAME as string,
+        Bucket: process.env.A_BUCKET_NAME as string,
         Key: key,
       });
       // Get the URL of the uploaded file
