@@ -62,7 +62,7 @@ Install the icons from React.js
 
 Install AWS Software Development Kit
 
-```npm install aws-sdk@lastest @aws-sdk/s3-request-presigner@latest @aws-sdk/client-s3@latest --save```
+```npm install aws-sdk@latest @aws-sdk/s3-request-presigner@latest @aws-sdk/client-s3@latest --save```
 
 Install Chakra UI packages
 
