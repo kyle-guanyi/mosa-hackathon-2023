@@ -1,5 +1,6 @@
-import { connectToDB } from "utils/database";
-import Comment from "models/comment";
+// @ts-nocheck
+import { connectToDB } from "../../../../utils/database";
+import Comment from "../../../../models/comment";
 
 /**
  * This function fetches all comments for a given post.

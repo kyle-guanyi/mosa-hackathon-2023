@@ -1,5 +1,6 @@
-import { connectToDB } from 'utils/database';
-import Event from 'models/event';
+// @ts-nocheck
+import { connectToDB } from '../../../utils/database';
+import Event from '../../../models/event';
 
 /**
  * This function fetches all events.

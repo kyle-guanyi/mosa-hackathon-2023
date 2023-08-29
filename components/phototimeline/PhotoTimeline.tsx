@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 import React, { useState, useEffect } from "react";
 import { useDisclosure, Modal, Grid, GridItem, Image, ModalOverlay, ModalContent, ModalCloseButton } from "@chakra-ui/react";

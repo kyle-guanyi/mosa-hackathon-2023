@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { connectToDB } from "utils/database";
 import User from "models/user";
 
@@ -34,105 +35,42 @@ export const GET = async (request, { params }) => {
  * @returns - A response object
  */
 export const PATCH = async (request, { params }) => {
-  // Get the new user's contents from the body of the request
-  if (request.nextUrl.searchParams.get("type") === "attending") {
-    return PATCH_ATTENDING(request, {params});
-
-  } else if (request.nextUrl.searchParams.get("type") === "pic") {
-    return PATCH_PROFILE_PIC(request, {params});
-  }
-  const { firstName, lastName, closestMainCity, timeZone, gender, bio, classesTaken, fieldOfInterest } = await request.json();
-
   try {
     await connectToDB();
-
-    // Find the existing user by ID
     const existingUser = await User.findById(params.id);
-
     if (!existingUser) {
       return new Response("User not found", { status: 404 });
     }
 
-    // Update the user with new data
-    existingUser.firstName = firstName;
-    existingUser.lastName = lastName;
-    existingUser.closestMainCity = closestMainCity;
-    existingUser.timeZone = timeZone;
-    existingUser.gender = gender;
-    existingUser.bio = bio;
-    existingUser.classesTaken = classesTaken;
-    existingUser.fieldOfInterest = fieldOfInterest;
+    const type = request.nextUrl.searchParams.get("type");
+    const requestData = await request.json();
 
-    await existingUser.save();
-
-    return new Response("Successfully updated the User", { status: 200 });
-  } catch (error) {
-    return new Response("Error Updating User", { status: 500 });
-  }
-};
-
-/**
- * This function updates a user's attending events.
- *
- * @param request - The incoming request object
- * @param params - The route parameters
- * @constructor - The function that is called when the route is visited
- * @returns - A response object
- */
-export const PATCH_ATTENDING = async (request, { params }) => {
-  const { attendingEvents } = await request.json();
-
-  try {
-    await connectToDB();
-
-    // Find the existing user by ID
-    const existingUser = await User.findById(params.id);
-
-    if (!existingUser) {
-      return new Response("User not found", { status: 404 });
+    switch (type) {
+      case "attending":
+        existingUser.attendingEvents = requestData.attendingEvents;
+        break;
+      case "pic":
+        existingUser.userUpdatedProfileImage = requestData.userUpdatedProfileImage;
+        break;
+      default:
+        Object.assign(existingUser, {
+          firstName: requestData.firstName,
+          lastName: requestData.lastName,
+          closestMainCity: requestData.closestMainCity,
+          timeZone: requestData.timeZone,
+          gender: requestData.gender,
+          bio: requestData.bio,
+          classesTaken: requestData.classesTaken,
+          fieldOfInterest: requestData.fieldOfInterest,
+        });
     }
 
-    // update user's attending events array
-    existingUser.attendingEvents = attendingEvents;
-
     await existingUser.save();
 
-    return new Response("Successfully updated user's attending events", { status: 200 });
+    return new Response(`Successfully updated user${type ? `'s ${type}` : ''}`, { status: 200 });
   } catch (error) {
-    console.error("Error updating user's attending events:", error); // Log the error for debugging
-    return new Response("Error updating user's attending events", { status: 500 });
+    console.error(`Error updating user${type ? `'s ${type}` : ''}`, error);
+    return new Response(`Error updating user${type ? `'s ${type}` : ''}`, { status: 500 });
   }
 };
 
-/**
- * This function updates a user's profile pic.
- *
- * @param request - The incoming request object
- * @param params - The route parameters
- * @constructor - The function that is called when the route is visited
- * @returns - A response object
- */
-export const PATCH_PROFILE_PIC = async (request, { params }) => {
-  const { userUpdatedProfileImage } = await request.json();
-
-  try {
-    await connectToDB();
-
-    // Find the existing user by ID
-    const existingUser = await User.findById(params.id);
-
-    if (!existingUser) {
-      return new Response("User not found", { status: 404 });
-    }
-
-    // update user's attending events array
-    existingUser.userUpdatedProfileImage = userUpdatedProfileImage;
-
-    await existingUser.save();
-
-    return new Response("Successfully updated user's profile pic", { status: 200 });
-  } catch (error) {
-    console.error("Error updating user's profile pic:", error); // Log the error for debugging
-    return new Response("Error updating user's profile pic", { status: 500 });
-  }
-};

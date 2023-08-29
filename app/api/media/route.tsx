@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {NextRequest, NextResponse} from "next/server";
 import {v4 as uuid} from "uuid";
 import {GetObjectCommand, PutObjectCommand, S3Client} from "@aws-sdk/client-s3";

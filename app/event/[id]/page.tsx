@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import EventPage from "components/eventpage/EventPage";

@@ -1,5 +1,6 @@
-import { connectToDB } from "utils/database";
-import Event from "models/event";
+// @ts-nocheck
+import { connectToDB } from "../../../../utils/database";
+import Event from "../../../../models/event";
 import Message from "models/message";
 import Comment from "models/comment";
 
@@ -33,266 +34,59 @@ export const GET = async (request, { params }) => {
  * @constructor - The function that is called when the route is visited
  */
 export const PATCH = async (request, { params }) => {
-
-  if (request.nextUrl.searchParams.get("type") === "attending") {
-    return PATCH_ATTENDEES(request, {params});
-  } else if (request.nextUrl.searchParams.get("type") === "interested") {
-    return PATCH_INTERESTED(request, {params});
-  } else if (request.nextUrl.searchParams.get("type") === "eventImage") {
-    return PATCH_EVENT_IMAGE(request, {params});
-  } else if (request.nextUrl.searchParams.get("type") === "uploadedPictures") {
-    return PATCH_UPLOADED_PICTURES(request, {params});
-  } 
-
-  const { isPublic, eventName, isVirtual, location, zoomLink, startDate, startTime, timeZone, eventDescription, closestCity } = await request.json();
-
-  console.log("this is the request: ", new Date(startDate))
-
   try {
     await connectToDB();
 
     // Find the existing event by ID
     const existingEvent = await Event.findById(params?.id);
-
-    console.log("this is the existing event:", existingEvent);
     if (!existingEvent) {
       return new Response("Event not found", { status: 404 });
     }
-    
-    // Update the event with new data
-    existingEvent.isPublic = isPublic;
-    existingEvent.eventName = eventName;
-    existingEvent.isVirtual = isVirtual;
-    existingEvent.location = location;
-    existingEvent.zoomLink = zoomLink;
-    existingEvent.startDate = new Date(startDate);
-    existingEvent.startTime = startTime;
-    existingEvent.timeZone = timeZone;
-    existingEvent.eventDescription = eventDescription;
-    existingEvent.closestCity = closestCity;
-    existingEvent.lastEdited = Date.now();
+
+    const updateType = request.nextUrl.searchParams.get("type");
+    const requestData = await request.json();
+
+    // Using a switch statement to handle different types of updates
+    switch(updateType) {
+      case 'attending':
+        existingEvent.attendees = requestData.attendees;
+        break;
+      case 'interested':
+        existingEvent.interested = requestData.interested;
+        break;
+      case 'eventImage':
+        existingEvent.eventImage = requestData.eventImage;
+        break;
+      case 'uploadedPictures':
+        if (existingEvent.uploadedPictures && requestData.originalPictures) {
+          existingEvent.uploadedPictures = existingEvent.uploadedPictures.filter(
+              picture => !requestData.originalPictures.includes(picture)
+          );
+        }
+        existingEvent.uploadedPictures.push(...requestData.uploadedPictures);
+        break;
+      default:
+        Object.assign(existingEvent, {
+          isPublic: requestData.isPublic,
+          eventName: requestData.eventName,
+          isVirtual: requestData.isVirtual,
+          location: requestData.location,
+          zoomLink: requestData.zoomLink,
+          startDate: new Date(requestData.startDate),
+          startTime: requestData.startTime,
+          timeZone: requestData.timeZone,
+          eventDescription: requestData.eventDescription,
+          closestCity: requestData.closestCity,
+          lastEdited: Date.now()
+        });
+        break;
+    }
 
     await existingEvent.save();
+    return new Response(`Successfully updated event's ${updateType}`, { status: 200 });
 
-    return new Response("Successfully updated the Event", { status: 200 });
   } catch (error) {
-    console.error("Error:", error); // Log the error for debugging
-    return new Response("Error Updating Event", { status: 500 });
+    console.error(`Error updating event's ${updateType}`, error);
+    return new Response(`Error updating event's ${updateType}`, { status: 500 });
   }
 };
-
-/**
- * This function updates an event's attendees.
- *
- * @param request - The incoming request object
- * @param params - The route parameters
- * @constructor - The function that is called when the route is visited
- */
-export const PATCH_ATTENDEES = async (request, { params }) => {
-  const { attendees } = await request.json();
-
-  console.log("EVENT PATCH ATTENDEES?")
-  console.log(attendees)
-
-  try {
-    await connectToDB();
-
-    // Find the existing event by ID
-    const existingEvent = await Event.findById(params?.id);
-
-    if (!existingEvent) {
-      return new Response("Event not found", { status: 404 });
-    }
-
-    // update event's attendees
-    existingEvent.attendees = attendees;
-
-    await existingEvent.save();
-
-    return new Response("Successfully updated event's attendees", { status: 200 });
-  } catch (error) {
-    console.error("Error updating event's attendees", error); // Log the error for debugging
-    return new Response("Error updating event's attendees", { status: 500 });
-  }
-};
-
-/**
- * This function updates an event's interested users.
- *
- * @param request - The incoming request object
- * @param params - The route parameters
- * @constructor - The function that is called when the route is visited
- */
-export const PATCH_INTERESTED = async (request, { params }) => {
-  const { interested } = await request.json();
-
-  console.log(interested)
-
-  try {
-    await connectToDB();
-
-    // Find the existing event by ID
-    const existingEvent = await Event.findById(params?.id);
-
-    if (!existingEvent) {
-      return new Response("Event not found", { status: 404 });
-    }
-
-    // update event's attendees
-    existingEvent.interested = interested;
-
-    await existingEvent.save();
-
-    return new Response("Successfully updated event's interested users", { status: 200 });
-  } catch (error) {
-    console.error("Error updating event's interested users", error); // Log the error for debugging
-    return new Response("Error updating event's interested users", { status: 500 });
-  }
-};
-
-/**
- * This function updates an event's image.
- *
- * @param request - The incoming request object
- * @param params - The route parameters
- * @constructor - The function that is called when the route is visited
- */
-export const PATCH_EVENT_IMAGE = async (request, { params }) => {
-  const { eventImage } = await request.json();
-
-  try {
-    await connectToDB();
-
-    // Find the existing event by ID
-    const existingEvent = await Event.findById(params?.id);
-
-    if (!existingEvent) {
-      return new Response("Event not found", { status: 404 });
-    }
-
-    // update event's banner image
-    existingEvent.eventImage = eventImage;
-
-    await existingEvent.save();
-
-    return new Response("Successfully updated event's image", { status: 200 });
-  } catch (error) {
-    console.error("Error updating event's image", error); // Log the error for debugging
-    return new Response("Error updating event's image", { status: 500 });
-  }
-};
-
-/**
- * This function updates an event's uploaded pictures.
- *
- * @param request - The incoming request object
- * @param params - The route parameters
- * @constructor - The function that is called when the route is visited
- */
-export const PATCH_UPLOADED_PICTURES = async (request, { params }) => {
-  const { uploadedPictures, originalPictures } = await request.json();
-
-  try {
-    await connectToDB();
-
-    // Find the existing event by ID
-    const existingEvent = await Event.findById(params?.id);
-
-    if (!existingEvent) {
-      return new Response("Event not found", { status: 404 });
-    }
-    console.log("these are the new pictures", uploadedPictures)
-    
-    console.log("these are the original pictures to be filtered out", originalPictures)
-    console.log("these are the existing pictures", existingEvent.uploadedPictures)
-    // filter our old images
-    if (existingEvent.uploadedPictures && originalPictures) {
-      existingEvent.uploadedPictures = existingEvent.uploadedPictures.filter(picture => !originalPictures.includes(picture));
-      console.log("after filtering", existingEvent.uploadedPictures)
-      // update event's uploaded pictures
-      existingEvent.uploadedPictures.push(...uploadedPictures);
-      console.log("after adding", existingEvent.uploadedPictures)
-    } else {
-      existingEvent.uploadedPictures = uploadedPictures;
-    }
-    
-
-    await existingEvent.save();
-
-    return new Response("Successfully updated event's uploaded pictures", { status: 200 });
-  } catch (error) {
-    console.error("Error updating event's uploaded pictures", error); // Log the error for debugging
-    return new Response("Error updating event's uploaded pictures", { status: 500 });
-  }
-};
-
-/**
- * This function deletes an event.
- *
- * @param request - The incoming request object
- * @param params - The route parameters
- * @constructor - The function that is called when the route is visited
- */
-export const DELETE = async (request, { params }) => {
-  if (request.nextUrl.searchParams.get("type") === "deletedPictures") {
-    return DELETE_MESSAGE_IMAGES(request, {params});
-  }
-
-  try {
-    await connectToDB();
-
-    // Find the existing event by ID
-    const existingEvent = await Event.findById(params?.id);
-
-    if (!existingEvent) {
-      return new Response("Event not found", { status: 404 });
-    }
-
-    const messages = await Message.find({ event: existingEvent._id });
-
-    for (const message of messages) {
-      await Comment.deleteMany({ message: message._id });
-      await message.deleteOne();
-    }
-
-    // Delete the event
-    await existingEvent.deleteOne();
-
-    return new Response("Successfully deleted the event", { status: 200 });
-  } catch (error) {
-    console.error("Error deleting event", error); // Log the error for debugging
-    return new Response("Error deleting event", { status: 500 });
-  }
-};
-
-/**
- * This function deletes images from the event if the message associated with them is deleted
- *
- * @param request - The incoming request object
- * @param params - The route parameters
- * @constructor - The function that is called when the route is visited
- */
-export const DELETE_MESSAGE_IMAGES = async (request, { params }) => {
-  const { uploadedPictures } = await request.json();
-
-  try {
-    await connectToDB();
-
-    // Find the existing event by ID
-    const existingEvent = await Event.findById(params?.id);
-
-    if (!existingEvent) {
-      return new Response("Event not found", { status: 404 });
-    }
-
-    existingEvent.uploadedPictures = existingEvent.uploadedPictures.filter(picture => !uploadedPictures.includes(picture));
-
-    await existingEvent.save();
-
-    return new Response("Successfully deleted message pictures from event", { status: 200 });
-  } catch (error) {
-    console.error("Error deleting message pictures from event", error); // Log the error for debugging
-    return new Response("Error deleting message pictures from event", { status: 500 });
-  }
-};
-

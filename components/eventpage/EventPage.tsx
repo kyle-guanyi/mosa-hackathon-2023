@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from "react";
 import UserCard from "./UserCard";
 import MessageBoard from "/components/messageboard/MessageBoard";

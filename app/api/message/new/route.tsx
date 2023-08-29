@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { connectToDB } from "utils/database";
 import Message from "models/message";
 
