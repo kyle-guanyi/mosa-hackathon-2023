@@ -8,10 +8,10 @@ import {getSignedUrl} from '@aws-sdk/s3-request-presigner';
  * This function uploads an image to S3.
  */
 const s3Client = new S3Client({
-  region: process.env.AWS_REGION as string,
+  region: process.env.A_REGION as string,
   credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY as string,
-    secretAccessKey: process.env.AWS_SECRET_KEY as string,
+    accessKeyId: process.env.A_ACCESS_KEY as string,
+    secretAccessKey: process.env.A_SECRET_KEY as string,
   },
 });
 
@@ -30,7 +30,7 @@ async function uploadImageToS3(
 ): Promise<{url: Promise<string>, key: string }> {
   // Upload the file to S3
   const params = {
-    Bucket: process.env.AWS_BUCKET_NAME as string,
+    Bucket: process.env.A_BUCKET_NAME as string,
     Key: `${Date.now()}-${fileName}`,
     Body: file,
     ContentType: type,
