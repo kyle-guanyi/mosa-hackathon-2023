@@ -82,6 +82,8 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
   useEffect(() => {
     if (profileDetails?.userUpdatedProfileImage) {
       fetchProfilePicture();
+    } else {
+      setIsLoading(false);
     }
   }, [profileDetails?.userUpdatedProfileImage]);
   useRouter();
@@ -120,6 +122,7 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
         fieldOfInterest: data.fieldOfInterest,
         userUpdatedProfileImage: data.userUpdatedProfileImage,
       });
+      setIsLoading(false);
     };
 
     if (session?.user.id) getUserDetails();
@@ -313,7 +316,7 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
               )}
             </div>
             <div className="pt-1 flex">
-              {profileDetails &&
+              {profileDetails.gender &&
                 profileDetails.gender !== "Decline to Answer" && (
                   <h3 className="mx-auto">
                     <em>({profileDetails.gender})</em>
@@ -406,7 +409,7 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
             >
               {profileDetails?.bio}
             </Collapse>
-            {profileDetails?.bio.length > 300 && (
+            {profileDetails?.bio && profileDetails?.bio.length > 300 && (
               <Button
                 size="sm"
                 isActive={true}
