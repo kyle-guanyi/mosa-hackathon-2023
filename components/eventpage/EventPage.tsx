@@ -2,8 +2,8 @@
 import React from "react";
 import UserCard from "./UserCard";
 import MessageBoard from "/components/messageboard/MessageBoard";
-import { FiClock } from "react-icons/Fi";
-import { TbLocation } from "react-icons/Tb";
+import { FiClock } from "react-icons/fi";
+import { TbLocation } from "react-icons/tb";
 import { InfoOutlineIcon } from "@chakra-ui/icons";
 import { useState, useEffect, useCallback } from "react";
 import { useSession } from "next-auth/react";

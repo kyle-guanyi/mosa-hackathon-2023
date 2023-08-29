@@ -40,7 +40,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { FiTrash2 } from "react-icons/Fi";
+import { FiTrash2 } from "react-icons/fi";
 import { EditIcon } from "@chakra-ui/icons";
 
 /**
