@@ -23,5 +23,6 @@ export const config = {
     matcher: [
       '/((?!about).*)',
         '/assets/images/shield.png',
+        '/assets/images/logo.png',
     ],
   }
