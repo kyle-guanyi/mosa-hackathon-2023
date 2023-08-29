@@ -98,7 +98,6 @@ const Message = ({
 
   // add the editedMessage into the database where the message is stored
   const handleMessageEditSubmit = () => {
-    console.log("Edited message from messageform:", editedMessage)
     onPatchMessage(editedMessage);
     handlePatchEventPictures(editedMessage);
     onClose();
@@ -198,8 +197,6 @@ const Message = ({
     if (message.uploadedMessagePictures?.length > 0) {
       fetchUploadedMessagePictures();
       setEditedMessage({...editedMessage, originalPictures: message.uploadedMessagePictures});
-
-      console.log("this is the edited message with og stuff", editedMessage)
     }
   }, [message.uploadedMessagePictures]);
 
@@ -288,7 +285,6 @@ const Message = ({
    * @param keysArray - The keys array
    */
   const handleKeysArray = async (keysArray) => {
-    console.log("Reached patch message pictures")
     setEditedMessage({ ...editedMessage, uploadedMessagePictures: keysArray });
     toast({
       title: "Your newly uploaded image(s) have been attached to your message.",

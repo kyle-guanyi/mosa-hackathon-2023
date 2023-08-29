@@ -35,7 +35,6 @@ const MessageBoard = ({
   const fetchEventMessages = async () => {
     const response = await fetch(`/api/message/${eventDetails._id}`);
     if (response.status === 404) {
-      console.log("Event messages not found");
       setEventMessages([]);
       return;
     }
@@ -100,7 +99,6 @@ const MessageBoard = ({
   const editMessage = async (editedMessage) => {
     setSubmitting(true);
     try {
-      console.log("Reached edited message", editedMessage);
       const response = await fetch(`/api/message/${editedMessage._id}`, {
         method: "PATCH",
         body: JSON.stringify({
@@ -127,9 +125,7 @@ const MessageBoard = ({
    */
   const handleDeleteMessage = async (message) => {
     try {
-      console.log("this is the message being passed to handleDeleteMessage", message)
       if (message.uploadedMessagePictures && message.uploadedMessagePictures.length > 0) {
-        console.log("this is the message being passed to if statement", message)
         handleDeleteEventPictures(message);
       }
 
@@ -182,7 +178,6 @@ const MessageBoard = ({
   const handlePatchEventPictures = async (editedMessage) => {
     setSubmitting(true);
     try {
-      console.log("Reached edited message", editedMessage);
       await fetch(`/api/event/${eventDetails._id}?type=uploadedPictures`, {
         method: "PATCH",
         body: JSON.stringify({
@@ -208,9 +203,7 @@ const MessageBoard = ({
    */
   const handleDeleteEventPictures = async (message) => {
     setSubmitting(true);
-    console.log("This is the mssage in handleDeleteEventPictures", message)
     setDeletedMessage(message.uploadedMessagePictures)
-    console.log("This is the deleted message", deletedMessage)
     try {
       console.log("Reached deleted message", message);
       await fetch(`/api/event/${eventDetails._id}?type=deletedPictures`, {

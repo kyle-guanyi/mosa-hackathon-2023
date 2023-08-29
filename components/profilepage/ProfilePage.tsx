@@ -109,7 +109,6 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
     const getUserDetails = async () => {
       const response = await fetch(`/api/user/${session?.user.id}`);
       const data = await response.json();
-      console.log(data);
 
       setUser({
         firstName: data.firstName,

@@ -438,7 +438,6 @@ const EventFeed = ({
           )}
           closeMenuOnSelect={false}
           onChange={(selectedOptions) => {
-            console.log("This is filter city:", filterCity);
             const selectedValues = selectedOptions.map(
               (option) => option.value
             );
