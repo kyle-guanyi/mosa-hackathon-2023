@@ -57,7 +57,7 @@ const LogIn = () => {
           <section className="w-full flex-center ">
             <NextImage
               className="image-contain;"
-              src="https://i.imgur.com/Z49SyI3.png"
+              src="/assets/images/logo.png"
               alt="Founding Friends Logo"
               width={720}
               height={37}

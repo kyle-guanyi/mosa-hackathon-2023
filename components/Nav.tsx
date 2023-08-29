@@ -77,7 +77,7 @@ export default function WithAction() {
               <Box>
                 <Link href="/" className="flex gap-2 flex-center">
                   <NextImage
-                    src="https://i.imgur.com/UOP3Jhj.png"
+                    src="/assets/images/shield.png"
                     alt="University of Pennsylvania Logo"
                     width={30}
                     height={30}
