@@ -315,10 +315,10 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
               )}
             </div>
             <div className="pt-1 flex">
-              {profileDetails.gender &&
-                profileDetails.gender !== "Decline to Answer" && (
+              {profileDetails?.gender &&
+                profileDetails?.gender !== "Decline to Answer" && (
                   <h3 className="mx-auto">
-                    <em>({profileDetails.gender})</em>
+                    <em>({profileDetails?.gender})</em>
                   </h3>
                 )}
             </div>
