@@ -30,7 +30,6 @@ import {
  * @returns An event card
  */
 const EventCard = ({ event }) => {
-
   const [isLoading, setIsLoading] = useState(true);
 
   // fetch profilepic for user
@@ -103,7 +102,7 @@ const EventCard = ({ event }) => {
       const filteredUserUpdatedProfileImageKeysArray =
         userUpdatedProfileImageKeysArray.filter((key) => key);
 
-      if (filteredUserUpdatedProfileImageKeysArray.length > 0) {
+      if (filteredUserUpdatedProfileImageKeysArray) {
         const userUpdatedProfileImageResponse = await fetch(
           `/api/media?keys=${encodeURIComponent(
             JSON.stringify(filteredUserUpdatedProfileImageKeysArray)
@@ -115,10 +114,17 @@ const EventCard = ({ event }) => {
 
         if (userUpdatedProfileImageResponse.ok) {
           const updatedPictures = updatedEventAttendeesPictures.map(
-            (attendee, index) => ({
-              ...attendee,
-              userUpdatedProfileImage: userUpdatedProfileImageData.urls[index],
-            })
+            (attendee, index) => {
+              const updatedImageIndex = filteredUserUpdatedProfileImageKeysArray.indexOf(attendee.userUpdatedProfileImage);
+            if (updatedImageIndex !== -1) {
+              return {
+                ...attendee,
+                userUpdatedProfileImage: userUpdatedProfileImageData.urls[updatedImageIndex],
+              };
+            } else {
+              return attendee;
+            }
+            }
           );
           // console.log("These are the updated pictures: ", updatedPictures);
           setEventAttendeesPictures(updatedPictures);
@@ -273,7 +279,9 @@ const EventCard = ({ event }) => {
             ) : (
               <>
                 <Tooltip label={event.eventName} aria-label="Event Name">
-                  <Heading size="md" className="event-name">{event.eventName}</Heading>
+                  <Heading size="md" className="event-name">
+                    {event.eventName}
+                  </Heading>
                 </Tooltip>
                 <Heading size="sm">
                   <em>Major City/Region: {event.closestCity}</em>
@@ -282,7 +290,9 @@ const EventCard = ({ event }) => {
                   label={event.location || "Virtual Event"}
                   aria-label="Event Location"
                 >
-                  <Text className="event-location">{event.location || "Virtual Event"}</Text>
+                  <Text className="event-location">
+                    {event.location || "Virtual Event"}
+                  </Text>
                 </Tooltip>
                 <Text>
                   Event Local Time:
