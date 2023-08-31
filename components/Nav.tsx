@@ -76,8 +76,8 @@ export default function WithAction() {
             <HStack spacing={8} alignItems={"center"}>
               <Box>
                 <Link href="/" className="flex gap-2 flex-center">
-                  <NextImage
-                    src="/assets/images/shield.png"
+                  <Image
+                    src="https://i.imgur.com/UOP3Jhj.png"
                     alt="University of Pennsylvania Logo"
                     width={30}
                     height={30}
@@ -367,8 +367,8 @@ export default function WithAction() {
             <HStack spacing={8} alignItems={"center"}>
               <Box>
                 <Link href="/" className="flex gap-2 flex-center">
-                  <NextImage
-                    src="/assets/images/shield.png"
+                  <Image
+                    src="https://i.imgur.com/UOP3Jhj.png"
                     alt="University of Pennsylvania Logo"
                     width={30}
                     height={30}

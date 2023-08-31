@@ -55,12 +55,10 @@ const LogIn = () => {
     <div className="fixed inset-0 flex-center flex-col">
         <div>
           <section className="w-full flex-center ">
-            <NextImage
-              className="image-contain;"
-              src="/assets/images/logo.png"
+            <Image
+              className="image-contain"
+              src="https://i.imgur.com/Z49SyI3.png"
               alt="Founding Friends Logo"
-              width={720}
-              height={37}
             />
           </section>
           <div className="flex justify-center space-x-4 mt-4">
