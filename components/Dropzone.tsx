@@ -220,7 +220,7 @@ export default function FileUpload({
       setFiles([]);
       onReplaceClose();
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     } finally {
       toast({
         title: "File(s) successfully uploaded",
@@ -381,7 +381,7 @@ export default function FileUpload({
                   className="hover:opacity-80"
                   ml={3}
                   onClick={() => {
-                    console.log(initialFiles);
+                    // console.log(initialFiles);
                     onReplaceOpen();
                   }}
                 >

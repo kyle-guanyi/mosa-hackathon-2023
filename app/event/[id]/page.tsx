@@ -141,7 +141,7 @@ const Event = ({ params }) => {
     if (session?.user.id === creatorInfo._id) {
       toast({
         title: "Unable to remove yourself (the host) from the event",
-        description: "To proceed, you need to delete the event",
+        description: "To proceed, you will need to delete the event",
         status: "error",
         duration: 4000,
         isClosable: true,

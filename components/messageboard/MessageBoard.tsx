@@ -136,7 +136,6 @@ const MessageBoard = ({
       if (response.ok) {
         // Refresh comments after deletion
         fetchEventMessages();
-
         toast({
           title: "Your message has been deleted successfully.",
           status: "success",
@@ -146,6 +145,8 @@ const MessageBoard = ({
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      handleDeletePatch();
     }
   };
 
@@ -205,7 +206,7 @@ const MessageBoard = ({
     setSubmitting(true);
     setDeletedMessage(message.uploadedMessagePictures)
     try {
-      console.log("Reached deleted message", message);
+      // console.log("Reached deleted message", message);
       await fetch(`/api/event/${eventDetails._id}?type=deletedPictures`, {
         method: "DELETE",
         body: JSON.stringify({

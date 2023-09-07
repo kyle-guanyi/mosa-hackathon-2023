@@ -125,9 +125,10 @@ export const DELETE = async (request, { params }) => {
         existingEvent.uploadedPictures = existingEvent.uploadedPictures.filter(
           (picture) => !requestData.uploadedPictures.includes(picture)
         );
-
         await existingEvent.save();
-
+        return new Response(`Successfully deleted images assocaited with message`, {
+          status: 200,
+        });
       default:
         const messages = await Message.find({ event: existingEvent._id });
 

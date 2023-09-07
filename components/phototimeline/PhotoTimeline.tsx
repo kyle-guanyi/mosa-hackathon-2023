@@ -40,6 +40,10 @@ const PhotoTimeline = ({ event }) => {
     if (event.uploadedPictures?.length > 0) {
       fetchUploadedEventPictures();
     }
+
+    if (event.uploadedPictures?.length == 0) {
+      setUploadedEventPictures([]);
+    }
   }, [event.uploadedPictures, event, pictureKeys]);
 
 
