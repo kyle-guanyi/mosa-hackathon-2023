@@ -106,7 +106,6 @@ export const PATCH = async (request, { params }) => {
  * @constructor - The function that is called when the route is visited
  */
 export const DELETE = async (request, { params }) => {
-  const updateType = request.nextUrl.searchParams.get("type");
 
   try {
     await connectToDB();
@@ -118,23 +117,16 @@ export const DELETE = async (request, { params }) => {
       return new Response("Event not found", { status: 404 });
     }
 
-    async function deleteMessageImages() {
-      const { uploadedPictures } = await request.json();
-
-      existingEvent.uploadedPictures = existingEvent.uploadedPictures.filter(
-        (picture) => !uploadedPictures.includes(picture)
-      );
-
-      await existingEvent.save();
-
-      return new Response("Successfully deleted message pictures from event", {
-        status: 200,
-      });
-    }
+    const updateType = request.nextUrl.searchParams.get("type");
+    const requestData = await request.json();
 
     switch (updateType) {
       case "deletedPictures":
-        return deleteMessageImages();
+        existingEvent.uploadedPictures = existingEvent.uploadedPictures.filter(
+          (picture) => !requestData.uploadedPictures.includes(picture)
+        );
+
+        await existingEvent.save();
 
       default:
         const messages = await Message.find({ event: existingEvent._id });
