@@ -236,7 +236,7 @@ const EventCard = ({ event }) => {
   }, []);
 
   return (
-    <Link href={`/event/${event._id}`}>
+    <Link key={event._id} href={`/event/${event._id}`}>
       <Card
         maxW="90%"
         maxH="100%"

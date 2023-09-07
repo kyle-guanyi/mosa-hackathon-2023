@@ -19,7 +19,7 @@ import { useToast } from "@chakra-ui/react";
  * @returns - The event page
  */
 const Event = ({ params }) => {
-  const [eventDetails, setEventDetails] = useState([]);
+  const [eventDetails, setEventDetails] = useState({});
   const [creatorInfo, setCreatorInfo] = useState();
   const [attendeesInfo, setAttendeesInfo] = useState<any[]>([]);
 

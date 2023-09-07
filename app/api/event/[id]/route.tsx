@@ -18,14 +18,14 @@ export const GET = async (request, { params }) => {
 
     const event = await Event.findById(params?.id);
 
-    if(!event) return new Response("Event not found", {status: 404});
+    if (!event) return new Response("Event not found", { status: 404 });
 
-    return new Response(JSON.stringify(event), {status: 200})
+    return new Response(JSON.stringify(event), { status: 200 });
   } catch (error) {
-    console.log(error)
-    return new Response("Failed to fetch event", { status: 500 })
+    console.log(error);
+    return new Response("Failed to fetch event", { status: 500 });
   }
-}
+};
 
 /**
  * This function updates an event.
@@ -48,23 +48,26 @@ export const PATCH = async (request, { params }) => {
     const requestData = await request.json();
 
     // Using a switch statement to handle different types of updates
-    switch(updateType) {
-      case 'attending':
+    switch (updateType) {
+      case "attending":
         existingEvent.attendees = requestData.attendees;
         break;
-      case 'interested':
+      case "interested":
         existingEvent.interested = requestData.interested;
         break;
-      case 'eventImage':
+      case "eventImage":
         existingEvent.eventImage = requestData.eventImage;
         break;
-      case 'uploadedPictures':
+      case "uploadedPictures":
         if (existingEvent.uploadedPictures && requestData.originalPictures) {
-          existingEvent.uploadedPictures = existingEvent.uploadedPictures.filter(
-              picture => !requestData.originalPictures.includes(picture)
-          );
+          existingEvent.uploadedPictures =
+            existingEvent.uploadedPictures.filter(
+              (picture) => !requestData.originalPictures.includes(picture)
+            );
+          existingEvent.uploadedPictures.push(...requestData.uploadedPictures);
+        } else {
+          existingEvent.uploadedPictures = requestData.uploadedPictures;
         }
-        existingEvent.uploadedPictures.push(...requestData.uploadedPictures);
         break;
       default:
         Object.assign(existingEvent, {
@@ -78,16 +81,76 @@ export const PATCH = async (request, { params }) => {
           timeZone: requestData.timeZone,
           eventDescription: requestData.eventDescription,
           closestCity: requestData.closestCity,
-          lastEdited: Date.now()
+          lastEdited: Date.now(),
         });
         break;
     }
 
     await existingEvent.save();
-    return new Response(`Successfully updated event's ${updateType}`, { status: 200 });
-
+    return new Response(`Successfully updated event's ${updateType}`, {
+      status: 200,
+    });
   } catch (error) {
     console.error(`Error updating event's ${updateType}`, error);
-    return new Response(`Error updating event's ${updateType}`, { status: 500 });
+    return new Response(`Error updating event's ${updateType}`, {
+      status: 500,
+    });
+  }
+};
+
+/**
+ * This function deletes an event.
+ *
+ * @param request - The incoming request object
+ * @param params - The route parameters
+ * @constructor - The function that is called when the route is visited
+ */
+export const DELETE = async (request, { params }) => {
+  const updateType = request.nextUrl.searchParams.get("type");
+
+  try {
+    await connectToDB();
+
+    // Find the existing event by ID
+    const existingEvent = await Event.findById(params?.id);
+
+    if (!existingEvent) {
+      return new Response("Event not found", { status: 404 });
+    }
+
+    async function deleteMessageImages() {
+      const { uploadedPictures } = await request.json();
+
+      existingEvent.uploadedPictures = existingEvent.uploadedPictures.filter(
+        (picture) => !uploadedPictures.includes(picture)
+      );
+
+      await existingEvent.save();
+
+      return new Response("Successfully deleted message pictures from event", {
+        status: 200,
+      });
+    }
+
+    switch (updateType) {
+      case "deletedPictures":
+        return deleteMessageImages();
+
+      default:
+        const messages = await Message.find({ event: existingEvent._id });
+
+        for (const message of messages) {
+          await Comment.deleteMany({ message: message._id });
+          await message.deleteOne();
+        }
+
+        // Delete the event
+        await existingEvent.deleteOne();
+
+        return new Response("Successfully deleted the event", { status: 200 });
+    }
+  } catch (error) {
+    console.error(`Error deleting event's ${updateType}`, error);
+    return new Response(`Error deleting event's ${updateType}`, { status: 500 });
   }
 };
