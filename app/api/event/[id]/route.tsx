@@ -106,7 +106,6 @@ export const PATCH = async (request, { params }) => {
  * @constructor - The function that is called when the route is visited
  */
 export const DELETE = async (request, { params }) => {
-
   try {
     await connectToDB();
 
@@ -125,10 +124,7 @@ export const DELETE = async (request, { params }) => {
         existingEvent.uploadedPictures = existingEvent.uploadedPictures.filter(
           (picture) => !requestData.uploadedPictures.includes(picture)
         );
-        await existingEvent.save();
-        return new Response(`Successfully deleted images assocaited with message`, {
-          status: 200,
-        });
+        break;
       default:
         const messages = await Message.find({ event: existingEvent._id });
 
@@ -142,8 +138,14 @@ export const DELETE = async (request, { params }) => {
 
         return new Response("Successfully deleted the event", { status: 200 });
     }
+    await existingEvent.save();
+    return new Response(`Successfully deleted images assocaited with message`, {
+      status: 200,
+    });
   } catch (error) {
     console.error(`Error deleting event's ${updateType}`, error);
-    return new Response(`Error deleting event's ${updateType}`, { status: 500 });
+    return new Response(`Error deleting event's ${updateType}`, {
+      status: 500,
+    });
   }
 };
