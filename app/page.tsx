@@ -33,14 +33,14 @@ const LogIn = () => {
     };
 
     setUpProviders();
-  }, []);
+  }, [providers]);
 
   // Redirects to the home page if the user is logged in
   useEffect(() => {
     if (session?.user) {
       router.push(`/home`)
     }
-  }, [session]);
+  }, [session, router]);
 
   // Displays a loading spinner if the session is loading
   if (status === "loading") {
@@ -55,10 +55,13 @@ const LogIn = () => {
     <div className="fixed inset-0 flex-center flex-col">
         <div>
           <section className="w-full flex-center ">
-            <Image
-              className="image-contain"
-              src="https://i.imgur.com/Z49SyI3.png"
-              alt="Founding Friends Logo"
+            <NextImage
+               className="image-contain"
+               src="https://i.imgur.com/Z49SyI3.png"
+               alt="Founding Friends Logo"
+               width={1148}
+               height={213}
+               loading="lazy" // This enables lazy loading
             />
           </section>
           <div className="flex justify-center space-x-4 mt-4">
@@ -71,7 +74,7 @@ const LogIn = () => {
                   className="hover:opacity-80 mx-auto"
                   size="md"
                   key={provider.name}
-                  onClick={() => signIn(provider.id)}
+                  onClick={() => signIn(provider.id, { callbackUrl: '/home' })}
                   leftIcon={<Image src="https://gdm-catalog-fmapi-prod.imgix.net/ProductLogo/5179d6b3-aa3f-403b-8cb4-718850815472.png?auto=format,compress&size=50" alt="Image" boxSize={4} />}
                 >
                   Login with your UPenn Google Email

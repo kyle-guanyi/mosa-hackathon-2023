@@ -137,7 +137,7 @@ const MessageBoard = ({
         // Refresh comments after deletion
         fetchEventMessages();
         toast({
-          title: "Your message has been deleted successfully.",
+          title: "Your message has been deleted successfully",
           status: "success",
           duration: 3000,
           isClosable: true,
