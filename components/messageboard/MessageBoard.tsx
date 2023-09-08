@@ -161,9 +161,9 @@ const MessageBoard = ({
   const handleKeysArray = async (keysArray) => {
     setMessage({ ...message, uploadedMessagePictures: keysArray });
     toast({
-      title: "Your newly uploaded image(s) have been attached to your message.",
+      title: "Your newly uploaded image(s) have been attached to your message",
       description:
-        "Be sure to submit your edits to replace your previously uploaded image(s).",
+        "Be sure to submit your edits to replace your previously uploaded image(s)",
       status: "info",
       duration: 5000,
       isClosable: true,
@@ -208,7 +208,7 @@ const MessageBoard = ({
     try {
       // console.log("Reached deleted message", message);
       await fetch(`/api/event/${eventDetails._id}?type=deletedPictures`, {
-        method: "DELETE",
+        method: "PATCH",
         body: JSON.stringify({
           uploadedPictures: message.uploadedMessagePictures,
         }),

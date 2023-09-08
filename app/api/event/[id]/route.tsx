@@ -69,6 +69,13 @@ export const PATCH = async (request, { params }) => {
           existingEvent.uploadedPictures = requestData.uploadedPictures;
         }
         break;
+      case "deletedPictures":
+        if (existingEvent.uploadedPictures && requestData.uploadedPictures) {
+          existingEvent.uploadedPictures = existingEvent.uploadedPictures.filter(
+            (picture) => !requestData.uploadedPictures.includes(picture)
+          );
+        }
+        break;
       default:
         Object.assign(existingEvent, {
           isPublic: requestData.isPublic,
@@ -116,36 +123,23 @@ export const DELETE = async (request, { params }) => {
       return new Response("Event not found", { status: 404 });
     }
 
-    const updateType = request.nextUrl.searchParams.get("type");
-    const requestData = await request.json();
+    // const updateType = request.nextUrl.searchParams.get("type");
+    // const requestData = await request.json();
 
-    switch (updateType) {
-      case "deletedPictures":
-        existingEvent.uploadedPictures = existingEvent.uploadedPictures.filter(
-          (picture) => !requestData.uploadedPictures.includes(picture)
-        );
-        break;
-      default:
-        const messages = await Message.find({ event: existingEvent._id });
+    const messages = await Message.find({ event: existingEvent._id });
 
-        for (const message of messages) {
-          await Comment.deleteMany({ message: message._id });
-          await message.deleteOne();
-        }
+    for (const message of messages) {
+      await Comment.deleteMany({ message: message._id });
+      await message.deleteOne();
+    }
 
-        // Delete the event
-        await existingEvent.deleteOne();
+    // Delete the event
+    await existingEvent.deleteOne();
 
         return new Response("Successfully deleted the event", { status: 200 });
     }
-    await existingEvent.save();
-    return new Response(`Successfully deleted images assocaited with message`, {
-      status: 200,
-    });
   } catch (error) {
-    console.error(`Error deleting event's ${updateType}`, error);
-    return new Response(`Error deleting event's ${updateType}`, {
-      status: 500,
-    });
+    console.error(`Error deleting event`, error);
+    return new Response(`Error deleting event`, { status: 500 });
   }
 };
