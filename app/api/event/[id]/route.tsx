@@ -71,9 +71,10 @@ export const PATCH = async (request, { params }) => {
         break;
       case "deletedPictures":
         if (existingEvent.uploadedPictures && requestData.uploadedPictures) {
-          existingEvent.uploadedPictures = existingEvent.uploadedPictures.filter(
-            (picture) => !requestData.uploadedPictures.includes(picture)
-          );
+          existingEvent.uploadedPictures =
+            existingEvent.uploadedPictures.filter(
+              (picture) => !requestData.uploadedPictures.includes(picture)
+            );
         }
         break;
       default:
@@ -136,8 +137,7 @@ export const DELETE = async (request, { params }) => {
     // Delete the event
     await existingEvent.deleteOne();
 
-        return new Response("Successfully deleted the event", { status: 200 });
-    }
+    return new Response("Successfully deleted the event", { status: 200 });
   } catch (error) {
     console.error(`Error deleting event`, error);
     return new Response(`Error deleting event`, { status: 500 });
