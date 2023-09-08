@@ -233,7 +233,7 @@ export default function WithAction() {
                           <Image
                             objectFit="cover"
                             src="https://media.licdn.com/dms/image/D5603AQGB0XCWWC1Qhg/profile-displayphoto-shrink_800_800/0/1694106706934?e=1699488000&v=beta&t=1gOBo08E4C1-FsEjMjBBQfADxMCA3jK1LsTz0e3hsjc"
-                            alt="Kevin Nguyen"
+                            alt="Kevin"
                             maxW={{ base: "100%", sm: "200px" }}
                           />
                           <Stack>
@@ -487,7 +487,7 @@ export default function WithAction() {
                     >
                       <Image
                         objectFit="cover"
-                        src="https://media.licdn.com/dms/image/D5603AQGfqevGzPNkrw/profile-displayphoto-shrink_800_800/0/1689120976379?e=1698278400&v=beta&t=qB9fqVtuKoa_V_vzpJPmlh-Geca1TApeusmG9Dg-DFI"
+                        src="https://media.licdn.com/dms/image/D5603AQGB0XCWWC1Qhg/profile-displayphoto-shrink_800_800/0/1694106706934?e=1699488000&v=beta&t=1gOBo08E4C1-FsEjMjBBQfADxMCA3jK1LsTz0e3hsjc"
                         alt="Kevin"
                         maxW={{ base: "100%", sm: "200px" }}
                       />
