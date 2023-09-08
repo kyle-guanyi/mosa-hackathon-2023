@@ -43,24 +43,22 @@ const LogIn = () => {
   }, [session, router]);
 
   // Displays a loading spinner if the session is loading
-  if (status === "loading") {
-    return (
-      <div className="fixed inset-0 flex-center">
-        <Spinner size="xl" />
-      </div>
-    );
-  }
+  // if (status === "loading") {
+  //   return (
+  //     <div className="fixed inset-0 flex-center">
+  //       <Spinner size="xl" />
+  //     </div>
+  //   );
+  // }
   // Displays the login page
   return (
     <div className="fixed inset-0 flex-center flex-col">
         <div>
           <section className="w-full flex-center ">
-            <NextImage
+            <Image
                className="image-contain"
                src="https://i.imgur.com/Z49SyI3.png"
                alt="Founding Friends Logo"
-               width={1148}
-               height={213}
                loading="lazy" // This enables lazy loading
             />
           </section>
