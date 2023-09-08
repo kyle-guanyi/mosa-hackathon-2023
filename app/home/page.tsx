@@ -18,16 +18,6 @@ import { Heading } from "@chakra-ui/react";
  */
 const Home = () => {
   const [selectedDate, setSelectedDate] = useState(null);
-  const { data: session, status } = useSession();
-
-  // Displays a loading spinner if the session is loading
-  if (status === "loading") {
-    return (
-      <div className="fixed inset-0 flex-center">
-        <Spinner size="xl" />
-      </div>
-    );
-  }
 
   // Handles the date selected by the user
   const handleDate = (nextValue) => {

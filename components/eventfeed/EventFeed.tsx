@@ -115,7 +115,7 @@ const EventFeed = ({
   const [filteredEvents, setFilteredEvents] = useState([]);
   const [filterCity, setFilterCity] = useState([]);
   const [filterVirtual, setFilterVirtual] = useState("");
-  const [sortOption, setSortOption] = useState(true);
+  const [sortOption, setSortOption] = useState("true");
 
   // obtains all the event JSONs
   // const fetchEvents = async () => {
