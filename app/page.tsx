@@ -33,7 +33,7 @@ const LogIn = () => {
     };
 
     setUpProviders();
-  }, [providers]);
+  }, []);
 
   // Redirects to the home page if the user is logged in
   useEffect(() => {
