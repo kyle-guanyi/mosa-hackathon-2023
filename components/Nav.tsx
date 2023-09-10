@@ -232,7 +232,7 @@ export default function WithAction() {
                         >
                           <Image
                             objectFit="cover"
-                            src="https://media.licdn.com/dms/image/D5603AQGB0XCWWC1Qhg/profile-displayphoto-shrink_800_800/0/1694106706934?e=1699488000&v=beta&t=1gOBo08E4C1-FsEjMjBBQfADxMCA3jK1LsTz0e3hsjc"
+                            src="https://media.licdn.com/dms/image/D5603AQF-mvRrjlNOGQ/profile-displayphoto-shrink_400_400/0/1694303410553?e=1700092800&v=beta&t=pToEZGKjIDnwmeHZUfYVPTc3nT0cu5OXNDQ1dYMtxzI"
                             alt="Kevin"
                             maxW={{ base: "100%", sm: "200px" }}
                           />
@@ -294,7 +294,7 @@ export default function WithAction() {
                         >
                           <Image
                             objectFit="cover"
-                            src="https://media.licdn.com/dms/image/C5603AQG19HBs2XI6uA/profile-displayphoto-shrink_800_800/0/1641970539103?e=1698278400&v=beta&t=mGW6wjJTFjYyYwZeE_ZW2CS7un1qWz-8UCA6dIbmCIM"
+                            src="https://media.licdn.com/dms/image/D5603AQG45fbtnMsPUw/profile-displayphoto-shrink_400_400/0/1694305975331?e=1700092800&v=beta&t=SQsW4FqBehJeNehLBTxDI64i-H6wGduPrTIcwjaJ1PI"
                             alt="Kyle Li"
                             maxW={{ base: "100%", sm: "200px" }}
                           />
@@ -487,7 +487,7 @@ export default function WithAction() {
                     >
                       <Image
                         objectFit="cover"
-                        src="https://media.licdn.com/dms/image/D5603AQGB0XCWWC1Qhg/profile-displayphoto-shrink_800_800/0/1694106706934?e=1699488000&v=beta&t=1gOBo08E4C1-FsEjMjBBQfADxMCA3jK1LsTz0e3hsjc"
+                        src="https://media.licdn.com/dms/image/D5603AQF-mvRrjlNOGQ/profile-displayphoto-shrink_400_400/0/1694303410553?e=1700092800&v=beta&t=pToEZGKjIDnwmeHZUfYVPTc3nT0cu5OXNDQ1dYMtxzI"
                         alt="Kevin"
                         maxW={{ base: "100%", sm: "200px" }}
                       />
@@ -548,7 +548,7 @@ export default function WithAction() {
                     >
                       <Image
                         objectFit="cover"
-                        src="https://media.licdn.com/dms/image/C5603AQG19HBs2XI6uA/profile-displayphoto-shrink_800_800/0/1641970539103?e=1698278400&v=beta&t=mGW6wjJTFjYyYwZeE_ZW2CS7un1qWz-8UCA6dIbmCIM"
+                        src="https://media.licdn.com/dms/image/D5603AQG45fbtnMsPUw/profile-displayphoto-shrink_400_400/0/1694305975331?e=1700092800&v=beta&t=SQsW4FqBehJeNehLBTxDI64i-H6wGduPrTIcwjaJ1PI"
                         alt="Kyle"
                         maxW={{ base: "100%", sm: "200px" }}
                       />
