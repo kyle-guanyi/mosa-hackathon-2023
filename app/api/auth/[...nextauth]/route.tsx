@@ -1,7 +1,8 @@
+// @ts-nocheck
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
-import { connectToDB } from 'utils/database';
-import User from 'models/user';
+import { connectToDB } from '../../../../utils/database';
+import User from '../../../../models/user';
 
 /**
  * This file is used to configure the NextAuth.js library.

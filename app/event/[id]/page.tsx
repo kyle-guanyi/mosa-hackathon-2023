@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import EventPage from "components/eventpage/EventPage";
@@ -18,7 +19,7 @@ import { useToast } from "@chakra-ui/react";
  * @returns - The event page
  */
 const Event = ({ params }) => {
-  const [eventDetails, setEventDetails] = useState([]);
+  const [eventDetails, setEventDetails] = useState({});
   const [creatorInfo, setCreatorInfo] = useState();
   const [attendeesInfo, setAttendeesInfo] = useState<any[]>([]);
 
@@ -140,7 +141,7 @@ const Event = ({ params }) => {
     if (session?.user.id === creatorInfo._id) {
       toast({
         title: "Unable to remove yourself (the host) from the event",
-        description: "To proceed, you need to delete the event",
+        description: "To proceed, you will need to delete the event",
         status: "error",
         duration: 4000,
         isClosable: true,

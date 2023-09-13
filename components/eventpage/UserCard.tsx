@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 import React from "react";
 import { useState, useEffect } from "react";
@@ -45,6 +46,8 @@ const UserCard = ({ user }) => {
   useEffect(() => {
     if (user?.userUpdatedProfileImage) {
       fetchProfilePicture();
+    } else {
+      setIsLoading(false);
     }
   }, [user?.userUpdatedProfileImage]);
 

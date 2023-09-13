@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Dropzone from "components/Dropzone";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";

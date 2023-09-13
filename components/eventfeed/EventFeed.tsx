@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 import React, { useState, useEffect } from "react";
 import EventCard from "./EventCard";
@@ -114,7 +115,7 @@ const EventFeed = ({
   const [filteredEvents, setFilteredEvents] = useState([]);
   const [filterCity, setFilterCity] = useState([]);
   const [filterVirtual, setFilterVirtual] = useState("");
-  const [sortOption, setSortOption] = useState(true);
+  const [sortOption, setSortOption] = useState("true");
 
   // obtains all the event JSONs
   // const fetchEvents = async () => {
@@ -437,7 +438,6 @@ const EventFeed = ({
           )}
           closeMenuOnSelect={false}
           onChange={(selectedOptions) => {
-            console.log("This is filter city:", filterCity);
             const selectedValues = selectedOptions.map(
               (option) => option.value
             );

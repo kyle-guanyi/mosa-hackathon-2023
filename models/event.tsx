@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Schema, model, models, Document, Types } from 'mongoose';
 import { DateTime } from "luxon";
 

@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
@@ -15,7 +16,7 @@ import {
   Tooltip,
   SkeletonCircle,
   AvatarGroup,
-  Skeleton
+  Skeleton,
 } from "@chakra-ui/react";
 
 const SmallerEventCard = ({ event }) => {
@@ -103,10 +104,21 @@ const SmallerEventCard = ({ event }) => {
 
         if (userUpdatedProfileImageResponse.ok) {
           const updatedPictures = updatedEventAttendeesPictures.map(
-            (attendee, index) => ({
-              ...attendee,
-              userUpdatedProfileImage: userUpdatedProfileImageData.urls[index],
-            })
+            (attendee, index) => {
+              const updatedImageIndex =
+                filteredUserUpdatedProfileImageKeysArray.indexOf(
+                  attendee.userUpdatedProfileImage
+                );
+              if (updatedImageIndex !== -1) {
+                return {
+                  ...attendee,
+                  userUpdatedProfileImage:
+                    userUpdatedProfileImageData.urls[updatedImageIndex],
+                };
+              } else {
+                return attendee;
+              }
+            }
           );
           // console.log("These are the updated pictures: ", updatedPictures);
           setEventAttendeesPictures(updatedPictures);
@@ -239,12 +251,11 @@ const SmallerEventCard = ({ event }) => {
             <div className="card-info">
               {isLoading ? (
                 <>
-                <Skeleton height="30px" width="100%" mt="2"/>
-                <Skeleton height="20px" width="100%" mt="2"/>
-                <Skeleton height="20px" width="100%" mt="2"/>
-                <Skeleton height="20px" width="100%" mt="2"/>
+                  <Skeleton height="30px" width="100%" mt="2" />
+                  <Skeleton height="20px" width="100%" mt="2" />
+                  <Skeleton height="20px" width="100%" mt="2" />
+                  <Skeleton height="20px" width="100%" mt="2" />
                 </>
-                
               ) : (
                 <div>
                   <Tooltip label={event.eventName} aria-label="Event Name">

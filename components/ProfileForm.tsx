@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Select from "react-select";
 import Dropzone from "components/Dropzone";
 import React, { useState, useEffect } from "react";

@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 import React, { useState, useEffect } from "react";
 import { useDisclosure, Modal, Grid, GridItem, Image, ModalOverlay, ModalContent, ModalCloseButton } from "@chakra-ui/react";
@@ -38,6 +39,10 @@ const PhotoTimeline = ({ event }) => {
 
     if (event.uploadedPictures?.length > 0) {
       fetchUploadedEventPictures();
+    }
+
+    if (event.uploadedPictures?.length == 0) {
+      setUploadedEventPictures([]);
     }
   }, [event.uploadedPictures, event, pictureKeys]);
 

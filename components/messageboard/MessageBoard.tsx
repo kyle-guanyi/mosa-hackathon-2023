@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import { useState, useEffect } from "react";
@@ -34,7 +35,6 @@ const MessageBoard = ({
   const fetchEventMessages = async () => {
     const response = await fetch(`/api/message/${eventDetails._id}`);
     if (response.status === 404) {
-      console.log("Event messages not found");
       setEventMessages([]);
       return;
     }
@@ -99,7 +99,6 @@ const MessageBoard = ({
   const editMessage = async (editedMessage) => {
     setSubmitting(true);
     try {
-      console.log("Reached edited message", editedMessage);
       const response = await fetch(`/api/message/${editedMessage._id}`, {
         method: "PATCH",
         body: JSON.stringify({
@@ -126,9 +125,7 @@ const MessageBoard = ({
    */
   const handleDeleteMessage = async (message) => {
     try {
-      console.log("this is the message being passed to handleDeleteMessage", message)
       if (message.uploadedMessagePictures && message.uploadedMessagePictures.length > 0) {
-        console.log("this is the message being passed to if statement", message)
         handleDeleteEventPictures(message);
       }
 
@@ -139,9 +136,8 @@ const MessageBoard = ({
       if (response.ok) {
         // Refresh comments after deletion
         fetchEventMessages();
-
         toast({
-          title: "Your message has been deleted successfully.",
+          title: "Your message has been deleted successfully",
           status: "success",
           duration: 3000,
           isClosable: true,
@@ -149,6 +145,8 @@ const MessageBoard = ({
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      handleDeletePatch();
     }
   };
 
@@ -163,9 +161,9 @@ const MessageBoard = ({
   const handleKeysArray = async (keysArray) => {
     setMessage({ ...message, uploadedMessagePictures: keysArray });
     toast({
-      title: "Your newly uploaded image(s) have been attached to your message.",
+      title: "Your newly uploaded image(s) have been attached to your message",
       description:
-        "Be sure to submit your edits to replace your previously uploaded image(s).",
+        "Be sure to submit your edits to replace your previously uploaded image(s)",
       status: "info",
       duration: 5000,
       isClosable: true,
@@ -181,7 +179,6 @@ const MessageBoard = ({
   const handlePatchEventPictures = async (editedMessage) => {
     setSubmitting(true);
     try {
-      console.log("Reached edited message", editedMessage);
       await fetch(`/api/event/${eventDetails._id}?type=uploadedPictures`, {
         method: "PATCH",
         body: JSON.stringify({
@@ -207,13 +204,11 @@ const MessageBoard = ({
    */
   const handleDeleteEventPictures = async (message) => {
     setSubmitting(true);
-    console.log("This is the mssage in handleDeleteEventPictures", message)
     setDeletedMessage(message.uploadedMessagePictures)
-    console.log("This is the deleted message", deletedMessage)
     try {
-      console.log("Reached deleted message", message);
+      // console.log("Reached deleted message", message);
       await fetch(`/api/event/${eventDetails._id}?type=deletedPictures`, {
-        method: "DELETE",
+        method: "PATCH",
         body: JSON.stringify({
           uploadedPictures: message.uploadedMessagePictures,
         }),

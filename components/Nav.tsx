@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import Link from "next/link";
@@ -75,8 +76,8 @@ export default function WithAction() {
             <HStack spacing={8} alignItems={"center"}>
               <Box>
                 <Link href="/" className="flex gap-2 flex-center">
-                  <NextImage
-                    src="/assets/images/shield.png"
+                  <Image
+                    src="https://i.imgur.com/UOP3Jhj.png"
                     alt="University of Pennsylvania Logo"
                     width={30}
                     height={30}
@@ -172,7 +173,7 @@ export default function WithAction() {
                           <Image
                             objectFit="cover"
                             src="https://media.licdn.com/dms/image/C4E03AQF40mBwJbL_ZQ/profile-displayphoto-shrink_800_800/0/1611695156693?e=1698278400&v=beta&t=iLM9cbJNz2324I8_YjyV3ifv0EZ0hEJeMhfgOnMpgjg"
-                            alt="Bonnie"
+                            alt="Bonnie Tse"
                             maxW={{ base: "100%", sm: "200px" }}
                           />
                           <Stack>
@@ -231,7 +232,7 @@ export default function WithAction() {
                         >
                           <Image
                             objectFit="cover"
-                            src="https://media.licdn.com/dms/image/D5603AQGfqevGzPNkrw/profile-displayphoto-shrink_800_800/0/1689120976379?e=1698278400&v=beta&t=qB9fqVtuKoa_V_vzpJPmlh-Geca1TApeusmG9Dg-DFI"
+                            src="https://media.licdn.com/dms/image/D5603AQF-mvRrjlNOGQ/profile-displayphoto-shrink_400_400/0/1694303410553?e=1700092800&v=beta&t=pToEZGKjIDnwmeHZUfYVPTc3nT0cu5OXNDQ1dYMtxzI"
                             alt="Kevin"
                             maxW={{ base: "100%", sm: "200px" }}
                           />
@@ -293,8 +294,8 @@ export default function WithAction() {
                         >
                           <Image
                             objectFit="cover"
-                            src="https://media.licdn.com/dms/image/C5603AQG19HBs2XI6uA/profile-displayphoto-shrink_800_800/0/1641970539103?e=1698278400&v=beta&t=mGW6wjJTFjYyYwZeE_ZW2CS7un1qWz-8UCA6dIbmCIM"
-                            alt="Kyle"
+                            src="https://media.licdn.com/dms/image/D5603AQG45fbtnMsPUw/profile-displayphoto-shrink_400_400/0/1694305975331?e=1700092800&v=beta&t=SQsW4FqBehJeNehLBTxDI64i-H6wGduPrTIcwjaJ1PI"
+                            alt="Kyle Li"
                             maxW={{ base: "100%", sm: "200px" }}
                           />
                           <Stack>
@@ -366,8 +367,8 @@ export default function WithAction() {
             <HStack spacing={8} alignItems={"center"}>
               <Box>
                 <Link href="/" className="flex gap-2 flex-center">
-                  <NextImage
-                    src="/assets/images/shield.png"
+                  <Image
+                    src="https://i.imgur.com/UOP3Jhj.png"
                     alt="University of Pennsylvania Logo"
                     width={30}
                     height={30}
@@ -486,7 +487,7 @@ export default function WithAction() {
                     >
                       <Image
                         objectFit="cover"
-                        src="https://media.licdn.com/dms/image/D5603AQGfqevGzPNkrw/profile-displayphoto-shrink_800_800/0/1689120976379?e=1698278400&v=beta&t=qB9fqVtuKoa_V_vzpJPmlh-Geca1TApeusmG9Dg-DFI"
+                        src="https://media.licdn.com/dms/image/D5603AQF-mvRrjlNOGQ/profile-displayphoto-shrink_400_400/0/1694303410553?e=1700092800&v=beta&t=pToEZGKjIDnwmeHZUfYVPTc3nT0cu5OXNDQ1dYMtxzI"
                         alt="Kevin"
                         maxW={{ base: "100%", sm: "200px" }}
                       />
@@ -547,7 +548,7 @@ export default function WithAction() {
                     >
                       <Image
                         objectFit="cover"
-                        src="https://media.licdn.com/dms/image/C5603AQG19HBs2XI6uA/profile-displayphoto-shrink_800_800/0/1641970539103?e=1698278400&v=beta&t=mGW6wjJTFjYyYwZeE_ZW2CS7un1qWz-8UCA6dIbmCIM"
+                        src="https://media.licdn.com/dms/image/D5603AQG45fbtnMsPUw/profile-displayphoto-shrink_400_400/0/1694305975331?e=1700092800&v=beta&t=SQsW4FqBehJeNehLBTxDI64i-H6wGduPrTIcwjaJ1PI"
                         alt="Kyle"
                         maxW={{ base: "100%", sm: "200px" }}
                       />

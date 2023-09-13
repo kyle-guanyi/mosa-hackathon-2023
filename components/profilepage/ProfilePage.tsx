@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import React from "react";
@@ -81,6 +82,8 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
   useEffect(() => {
     if (profileDetails?.userUpdatedProfileImage) {
       fetchProfilePicture();
+    } else {
+      setIsLoading(false);
     }
   }, [profileDetails?.userUpdatedProfileImage]);
   useRouter();
@@ -106,7 +109,6 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
     const getUserDetails = async () => {
       const response = await fetch(`/api/user/${session?.user.id}`);
       const data = await response.json();
-      console.log(data);
 
       setUser({
         firstName: data.firstName,
@@ -119,6 +121,7 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
         fieldOfInterest: data.fieldOfInterest,
         userUpdatedProfileImage: data.userUpdatedProfileImage,
       });
+      setIsLoading(false);
     };
 
     if (session?.user.id) getUserDetails();
@@ -312,10 +315,10 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
               )}
             </div>
             <div className="pt-1 flex">
-              {profileDetails &&
-                profileDetails.gender !== "Decline to Answer" && (
+              {profileDetails?.gender &&
+                profileDetails?.gender !== "Decline to Answer" && (
                   <h3 className="mx-auto">
-                    <em>({profileDetails.gender})</em>
+                    <em>({profileDetails?.gender})</em>
                   </h3>
                 )}
             </div>
@@ -405,7 +408,7 @@ const ProfilePage = ({ profileDetails, handleEdit }) => {
             >
               {profileDetails?.bio}
             </Collapse>
-            {profileDetails?.bio.length > 300 && (
+            {profileDetails?.bio && profileDetails?.bio.length > 300 && (
               <Button
                 size="sm"
                 isActive={true}

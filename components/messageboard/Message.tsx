@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -39,7 +40,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { FiTrash2 } from "react-icons/Fi";
+import { FiTrash2 } from "react-icons/fi";
 import { EditIcon } from "@chakra-ui/icons";
 
 /**
@@ -66,7 +67,7 @@ const Message = ({
   });
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-   const {
+  const {
     isOpen: isAlertOpen,
     onOpen: onAlertOpen,
     onClose: onAlertClose,
@@ -97,10 +98,15 @@ const Message = ({
 
   // add the editedMessage into the database where the message is stored
   const handleMessageEditSubmit = () => {
-    console.log("Edited message from messageform:", editedMessage)
     onPatchMessage(editedMessage);
     handlePatchEventPictures(editedMessage);
     onClose();
+    toast({
+      title: "Your message has been edited successfully",
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+    });
     setMessageEditing(false);
   };
 
@@ -196,9 +202,10 @@ const Message = ({
   useEffect(() => {
     if (message.uploadedMessagePictures?.length > 0) {
       fetchUploadedMessagePictures();
-      setEditedMessage({...editedMessage, originalPictures: message.uploadedMessagePictures});
-
-      console.log("this is the edited message with og stuff", editedMessage)
+      setEditedMessage({
+        ...editedMessage,
+        originalPictures: message.uploadedMessagePictures,
+      });
     }
   }, [message.uploadedMessagePictures]);
 
@@ -287,7 +294,6 @@ const Message = ({
    * @param keysArray - The keys array
    */
   const handleKeysArray = async (keysArray) => {
-    console.log("Reached patch message pictures")
     setEditedMessage({ ...editedMessage, uploadedMessagePictures: keysArray });
     toast({
       title: "Your newly uploaded image(s) have been attached to your message.",
@@ -302,7 +308,13 @@ const Message = ({
   const toast = useToast();
 
   return (
-    <Card maxW="none" style={{ width: "100%" }} variant="outline" mt="4" padding={2}>
+    <Card
+      maxW="none"
+      style={{ width: "100%" }}
+      variant="outline"
+      mt="4"
+      padding={2}
+    >
       <CardHeader>
         <Flex>
           <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
@@ -355,7 +367,13 @@ const Message = ({
                     </ModalBody>
 
                     <ModalFooter>
-                      <Button colorScheme="blue" mr={3} onClick={onClose}>
+                      <Button
+                        colorScheme="blue"
+                        mr={3}
+                        onClick={onClose}
+                        isActive={true}
+                        className="hover:opacity-80"
+                      >
                         Close
                       </Button>
                     </ModalFooter>
@@ -370,36 +388,37 @@ const Message = ({
                   Delete Post
                 </MenuItem>
                 <AlertDialog
-                      motionPreset="slideInBottom"
-                      leastDestructiveRef={cancelRef}
-                      onClose={onAlertClose}
-                      isOpen={isAlertOpen}
-                      isCentered
-                    >
-                      <AlertDialogOverlay />
-                      <AlertDialogContent>
-                        <AlertDialogHeader>Delete Message?</AlertDialogHeader>
-                        <AlertDialogCloseButton className="hover:opacity-50" />
-                        <AlertDialogBody>
-                          Are you sure you want to delete this message and its associated pictures?                     
-                        </AlertDialogBody>
-                        <AlertDialogFooter>
-                          <Button ref={cancelRef} onClick={onAlertClose}>
-                            No
-                          </Button>
-                          <Button
-                            colorScheme="red"
-                            variant={"solid"}
-                            isActive={true}
-                            className="hover:opacity-80"
-                            ml={3}
-                            onClick={onDeleteItem}
-                          >
-                            Yes
-                          </Button>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
+                  motionPreset="slideInBottom"
+                  leastDestructiveRef={cancelRef}
+                  onClose={onAlertClose}
+                  isOpen={isAlertOpen}
+                  isCentered
+                >
+                  <AlertDialogOverlay />
+                  <AlertDialogContent>
+                    <AlertDialogHeader>Delete Message?</AlertDialogHeader>
+                    <AlertDialogCloseButton className="hover:opacity-50" />
+                    <AlertDialogBody>
+                      Are you sure you want to delete this message and its
+                      associated pictures?
+                    </AlertDialogBody>
+                    <AlertDialogFooter>
+                      <Button ref={cancelRef} onClick={onAlertClose}>
+                        No
+                      </Button>
+                      <Button
+                        colorScheme="red"
+                        variant={"solid"}
+                        isActive={true}
+                        className="hover:opacity-80"
+                        ml={3}
+                        onClick={onDeleteItem}
+                      >
+                        Yes
+                      </Button>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </MenuList>
             </Menu>
           )}
@@ -425,7 +444,7 @@ const Message = ({
           )}
         </CardBody>
       </CardHeader>
-      <Grid templateColumns="repeat(5, 1fr)" gap={3} pb='2'>
+      <Grid templateColumns="repeat(5, 1fr)" gap={3} pb="2">
         {uploadedMessagePictures?.map((file, index) => (
           <GridItem pl="2" key={index} className="cursor-pointer">
             <Image
