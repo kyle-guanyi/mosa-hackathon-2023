@@ -134,13 +134,13 @@ Step 5:
 Step 9: To terminate localhost, in the Terminal type "Control + C"
 
 Welcome Page - http://localhost:3000
-![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/e9eb2149-c9b7-4a20-975a-0cf743457ab2)
+![image](https://github.com/bonniewt/mosa-hackathon-2023/blob/main/public/assets/slide%20images/welcome-page.png)
 
 About Page
-![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/1f2a127b-b485-4261-a7f2-e362ba2b32fe)
+![image](https://github.com/bonniewt/mosa-hackathon-2023/blob/main/public/assets/slide%20images/about-page.png)
 
 Login Page using Google and restricted to seas.upenn.edu emails only
-![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/ff4cc641-1e66-4073-a2b9-37c1018b9185)
+![image](https://github.com/bonniewt/mosa-hackathon-2023/blob/main/public/assets/slide%20images/log-in-page.png)
 
 Event Home Page with Filters
 ![](https://github.com/bonniewt/mosa-hackathon-2023/blob/main/public/assets/gifs/filter.gif)
