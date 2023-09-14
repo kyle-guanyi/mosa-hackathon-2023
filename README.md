@@ -1,6 +1,6 @@
 # mosa-hackathon-2023
 
-# Founding Friends
+# Founding Friends Demo Video
 [![Founding Friends Demo Video](https://img.youtube.com/vi/UquxE1sai_0/0.jpg)](https://www.youtube.com/watch?v=UquxE1sai_0)
 
 
