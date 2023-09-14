@@ -1,10 +1,10 @@
 # mosa-hackathon-2023
 
-# Founding Friends
-![Founding Friends Slides](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/a8a73f79-7185-426d-8606-c8a9d089ced6)
+# Founding Friends Demo Video
+[![Founding Friends Demo Video](https://img.youtube.com/vi/UquxE1sai_0/0.jpg)](https://www.youtube.com/watch?v=UquxE1sai_0)
 
 
-## Overview
+## Founding Friends Overview
 
 ### Project summary
 
@@ -134,37 +134,28 @@ Step 5:
 Step 9: To terminate localhost, in the Terminal type "Control + C"
 
 Welcome Page - http://localhost:3000
-![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/e9eb2149-c9b7-4a20-975a-0cf743457ab2)
+![image](https://github.com/bonniewt/mosa-hackathon-2023/blob/main/public/assets/slide%20images/welcome-page.png)
 
 About Page
-![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/1f2a127b-b485-4261-a7f2-e362ba2b32fe)
+![image](https://github.com/bonniewt/mosa-hackathon-2023/blob/main/public/assets/slide%20images/about-page.png)
 
 Login Page using Google and restricted to seas.upenn.edu emails only
-![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/ff4cc641-1e66-4073-a2b9-37c1018b9185)
+![image](https://github.com/bonniewt/mosa-hackathon-2023/blob/main/public/assets/slide%20images/log-in-page.png)
 
-Event Home Page
-![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/cc99f5e8-82bd-46a3-bbc5-a565b373484d)
+Event Home Page with Filters
+![](https://github.com/bonniewt/mosa-hackathon-2023/blob/main/public/assets/gifs/filter.gif)
 
 Profile Page
-![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/d6291d0a-77a1-4192-b5a6-d5358d96f219)
-
-Edit Profile Page
-![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/a3351919-dacb-4994-8d01-fa5d7be47bc3)
+![](https://github.com/bonniewt/mosa-hackathon-2023/blob/main/public/assets/gifs/profile-page.gif)
 
 Create New Event Page
-![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/a187d386-4d41-4765-85d3-0659bd902338)
-
-Event Home Page - Filtered
-![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/fe3afef4-cd9d-4901-bbcd-1c340f6b5eb9)
+![](https://github.com/bonniewt/mosa-hackathon-2023/blob/main/public/assets/gifs/create-event.gif)
 
 Event Page
-![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/853dd0cb-5858-45c5-aff9-32c8bc8f2942)
+![](https://github.com/bonniewt/mosa-hackathon-2023/blob/main/public/assets/gifs/event-page.gif)
 
-Event Discussion Board
-![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/dba51669-8ceb-432c-a485-151eb92e1ced)
-
-Sign Out
-![image](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/d92fa765-c844-4d86-a418-78a1ba6982d4)
+About, Profile, Sign Out Hamburger Toggle
+![](https://github.com/bonniewt/mosa-hackathon-2023/blob/main/public/assets/gifs/hamburger.gif)
 
 
 ## Additional information

@@ -172,7 +172,7 @@ export default function WithAction() {
                         >
                           <Image
                             objectFit="cover"
-                            src="https://media.licdn.com/dms/image/C4E03AQF40mBwJbL_ZQ/profile-displayphoto-shrink_800_800/0/1611695156693?e=1698278400&v=beta&t=iLM9cbJNz2324I8_YjyV3ifv0EZ0hEJeMhfgOnMpgjg"
+                            src="https://media.licdn.com/dms/image/D5603AQHt6-HKo2XtPg/profile-displayphoto-shrink_400_400/0/1694623371330?e=1700092800&v=beta&t=ldDycYuo5H7oxdoMK9H67XuAg66lR4pdwWqBgZ0dqYM"
                             alt="Bonnie Tse"
                             maxW={{ base: "100%", sm: "200px" }}
                           />
@@ -428,7 +428,7 @@ export default function WithAction() {
                     >
                       <Image
                         objectFit="cover"
-                        src="https://media.licdn.com/dms/image/C4E03AQF40mBwJbL_ZQ/profile-displayphoto-shrink_800_800/0/1611695156693?e=1698278400&v=beta&t=iLM9cbJNz2324I8_YjyV3ifv0EZ0hEJeMhfgOnMpgjg"
+                        src="https://media.licdn.com/dms/image/D5603AQHt6-HKo2XtPg/profile-displayphoto-shrink_400_400/0/1694623371330?e=1700092800&v=beta&t=ldDycYuo5H7oxdoMK9H67XuAg66lR4pdwWqBgZ0dqYM"
                         alt="Bonnie"
                         maxW={{ base: "100%", sm: "200px" }}
                       />
