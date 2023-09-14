@@ -1,7 +1,7 @@
 # mosa-hackathon-2023
 
 # Founding Friends
-![Founding Friends Slides](https://github.com/kyle-guanyi/mosa-hackathon-2023/assets/70975465/a8a73f79-7185-426d-8606-c8a9d089ced6)
+[![Founding Friends Demo Video](https://img.youtube.com/vi/UquxE1sai_0/0.jpg)](https://www.youtube.com/watch?v=UquxE1sai_0)
 
 
 ## Overview
