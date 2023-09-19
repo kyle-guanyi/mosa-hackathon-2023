@@ -10,7 +10,7 @@
 
 Founding Friends is designed by MCIT online students for UPenn students. The website provides an intuitive portal for students to create events and sign-up to attend in-person and virtual events. The website uses the UPenn email to login so that only UPenn students can sign-up for event. Each event page allows students to efficiently share Zoom meetings links for virtual meetings and photos from the event. Once logged in, students can filter for events in their area, or on a certain date. Students can create a profile to share a brief bio, their interests, and which classes they have completed. 
 
-Link to Founding Friends: [Founding Friends] (https://founding-friends.netlify.app/)
+Link to Founding Friends: [Founding Friends](https://founding-friends.netlify.app/)
 Link to our Devpost project page here: [Devpost](https://devpost.com/software/founding-friends)
 
 ### Authors
