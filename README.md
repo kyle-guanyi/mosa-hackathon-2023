@@ -18,6 +18,32 @@ Link to our Devpost project page here: [Devpost](https://devpost.com/software/fo
 * Kevin Nguyen - kevinocca – kebin@seas.upenn.edu – [GitHub](https://github.com/kebinjpeg)
 * Bonnie Tse - bonniet – Penn email – [GitHub](https://github.com/bonniewt)
 
+### Images and Gifs of Founding Friends
+
+Welcome Page - http://localhost:3000
+![image](https://github.com/bonniewt/mosa-hackathon-2023/blob/main/public/assets/slide%20images/welcome-page.png)
+
+About Page
+![image](https://github.com/bonniewt/mosa-hackathon-2023/blob/main/public/assets/slide%20images/about-page.png)
+
+Login Page using Google and restricted to seas.upenn.edu emails only
+![image](https://github.com/bonniewt/mosa-hackathon-2023/blob/main/public/assets/slide%20images/log-in-page.png)
+
+Event Home Page with Filters
+![](https://github.com/bonniewt/mosa-hackathon-2023/blob/main/public/assets/gifs/filter.gif)
+
+Profile Page
+![](https://github.com/bonniewt/mosa-hackathon-2023/blob/main/public/assets/gifs/profile-page.gif)
+
+Create New Event Page
+![](https://github.com/bonniewt/mosa-hackathon-2023/blob/main/public/assets/gifs/create-event.gif)
+
+Event Page
+![](https://github.com/bonniewt/mosa-hackathon-2023/blob/main/public/assets/gifs/event-page.gif)
+
+About, Profile, Sign Out Hamburger Toggle
+![](https://github.com/bonniewt/mosa-hackathon-2023/blob/main/public/assets/gifs/hamburger.gif)
+
 ## Usage
 
 This section walks a prospective user through the process of installing and running the project on their local machine. The more detailed and the more accurate, the better. User-friendly instructions will entice prospective users (including judges) to engage more deeply with your project, which could improve your hackathon score.
@@ -132,31 +158,6 @@ In the web browser of your choice, navigate to `localhost:3000`
 Step 5: 
 
 Step 9: To terminate localhost, in the Terminal type "Control + C"
-
-Welcome Page - http://localhost:3000
-![image](https://github.com/bonniewt/mosa-hackathon-2023/blob/main/public/assets/slide%20images/welcome-page.png)
-
-About Page
-![image](https://github.com/bonniewt/mosa-hackathon-2023/blob/main/public/assets/slide%20images/about-page.png)
-
-Login Page using Google and restricted to seas.upenn.edu emails only
-![image](https://github.com/bonniewt/mosa-hackathon-2023/blob/main/public/assets/slide%20images/log-in-page.png)
-
-Event Home Page with Filters
-![](https://github.com/bonniewt/mosa-hackathon-2023/blob/main/public/assets/gifs/filter.gif)
-
-Profile Page
-![](https://github.com/bonniewt/mosa-hackathon-2023/blob/main/public/assets/gifs/profile-page.gif)
-
-Create New Event Page
-![](https://github.com/bonniewt/mosa-hackathon-2023/blob/main/public/assets/gifs/create-event.gif)
-
-Event Page
-![](https://github.com/bonniewt/mosa-hackathon-2023/blob/main/public/assets/gifs/event-page.gif)
-
-About, Profile, Sign Out Hamburger Toggle
-![](https://github.com/bonniewt/mosa-hackathon-2023/blob/main/public/assets/gifs/hamburger.gif)
-
 
 ## Additional information
 
