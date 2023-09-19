@@ -12,7 +12,7 @@ Founding Friends is designed by MCIT online students for UPenn students. The web
 
 Link to Founding Friends: [Founding Friends](https://founding-friends.netlify.app/)
 
-Link to our Devpost project page here: [Devpost](https://devpost.com/software/founding-friends)
+Link to our Devpost: [Devpost](https://devpost.com/software/founding-friends)
 
 ### Authors
 
