@@ -18,7 +18,6 @@ import { Button, Image, Spinner } from "@chakra-ui/react";
 const LogIn = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [providers, setProviders] = useState(null);
 
   const queryParams = new URLSearchParams(window.location.search);
