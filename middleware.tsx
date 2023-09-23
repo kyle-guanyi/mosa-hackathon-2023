@@ -17,6 +17,7 @@ export default withAuth({
       else if (new URL(url).origin === baseUrl) return url
       return baseUrl
     }
+  }
 });
 
 /**
