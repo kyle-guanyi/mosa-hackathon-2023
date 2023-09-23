@@ -24,7 +24,7 @@ const LogIn = () => {
   const callbackUrl = router.query?.callbackUrl || "";
 
   // Check if callbackUrl matches the expected style
-  const isEventCallback = /^\/event\/[^/]+/.test(callbackUrl);
+  const isEventCallback = /\/event\/([^/]+)/.test(callbackUrl);
 
   // Construct eventUrl conditionally
   const eventUrl = isEventCallback ? callbackUrl : "/home";
