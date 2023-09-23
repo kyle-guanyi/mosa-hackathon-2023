@@ -20,15 +20,6 @@ const LogIn = () => {
   const router = useRouter();
   const [providers, setProviders] = useState(null);
 
-  const queryParams = new URLSearchParams(window.location.search);
-  const callbackUrl = queryParams.get("callbackUrl");
-
-  // Check if callbackUrl matches the expected style
-  const isEventCallback = /\/event\/([^/]+)/.test(callbackUrl);
-
-  // Construct eventUrl conditionally
-  const eventUrl = isEventCallback ? callbackUrl : "/home";
-
   // Fetches the providers
   useEffect(() => {
     const setUpProviders = async () => {
@@ -38,6 +29,16 @@ const LogIn = () => {
     };
 
     setUpProviders();
+  }, []);
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.search);
+    const callbackUrl = queryParams.get("callbackUrl");
+    // Check if callbackUrl matches the expected style
+    const isEventCallback = /\/event\/([^/]+)/.test(callbackUrl);
+
+    // Construct eventUrl conditionally
+    const eventUrl = isEventCallback ? callbackUrl : "/home";
   }, []);
 
   // Redirects to the home page if the user is logged in
