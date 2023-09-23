@@ -20,6 +20,10 @@ const LogIn = () => {
   const router = useRouter();
   const [providers, setProviders] = useState(null);
 
+  const callbackUrl = router.query.callbackUrl || "";
+  const eventID = callbackUrl.match(/\/event\/([^/]+)/);
+  const eventUrl = eventID ? `/event/${eventID[1]}` : "/home";
+
   // Fetches the providers
   useEffect(() => {
     const setUpProviders = async () => {
@@ -34,17 +38,7 @@ const LogIn = () => {
   // Redirects to the home page if the user is logged in
   useEffect(() => {
     if (session?.user) {
-      // Check if there's a callbackUrl in the query parameters
-      const callbackUrl = new URLSearchParams(window.location.search).get(
-        "callbackUrl"
-      );
-
-      // If callbackUrl exists and starts with "/", redirect to it
-      if (callbackUrl && callbackUrl.startsWith("/")) {
-        router.push(callbackUrl);
-      } else {
-        router.push(`/home`); // Default redirection
-      }
+      router.push(`/home`);
     }
   }, [session, router]);
 
@@ -83,7 +77,7 @@ const LogIn = () => {
                 className="hover:opacity-80 mx-auto"
                 size="md"
                 key={provider.name}
-                onClick={() => signIn(provider.id, { callbackUrl: "/home" })}
+                onClick={() => signIn(provider.id, { callbackUrl: eventUrl })}
                 leftIcon={
                   <Image
                     src="https://gdm-catalog-fmapi-prod.imgix.net/ProductLogo/5179d6b3-aa3f-403b-8cb4-718850815472.png?auto=format,compress&size=50"
