@@ -20,6 +20,8 @@ const LogIn = () => {
   const router = useRouter();
   const [providers, setProviders] = useState(null);
 
+  const [eventUrl, setEventUrl] = useState("/home")
+
   // Fetches the providers
   useEffect(() => {
     const setUpProviders = async () => {
@@ -38,7 +40,7 @@ const LogIn = () => {
     const isEventCallback = /\/event\/([^/]+)/.test(callbackUrl);
 
     // Construct eventUrl conditionally
-    const eventUrl = isEventCallback ? callbackUrl : "/home";
+    setEventUrl(isEventCallback ? callbackUrl : "/home");
   }, []);
 
   // Redirects to the home page if the user is logged in
