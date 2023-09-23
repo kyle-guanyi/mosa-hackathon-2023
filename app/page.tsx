@@ -18,17 +18,18 @@ import { Button, Image, Spinner } from "@chakra-ui/react";
 const LogIn = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [providers, setProviders] = useState(null);
 
-  // Check if router.query and callbackUrl are defined
-  const callbackUrl = router.query?.callbackUrl || "";
+  const queryParams = new URLSearchParams(window.location.search);
+  const callbackUrl = queryParams.get("callbackUrl");
 
   // Check if callbackUrl matches the expected style
   const isEventCallback = /\/event\/([^/]+)/.test(callbackUrl);
 
   // Construct eventUrl conditionally
   const eventUrl = isEventCallback ? callbackUrl : "/home";
-  
+
   // Fetches the providers
   useEffect(() => {
     const setUpProviders = async () => {
