@@ -20,10 +20,15 @@ const LogIn = () => {
   const router = useRouter();
   const [providers, setProviders] = useState(null);
 
-  const callbackUrl = router.query.callbackUrl || "";
-  const eventID = callbackUrl.match(/\/event\/([^/]+)/);
-  const eventUrl = eventID ? `/event/${eventID[1]}` : "/home";
+  // Check if router.query and callbackUrl are defined
+  const callbackUrl = router.query?.callbackUrl || "";
 
+  // Check if callbackUrl matches the expected style
+  const isEventCallback = /^\/event\/[^/]+/.test(callbackUrl);
+
+  // Construct eventUrl conditionally
+  const eventUrl = isEventCallback ? callbackUrl : "/home";
+  
   // Fetches the providers
   useEffect(() => {
     const setUpProviders = async () => {
