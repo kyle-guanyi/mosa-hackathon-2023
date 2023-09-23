@@ -43,9 +43,6 @@ const handler = NextAuth({
 
       return session;
     },
-    async redirect({ url, baseUrl }) {
-      return `${baseUrl}/?callbackUrl=${encodeURIComponent(url)}`;
-    },
     /**
      * This function is called whenever a user is logged in.
      * It is used to check if the user is a Penn student.
@@ -60,7 +57,6 @@ const handler = NextAuth({
       }
       try {
         await connectToDB();
-        const callbackUrl = query.callbackUrl ? decodeURIComponent(query.callbackUrl) : "/home";
         //check if user already exists
         const userExists = await User.findOne({
           email: profile.email,
@@ -82,7 +78,7 @@ const handler = NextAuth({
             attendingEvents: [],
           });
         }
-        return callbackUrl;
+        return true;
       } catch (error) {
         console.log(error);
         return false;

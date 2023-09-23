@@ -34,7 +34,17 @@ const LogIn = () => {
   // Redirects to the home page if the user is logged in
   useEffect(() => {
     if (session?.user) {
-      router.push(`/home`);
+      // Check if there's a callbackUrl in the query parameters
+      const callbackUrl = new URLSearchParams(window.location.search).get(
+        "callbackUrl"
+      );
+
+      // If callbackUrl exists and starts with "/", redirect to it
+      if (callbackUrl && callbackUrl.startsWith("/")) {
+        router.push(callbackUrl);
+      } else {
+        router.push(`/home`); // Default redirection
+      }
     }
   }, [session, router]);
 
@@ -64,7 +74,8 @@ const LogIn = () => {
               <Spinner size="xl" />
             </div>
           ) : (
-            providers && Object.values(providers).map((provider) => (
+            providers &&
+            Object.values(providers).map((provider) => (
               <Button
                 type="button"
                 colorScheme="facebook"
@@ -72,7 +83,7 @@ const LogIn = () => {
                 className="hover:opacity-80 mx-auto"
                 size="md"
                 key={provider.name}
-                onClick={() => signIn(provider.id)}
+                onClick={() => signIn(provider.id, { callbackUrl: "/home" })}
                 leftIcon={
                   <Image
                     src="https://gdm-catalog-fmapi-prod.imgix.net/ProductLogo/5179d6b3-aa3f-403b-8cb4-718850815472.png?auto=format,compress&size=50"
