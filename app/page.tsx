@@ -64,7 +64,7 @@ const LogIn = () => {
               <Spinner size="xl" />
             </div>
           ) : (
-            Object.values(providers).map((provider) => (
+            providers && Object.values(providers).map((provider) => (
               <Button
                 type="button"
                 colorScheme="facebook"
