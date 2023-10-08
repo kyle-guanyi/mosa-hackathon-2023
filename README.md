@@ -1,5 +1,7 @@
 # mosa-hackathon-2023
 
+# WINNER OF MOSA SUMMER OF CODE HACKATHON
+
 # Founding Friends Demo Video
 [![Founding Friends Demo Video](https://img.youtube.com/vi/UquxE1sai_0/0.jpg)](https://www.youtube.com/watch?v=UquxE1sai_0)
 
@@ -13,6 +15,8 @@ Founding Friends is designed by MCIT online students for UPenn students. The web
 Link to Founding Friends: [Founding Friends](https://founding-friends.vercel.app/)
 
 Link to our Devpost: [Devpost](https://devpost.com/software/founding-friends)
+
+Link to UPenn Official Blog Post: [MOSA Summer of Code](https://online.seas.upenn.edu/student-experience/mosa-summer-of-code-part-1/)
 
 ### Authors
 
